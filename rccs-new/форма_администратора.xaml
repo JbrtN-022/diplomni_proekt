@@ -1,0 +1,90 @@
+﻿<Window x:Class="rccs_new.форма_администратора"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Панель администратора"
+        Height="650"
+        Width="1100"
+        WindowStartupLocation="CenterScreen"
+       
+        Background="White">
+
+    <materialDesign:DrawerHost x:Name="DrawerHost" IsLeftDrawerOpen="False">
+
+        <materialDesign:DrawerHost.LeftDrawerContent>
+            <StackPanel Width="280" Background="{DynamicResource MaterialDesignPaper}">
+                <TextBlock Text="Меню администратора"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Margin="20,30,20,25"
+                           Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+
+                <StackPanel Margin="15,0">
+                    <TextBlock Text="Документы аренды"
+                               FontSize="14" 
+                               FontWeight="Medium" 
+                               Margin="5,10,5,5"/>
+                    <ComboBox materialDesign:HintAssist.Hint="Выберите документ" 
+                              Margin="5,0,5,10"/>
+
+                    <TextBlock Text="Документы продаж"
+                               FontSize="14" 
+                               FontWeight="Medium" 
+                               Margin="5,10,5,5"/>
+                    <ComboBox materialDesign:HintAssist.Hint="Выберите документ" 
+                              Margin="5,0,5,15"/>
+
+                    <Button x:Name="справочники" Content="Список справочников"
+                            Height="45"
+                            Margin="5,8"
+                            Style="{StaticResource MaterialDesignRaisedButton}" Click="справочники_Click"/>
+
+                    <Button x:Name="пользователи"
+                            Content="Список пользователей"
+                            Height="45"
+                            Margin="5,8"
+                            Style="{StaticResource MaterialDesignRaisedButton}" Click="пользователи_Click" />
+
+                    <Button x:Name="выйти" Content="Выйти"
+                            Height="45"
+                            Margin="5,15,5,5"
+                            Style="{StaticResource MaterialDesignFlatButton}" Click="выйти_Click" />
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:DrawerHost.LeftDrawerContent>
+
+        <Grid>
+            <Image Width="480"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Stretch"
+                   Source="/4341e5ebee5ed500e1fb2f79340f0d53.jpg"
+                   Stretch="UniformToFill"
+                   Opacity="0.9"/>
+
+            <StackPanel Margin="90,40,0,0" 
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Left">
+                <TextBlock x:Name="title" 
+                           Text="С возвращением,"
+                           FontSize="32"
+                           FontWeight="Medium"
+                           Foreground="#212121"/>
+            </StackPanel>
+
+            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                    Width="50" 
+                    Height="50"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="15"
+                    Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                    CommandParameter="Left">
+                <materialDesign:PackIcon Kind="Menu" Width="30" Height="30"/>
+            </Button>
+
+            <Border Height="6"
+                    VerticalAlignment="Bottom"
+                    Background="#2196F3"/>
+        </Grid>
+    </materialDesign:DrawerHost>
+</Window>

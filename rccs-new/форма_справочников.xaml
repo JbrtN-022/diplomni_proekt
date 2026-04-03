@@ -1,0 +1,112 @@
+﻿<Window x:Class="rccs_new.форма_справочников"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Справочники"
+        Height="520"
+        Width="850"
+        WindowStartupLocation="CenterScreen"
+        >
+
+    <Grid>
+       
+        <Grid Background="#FF2196F3" Height="60" VerticalAlignment="Top">
+            <TextBlock Text="Справочники"
+                       Foreground="White"
+                       FontSize="22"
+                       FontWeight="Medium"
+                       VerticalAlignment="Center"
+                       Margin="25,0,0,0"/>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,20,0">
+
+                <Button x:Name="Back"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        Width="45" Height="45"
+                        ToolTip="Назад"
+                        Margin="5,0"
+                       >
+                    <materialDesign:PackIcon Kind="ArrowBack" Width="26" Height="26" Foreground="White"/>
+                </Button>
+
+                <Button x:Name="UppBtn"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        Width="45" Height="45"
+                        ToolTip="Редактировать"
+                        Margin="5,0">
+                    <materialDesign:PackIcon Kind="Pencil" Width="26" Height="26" Foreground="White"/>
+                </Button>
+
+                <Button x:Name="DelBtn"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        Width="45" Height="45"
+                        ToolTip="Удалить"
+                        Margin="5,0">
+                    <materialDesign:PackIcon Kind="Delete" Width="26" Height="26" Foreground="White"/>
+                </Button>
+
+                <Button x:Name="addBtn"
+                        Style="{StaticResource MaterialDesignToolButton}"
+                        Width="45" Height="45"
+                        ToolTip="Добавить запись"
+                        Margin="8,0,0,0">
+                    <materialDesign:PackIcon Kind="Plus" Width="28" Height="28" Foreground="White"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Основное содержимое -->
+        <Grid Margin="0,60,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Левая часть - ComboBox -->
+            <StackPanel Margin="20,20,10,20">
+                <TextBlock Text="Выберите справочник:" 
+                           FontSize="15" 
+                           FontWeight="Medium"
+                           Margin="0,0,0,8"/>
+
+                <ComboBox x:Name="cmbSpravochnik"
+                          materialDesign:HintAssist.Hint="Выберите справочник"
+                          DisplayMemberPath="Value"
+                          SelectedValuePath="Key"
+                          FontSize="15"
+                          Height="45"
+                          />
+            </StackPanel>
+
+            <!-- Правая часть - Таблица -->
+            <DataGrid x:Name="dgSpravochnik"
+                      Grid.Column="1"
+                      Margin="10,20,20,20"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserResizeRows="False"
+                      GridLinesVisibility="None"
+                      Style="{StaticResource MaterialDesignDataGrid}"
+                      SelectionMode="Single"
+                      Background="White"
+                      Foreground="Black">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Ключ"
+                                        Binding="{Binding Code}"
+                                        Width="130"
+                                        IsReadOnly="True"/>
+
+                    <DataGridTextColumn Header="Наименование"
+                                        Binding="{Binding Name}"
+                                        Width="*"
+                                        IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>
