@@ -15,6 +15,9 @@ namespace рццс.MyClass
         public static MySqlCommand mycommand;
         public static MySqlDataAdapter myDataAdapter;
 
+        public static string login;
+        public static string roll;
+
         public static bool ConnectBD()
         {
             try
