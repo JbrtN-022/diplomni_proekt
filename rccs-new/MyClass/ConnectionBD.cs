@@ -20,12 +20,15 @@ namespace rccs.MyClass
         public static string login;
         public static string roll;
         public static string resFio;
-
+    
         public static DataTable dtVidLica = new DataTable();    
         public static DataTable dtGoroda = new DataTable();
         public static DataTable dtEtaj = new DataTable();
         public static DataTable dtOffice = new DataTable();
         public static DataTable dtRoll = new DataTable();
+        public static DataTable dtWorkers = new DataTable();
+        public static DataTable dtTemp = new DataTable();
+        public static DataTable dtCompanyCombobox = new DataTable();
         public static bool ConnectBD()
         {
             try

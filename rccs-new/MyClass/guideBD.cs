@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace rccs.MyClass
 {
@@ -38,5 +39,12 @@ namespace rccs.MyClass
             ConnectionBD.dtRoll.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtRoll);
         }
+        public static void selectCompany()
+        {
+            ConnectionBD.mycommand.CommandText = "SELECT id_company, company FROM rccs.company;";
+            ConnectionBD.dtCompanyCombobox.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtCompanyCombobox);
+        }
+
     }
 }

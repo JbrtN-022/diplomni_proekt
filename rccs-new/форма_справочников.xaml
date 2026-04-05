@@ -3,13 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Справочники"
-        Height="520"
-        Width="850"
-        WindowStartupLocation="CenterScreen"
-        >
+        Height="580"
+        Width="920"
+        WindowStartupLocation="CenterScreen">
 
     <Grid>
-       
+        <!-- Шапка -->
         <Grid Background="#FF2196F3" Height="60" VerticalAlignment="Top">
             <TextBlock Text="Справочники"
                        Foreground="White"
@@ -28,7 +27,7 @@
                         Width="45" Height="45"
                         ToolTip="Назад"
                         Margin="5,0"
-                       >
+                        Click="Back_Click">
                     <materialDesign:PackIcon Kind="ArrowBack" Width="26" Height="26" Foreground="White"/>
                 </Button>
 
@@ -58,42 +57,41 @@
             </StackPanel>
         </Grid>
 
-        <!-- Основное содержимое -->
+        <!-- Основная область -->
         <Grid Margin="0,60,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="340"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Левая часть - ComboBox -->
-            <StackPanel Margin="20,20,10,20">
-                <TextBlock Text="Выберите справочник:" 
-                           FontSize="15" 
+            <!-- Левая колонка - ComboBox -->
+            <StackPanel Margin="25,25,15,0">
+                <TextBlock Text="Выберите справочник:"
+                           FontSize="16"
                            FontWeight="Medium"
-                           Margin="0,0,0,8"/>
-
+                           Margin="0,0,0,10"/>
                 <ComboBox x:Name="cmbSpravochnik"
-                          materialDesign:HintAssist.Hint="Выберите справочник"
-                          DisplayMemberPath="Value"
-                          SelectedValuePath="Key"
-                          FontSize="15"
                           Height="45"
-                          />
+                          FontSize="15"
+                          
+                          SelectionChanged="cmbSpravochnik_SelectionChanged"/>
             </StackPanel>
 
-            <!-- Правая часть - Таблица -->
+            <!-- Правая колонка - Таблица -->
             <DataGrid x:Name="dgSpravochnik"
                       Grid.Column="1"
-                      Margin="10,20,20,20"
+                      Margin="15,25,25,25"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"
                       CanUserResizeRows="False"
-                      GridLinesVisibility="None"
-                      Style="{StaticResource MaterialDesignDataGrid}"
+                      GridLinesVisibility="Horizontal"
+                      Background="#FF96D1FF"
+                      Foreground="Black"
+                      BorderBrush="#2196F3"
+                      BorderThickness="1"
                       SelectionMode="Single"
-                      Background="White"
-                      Foreground="Black">
+                      Style="{StaticResource MaterialDesignDataGrid}">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Ключ"

@@ -112,6 +112,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="добавление пользователей.xaml.cs">
+      <DependentUpon>добавление пользователей.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="редактирование_пользователей.xaml.cs">
+      <DependentUpon>редактирование_пользователей.xaml</DependentUpon>
+    </Compile>
     <Compile Include="форма_администратора.xaml.cs">
       <DependentUpon>форма_администратора.xaml</DependentUpon>
     </Compile>
@@ -137,6 +143,14 @@
       <DependentUpon>авторизация.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="добавление пользователей.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="редактирование_пользователей.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="форма_администратора.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

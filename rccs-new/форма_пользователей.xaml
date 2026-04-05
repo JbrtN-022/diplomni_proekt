@@ -31,7 +31,7 @@
                         Style="{StaticResource MaterialDesignToolButton}"
                         Width="45" Height="45"
                         ToolTip="Назад"
-                        Margin="5,0"
+                        Margin="5,0" Click="Back_Click"
                         >
                     <materialDesign:PackIcon Kind="ArrowBack" Width="26" Height="26" Foreground="White"/>
                 </Button>
@@ -40,7 +40,7 @@
                         Style="{StaticResource MaterialDesignToolButton}"
                         Width="45" Height="45"
                         ToolTip="Редактировать"
-                        Margin="5,0">
+                        Margin="5,0" Click="UppBtn_Click">
                     <materialDesign:PackIcon Kind="Pencil" Width="26" Height="26" Foreground="White"/>
                 </Button>
 
@@ -48,7 +48,7 @@
                         Style="{StaticResource MaterialDesignToolButton}"
                         Width="45" Height="45"
                         ToolTip="Удалить"
-                        Margin="5,0">
+                        Margin="5,0" Click="DelBtn_Click">
                     <materialDesign:PackIcon Kind="Delete" Width="26" Height="26" Foreground="White"/>
                 </Button>
 
@@ -56,7 +56,7 @@
                         Style="{StaticResource MaterialDesignToolButton}"
                         Width="45" Height="45"
                         ToolTip="Добавить запись"
-                        Margin="8,0,0,0">
+                        Margin="8,0,0,0" Click="addBtn_Click">
                     <materialDesign:PackIcon Kind="Plus" Width="28" Height="28" Foreground="White"/>
                 </Button>
             </StackPanel>
@@ -65,42 +65,43 @@
         <!-- Основная область -->
         <Grid Margin="0,60,0,0">
             <DataGrid x:Name="dgSpravochnik"
-                      Margin="15,15,15,15"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      CanUserDeleteRows="False"
-                      CanUserResizeRows="False"
-                      GridLinesVisibility="None"
-                      Background="White"
-                      Foreground="Black"
-                      Style="{StaticResource MaterialDesignDataGrid}"
-                      SelectionMode="Single">
+          Margin="15,15,15,15"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          CanUserDeleteRows="False"
+          CanUserResizeRows="False"
+          GridLinesVisibility="None"
+          Background="White"
+          Foreground="Black"
+          Style="{StaticResource MaterialDesignDataGrid}"
+          SelectionMode="Single"
+          SelectionChanged="dgSpravochnik_SelectionChanged">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Ключ" 
-                                        Binding="{Binding Code}" 
-                                        Width="100" 
-                                        IsReadOnly="True"/>
+                    <DataGridTextColumn Header="ID" 
+                            Binding="{Binding id_workers}" 
+                            Width="80" 
+                            IsReadOnly="True"/>
 
                     <DataGridTextColumn Header="ФИО" 
-                                        Binding="{Binding Name}" 
-                                        Width="*" 
-                                        IsReadOnly="True"/>
+                            Binding="{Binding name}" 
+                            Width="*" 
+                            IsReadOnly="True"/>
 
-                    <DataGridTextColumn Header="Дата трудоустройства" 
-                                        Binding="{Binding Date}" 
-                                        Width="180" 
-                                        IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Рабочий телефон" 
+                            Binding="{Binding work_device_data}" 
+                            Width="180" 
+                            IsReadOnly="True"/>
 
-                    <DataGridTextColumn Header="Телефон" 
-                                        Binding="{Binding Phone}" 
-                                        Width="140" 
-                                        IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Номер телефона" 
+                            Binding="{Binding number}" 
+                            Width="150" 
+                            IsReadOnly="True"/>
 
                     <DataGridTextColumn Header="Компания" 
-                                        Binding="{Binding Company}" 
-                                        Width="*" 
-                                        IsReadOnly="True"/>
+                            Binding="{Binding company}" 
+                            Width="*" 
+                            IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

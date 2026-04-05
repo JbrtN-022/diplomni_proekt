@@ -53,7 +53,7 @@
             </StackPanel>
         </materialDesign:DrawerHost.LeftDrawerContent>
 
-        <Grid>
+        <Grid RenderTransformOrigin="0.502,0.474">
             <Image Width="480"
                    HorizontalAlignment="Right"
                    VerticalAlignment="Stretch"
@@ -82,9 +82,9 @@
                 <materialDesign:PackIcon Kind="Menu" Width="30" Height="30"/>
             </Button>
 
-            <Border Height="6"
+            <Border Height="25"
                     VerticalAlignment="Bottom"
-                    Background="#2196F3"/>
+                    Background="#2196F3" Panel.ZIndex="-1"/>
         </Grid>
     </materialDesign:DrawerHost>
 </Window>
