@@ -73,6 +73,7 @@
           GridLinesVisibility="None"
           Background="White"
           Foreground="Black"
+          
           Style="{StaticResource MaterialDesignDataGrid}"
           SelectionMode="Single"
           SelectionChanged="dgSpravochnik_SelectionChanged">
@@ -88,10 +89,10 @@
                             Width="*" 
                             IsReadOnly="True"/>
 
-                    <DataGridTextColumn Header="Рабочий телефон" 
+                    <DataGridTextColumn Header="дата трудоустройства" 
                             Binding="{Binding work_device_data}" 
                             Width="180" 
-                            IsReadOnly="True"/>
+                            IsReadOnly="True" />
 
                     <DataGridTextColumn Header="Номер телефона" 
                             Binding="{Binding number}" 

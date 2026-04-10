@@ -23,12 +23,14 @@ namespace rccs.MyClass
                 else
                 {
                     ConnectionBD.roll = null;
+                    MessageBox.Show("такого пользователя нет");
+
                 }
             }
             catch (Exception e)
             {
                 ConnectionBD.login = ConnectionBD.roll = null;
-                
+                MessageBox.Show("ошибка авторизации");
             }
         }
         public static void GetFioUser(string log, string pass)

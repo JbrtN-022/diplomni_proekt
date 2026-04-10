@@ -31,28 +31,12 @@
                     <materialDesign:PackIcon Kind="ArrowBack" Width="26" Height="26" Foreground="White"/>
                 </Button>
 
-                <Button x:Name="UppBtn"
-                        Style="{StaticResource MaterialDesignToolButton}"
-                        Width="45" Height="45"
-                        ToolTip="Редактировать"
-                        Margin="5,0">
-                    <materialDesign:PackIcon Kind="Pencil" Width="26" Height="26" Foreground="White"/>
-                </Button>
-
                 <Button x:Name="DelBtn"
                         Style="{StaticResource MaterialDesignToolButton}"
                         Width="45" Height="45"
                         ToolTip="Удалить"
-                        Margin="5,0">
+                        Margin="5,0" Click="DelBtn_Click">
                     <materialDesign:PackIcon Kind="Delete" Width="26" Height="26" Foreground="White"/>
-                </Button>
-
-                <Button x:Name="addBtn"
-                        Style="{StaticResource MaterialDesignToolButton}"
-                        Width="45" Height="45"
-                        ToolTip="Добавить запись"
-                        Margin="8,0,0,0">
-                    <materialDesign:PackIcon Kind="Plus" Width="28" Height="28" Foreground="White"/>
                 </Button>
             </StackPanel>
         </Grid>
@@ -61,7 +45,9 @@
         <Grid Margin="0,60,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="340"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="175*"/>
+                <ColumnDefinition Width="304*"/>
+                <ColumnDefinition Width="101*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Левая колонка - ComboBox -->
@@ -70,28 +56,117 @@
                            FontSize="16"
                            FontWeight="Medium"
                            Margin="0,0,0,10"/>
-                <ComboBox x:Name="cmbSpravochnik"
-                          Height="45"
-                          FontSize="15"
-                          
-                          SelectionChanged="cmbSpravochnik_SelectionChanged"/>
+
+                <Grid>
+                    <Border CornerRadius="10" Background="#F8F8F8" BorderBrush="#CCCCCC" BorderThickness="1">
+
+                        <ComboBox x:Name="cmbSpravochnik" Height="35" FontSize="15"
+                    Background="Transparent"
+                    BorderBrush="#CCCCCC"
+                    BorderThickness="0" SelectionChanged="cmbSpravochnik_SelectionChanged"
+                                  />
+                    </Border>
+                </Grid>
+                <Border x:Name="Add" Width="290"
+                Padding="15"
+                CornerRadius="15"
+                Background="White"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Margin="0,10,0,0" 
+                BorderBrush="#FFCCCCCC"
+                BorderThickness="1"
+>
+
+                    <StackPanel>
+                        <TextBlock Text="Добавление записи"
+                           FontSize="16"
+                           FontWeight="Medium"
+                           Margin="0,0,0,15"
+                           HorizontalAlignment="Center"/>
+
+
+                        <TextBlock x:Name="addtxt" Text="Пароль" FontSize="14" Margin="0,0,0,5"/>
+                        <Border CornerRadius="10" Background="#F8F8F8" BorderBrush="#CCCCCC" BorderThickness="1">
+                            <TextBox x:Name="txtAdd" 
+                             Height="33" 
+                             FontSize="15"
+                             Padding="10,0"
+                             Background="Transparent" 
+                             BorderThickness="0"
+                             Foreground="Black"/>
+                        </Border>
+
+                        <Button Content="Добавление"
+                        Height="45"
+                        Margin="0,15,0,0"
+                        Background="#2196F3"
+                        Foreground="White"
+                        FontSize="15"
+                        FontWeight="Medium"
+                        BorderThickness="0" Click="Button_Click"
+                       />
+                    </StackPanel>
+                </Border>
+                <Border x:Name="Upp" Width="290"
+                Padding="15"
+                CornerRadius="15"
+                Background="White"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Margin="0,10,0,0" 
+                BorderBrush="#FFCCCCCC"
+                BorderThickness="1"
+>
+
+                    <StackPanel>
+                        <TextBlock Text="Редактирование записи"
+                           FontSize="16"
+                           FontWeight="Medium"
+                           Margin="0,0,0,15"
+                           HorizontalAlignment="Center"/>
+
+
+                        <TextBlock x:Name="upptxt" Text="Пароль" FontSize="14" Margin="0,0,0,5"/>
+                        <Border CornerRadius="10" Background="#F8F8F8" BorderBrush="#CCCCCC" BorderThickness="1">
+                            <TextBox x:Name="txtUpp" 
+                             Height="33" 
+                             FontSize="15"
+                             Padding="10,0"
+                             Background="Transparent" 
+                             BorderThickness="0"
+                             Foreground="Black"/>
+                        </Border>
+
+                        <Button Content="Сохранить изменения"
+                        Height="45"
+                        Margin="0,15,0,0"
+                        Background="#2196F3"
+                        Foreground="White"
+                        FontSize="15"
+                        FontWeight="Medium"
+                        BorderThickness="0" Click="Button_Click_1"
+                        />
+                    </StackPanel>
+                </Border>
             </StackPanel>
 
             <!-- Правая колонка - Таблица -->
             <DataGrid x:Name="dgSpravochnik"
                       Grid.Column="1"
-                      Margin="15,25,25,25"
-                      AutoGenerateColumns="False"
+                      Margin="10,25,35,20"
+                      
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"
                       CanUserResizeRows="False"
                       GridLinesVisibility="Horizontal"
-                      Background="#FF96D1FF"
+                      AutoGenerateColumns="True"
+                      Background="#F8F8F8"
                       Foreground="Black"
-                      BorderBrush="#2196F3"
+                      BorderBrush="#CCCCCC"
                       BorderThickness="1"
                       SelectionMode="Single"
-                      Style="{StaticResource MaterialDesignDataGrid}">
+                      Style="{StaticResource MaterialDesignDataGrid}" SelectionChanged="dgSpravochnik_SelectionChanged" Grid.ColumnSpan="3">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Ключ"

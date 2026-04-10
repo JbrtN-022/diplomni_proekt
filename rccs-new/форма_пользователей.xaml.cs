@@ -27,7 +27,7 @@ namespace rccs_new
             LoadWorkers();
         }
 
-        private void LoadWorkers()
+        public  void LoadWorkers()
         {
            ClassWorkers.SelectWorkers();                   
             dgSpravochnik.ItemsSource = ConnectionBD.dtWorkers.DefaultView;   

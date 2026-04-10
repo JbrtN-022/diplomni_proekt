@@ -11,31 +11,31 @@ namespace rccs.MyClass
     {
         public static void selectVidLica()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.type_of_face;";
+            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.type_of_face order by id_type_of_face asc;";
             ConnectionBD.dtVidLica.Clear(); 
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtVidLica);
         }
         public static void selectGoroda()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.city;";
+            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.city order by id_city asc;";
             ConnectionBD.dtGoroda.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtGoroda);
         }
         public static void selectEtaj()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.floor;";
+            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.floor order by id_floor asc;";
             ConnectionBD.dtEtaj.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtEtaj);
         }
         public static void selectOffice()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.office;";
+            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.office order by id_office asc;";
             ConnectionBD.dtOffice.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtOffice);
         }
         public static void selectRoll()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.roll;";
+            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.roll order by id_roll asc;";
             ConnectionBD.dtRoll.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtRoll);
         }
@@ -44,7 +44,103 @@ namespace rccs.MyClass
             ConnectionBD.mycommand.CommandText = "SELECT id_company, company FROM rccs.company;";
             ConnectionBD.dtCompanyCombobox.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtCompanyCombobox);
-        }
 
+        }
+        //vidlica
+
+        public static void AddVidLica(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"INSERT INTO rccs.type_of_face (type_of_face) VALUES ('{name}');";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static void UppVidLica(string id, string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"UPDATE rccs.type_of_face
+            SET type_of_face = '{name}'
+            WHERE id_type_of_face = {id};";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static void DelVidLica(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"DELETE FROM rccs.type_of_face WHERE id_type_of_face = '{name}';";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        // city
+
+        public static void AddCity(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"INSERT INTO rccs.city (city) VALUES ('{name}');";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static void UppCity(string id, string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"UPDATE rccs.city
+            SET city = '{name}'
+            WHERE id_city = '{id}';";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static void DelCity(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"DELETE FROM rccs.city WHERE id_city = '{name}';";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        // roll
+
+        public static void AddRoll(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"INSERT INTO rccs.roll  (roll ) VALUES ('{name}');";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static void UppRoll(string id, string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"UPDATE rccs.roll
+            SET roll =  '{name}'
+            WHERE id_roll = {id};";
+
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static void DelRoll(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"DELETE FROM rccs.roll WHERE id_roll = '{name}';";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        // office
+
+        public static void AddOffice(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"INSERT INTO rccs.office  (office ) VALUES ('{name}');";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static void UppOffice(string id, string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"UPDATE rccs.office
+            SET office = '{name}'
+            WHERE id_office  = {id};";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static void DelOffice(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"DELETE FROM rccs.office WHERE id_office = '{name}';";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        // floor 
+
+        public static void AddFloor(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"INSERT INTO rccs.floor  (floor ) VALUES ('{name}');";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static void UppFloor(string id, string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"UPDATE rccs.floor
+            SET floor = '{name}'
+            WHERE id_floor  = {id};";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static void DelFloor(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $@"DELETE FROM rccs.floor WHERE id_floor  = '{name}';";
+            ConnectionBD.mycommand.ExecuteNonQuery();
+        }
     }
 }

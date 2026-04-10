@@ -56,5 +56,16 @@ namespace rccs_new
 
             this.Close();
         }
+
+        private void контрагенты_Click(object sender, RoutedEventArgs e)
+        {
+            
+            форма_контрагентов spravochnik = new форма_контрагентов();
+            Application.Current.MainWindow = spravochnik;
+            spravochnik.Show();
+
+            this.Close();
+        }
     }
 }
+

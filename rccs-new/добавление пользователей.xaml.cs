@@ -26,6 +26,7 @@ namespace rccs_new
         {
             InitializeComponent();
             LoadRoles();
+            dpDate.SelectedDateFormat = DatePickerFormat.Short;
         }
         private void txtFIO_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -117,7 +118,7 @@ namespace rccs_new
 
                 MessageBox.Show("Работник успешно добавлен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Опционально: закрыть форму после добавления
+                
                 this.Close();
             }
             catch (Exception ex)

@@ -37,6 +37,7 @@ namespace rccs_new
                 workers.name,
                 workers.work_device_data,
                 workers.number,
+                workers.id_company,
                 users.login,
                 users.password,
                 users.id_roll
@@ -59,11 +60,47 @@ namespace rccs_new
                 txtLogin.Text = row["login"]?.ToString() ?? "";
                 txtPassword.Text = row["password"]?.ToString() ?? "";
 
-                if (row["work_device_data"] != DBNull.Value)
+                if (row["work_device_data"] != DBNull.Value && row["work_device_data"] != null)
+                {
                     dpDate.SelectedDate = Convert.ToDateTime(row["work_device_data"]);
+                }
 
-                if (row["id_roll"] != DBNull.Value)
-                    cmbRole.SelectedValue = Convert.ToInt32(row["id_roll"]);
+                if (row["id_roll"] != DBNull.Value && row["id_roll"] != null)
+                {
+                    int roleId = Convert.ToInt32(row["id_roll"]);
+
+                  
+                    cmbRole.SelectedValue = roleId;
+
+                   
+                    if (cmbRole.SelectedValue == null)
+                    {
+                        
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            cmbRole.SelectedValue = roleId;
+                        }), System.Windows.Threading.DispatcherPriority.Loaded);
+                    }
+                }
+                if (row["id_company"] != DBNull.Value && row["id_company"] != null)
+                {
+                    int companyId = Convert.ToInt32(row["id_company"]);
+
+
+                    cmbComp.SelectedValue = companyId;
+
+
+                    if (cmbComp.SelectedValue == null)
+                    {
+
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            cmbComp.SelectedValue = companyId;
+                        }), System.Windows.Threading.DispatcherPriority.Loaded);
+                    }
+                }
+
+
             }
             else
             {
@@ -86,6 +123,21 @@ namespace rccs_new
             if (string.IsNullOrWhiteSpace(txtFIO.Text))
             {
                 MessageBox.Show("Введите ФИО сотрудника!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtLogin.Text))
+            {
+                MessageBox.Show("Введите логин сотрудника!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                MessageBox.Show("Введите пароль сотрудника!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtPhone.Text))
+            {
+                MessageBox.Show("Введите телефон сотрудника!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             try

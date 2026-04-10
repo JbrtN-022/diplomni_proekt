@@ -29,6 +29,7 @@ namespace rccs.MyClass
         public static DataTable dtWorkers = new DataTable();
         public static DataTable dtTemp = new DataTable();
         public static DataTable dtCompanyCombobox = new DataTable();
+        public static  DataTable dtCounterparty = new DataTable();
         public static bool ConnectBD()
         {
             try

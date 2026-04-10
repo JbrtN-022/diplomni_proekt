@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="rccs_new.UserControlCounterparty"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:rccs_new"
+             mc:Ignorable="d" Height="194" Width="430" Background="#2196F3">
+    <Border  Margin="3" Background="White"  CornerRadius="9">
+        <Grid Margin="14,13,12,13" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="395*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.ColumnSpan="2">
+            <!-- Название + Тип лица -->
+            <TextBlock x:Name="txtName" 
+                           FontSize="16" 
+                           FontWeight="SemiBold"
+                           TextWrapping="Wrap"
+                           Foreground="#212121"
+                           Text="Название •  тип лица"/>
+
+            <TextBlock x:Name="txtAdress" 
+                           Text=" адрес" 
+                           FontSize="13" 
+                           Foreground="#666666"
+                           Margin="0,4,0,0"/>
+
+            <Separator Margin="0,7,0,5" Background="#EEEEEE"/>
+
+            <!-- Контактная информация -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                    <TextBlock Text="Контактное лицо: " FontSize="12" Foreground="#666666"/>
+                <TextBlock x:Name="txtContPerson" Text="Иванов И.И." Margin="0,0,0,0" FontSize="13" Foreground="#333"/>
+            </StackPanel>
+
+            <TextBlock x:Name="txtPhone" Text="+7 (999) 123-45-67" FontSize="13" FontWeight="Medium" Foreground="#2196F3"/>
+
+            <TextBlock x:Name="txtEmail" Text="example@mail.ru" FontSize="13" Foreground="#1976D2" Margin="0,4,0,0"/>
+
+            <!-- Дополнительно -->
+            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                    <TextBlock Text="ИНН:" FontSize="12" Foreground="#666666"/>
+                <TextBlock x:Name="txtINN" Text="123456789012" Margin="6,0,0,0" FontSize="13"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                    <TextBlock Text="БИК:" FontSize="12" Foreground="#666666"/>
+                <TextBlock x:Name="txtBIC" Text="123456789012" Margin="6,0,0,0" FontSize="13"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+    </Border>
+</UserControl>

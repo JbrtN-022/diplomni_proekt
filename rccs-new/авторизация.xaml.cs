@@ -1,4 +1,5 @@
-﻿using rccs.MyClass;
+﻿using MaterialDesignThemes.Wpf;
+using rccs.MyClass;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,7 +67,11 @@ namespace rccs_new
                         MessageBox.Show("Неверные данные!");
                         break;
                     case "1":
+                        форма_менеджера formMEN = new форма_менеджера();
+                        Application.Current.MainWindow = formMEN;
+                        formMEN.Show();
 
+                        this.Close();
                         break;
                     case "2":
 
@@ -78,37 +83,39 @@ namespace rccs_new
 
                         this.Close();
                         break;
+                    default:
+                        MessageBox.Show("Неверные данные!");
+                        break;
                 }
             }
         }
 
         private void chkShowPassword_Checked(object sender, RoutedEventArgs e)
         {
+            bool isChecked = chkShowPassword.IsChecked == true;
 
-        }
-
-        private void chkShowPassword_Click(object sender, RoutedEventArgs e)
-        {
-            bool showPassword = chkShowPassword.IsChecked == true;
+            
             var parent = txtPassword.Parent as Grid;
-
             if (parent == null) return;
 
-            if (showPassword)
+            if (isChecked)
             {
-                // Создаём TextBox с правильным стилем
+                
                 _visiblePasswordBox = new TextBox
                 {
                     Text = txtPassword.Password,
-                    Style = (Style)FindResource("MaterialDesignOutlinedTextBox"),
-                    FontSize = 15,
                     Height = 50,
-                    Margin = new Thickness(0),
+                    FontSize = 15,
                     Padding = new Thickness(10, 0, 10, 0),
                     VerticalAlignment = VerticalAlignment.Center,
+                    Background = txtPassword.Background,
+                    BorderBrush = txtPassword.BorderBrush,
+                    BorderThickness = txtPassword.BorderThickness,
+
+                   
                 };
 
-                // Заменяем PasswordBox на TextBox
+
                 int index = parent.Children.IndexOf(txtPassword);
                 parent.Children.Remove(txtPassword);
                 parent.Children.Insert(index, _visiblePasswordBox);
@@ -118,7 +125,7 @@ namespace rccs_new
             }
             else
             {
-                // Возвращаем обратно PasswordBox
+
                 if (_visiblePasswordBox != null)
                 {
                     txtPassword.Password = _visiblePasswordBox.Text;
@@ -126,6 +133,55 @@ namespace rccs_new
                     int index = parent.Children.IndexOf(_visiblePasswordBox);
                     parent.Children.Remove(_visiblePasswordBox);
                     parent.Children.Insert(index, txtPassword);
+
+                    _visiblePasswordBox = null;
+                    txtPassword.Focus();
+                }
+            }
+        }
+
+        private void chkShowPassword_Click(object sender, RoutedEventArgs e)
+        {
+            bool show = chkShowPassword.IsChecked == true;
+
+            var parentGrid = txtPassword.Parent as Grid;
+            if (parentGrid == null) return;
+
+            if (show)
+            {
+                // Показываем пароль как обычный TextBox
+                _visiblePasswordBox = new TextBox
+                {
+                    Text = txtPassword.Password,
+                    Height = txtPassword.Height,
+                    FontSize = txtPassword.FontSize,
+                    Padding = txtPassword.Padding,
+                    VerticalAlignment = txtPassword.VerticalAlignment,
+                    HorizontalAlignment = txtPassword.HorizontalAlignment,
+                    Background = txtPassword.Background,
+                    BorderBrush = txtPassword.BorderBrush,
+                    BorderThickness = txtPassword.BorderThickness,
+                    FontFamily = txtPassword.FontFamily,
+                    Margin = txtPassword.Margin
+                };
+
+                int index = parentGrid.Children.IndexOf(txtPassword);
+                parentGrid.Children.Remove(txtPassword);
+                parentGrid.Children.Insert(index, _visiblePasswordBox);
+
+                _visiblePasswordBox.Focus();
+                _visiblePasswordBox.CaretIndex = _visiblePasswordBox.Text.Length;
+            }
+            else
+            {
+                // Возвращаем PasswordBox обратно
+                if (_visiblePasswordBox != null)
+                {
+                    txtPassword.Password = _visiblePasswordBox.Text;
+
+                    int index = parentGrid.Children.IndexOf(_visiblePasswordBox);
+                    parentGrid.Children.Remove(_visiblePasswordBox);
+                    parentGrid.Children.Insert(index, txtPassword);
 
                     _visiblePasswordBox = null;
                     txtPassword.Focus();
