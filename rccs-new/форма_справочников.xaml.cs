@@ -156,18 +156,36 @@ namespace rccs_new
                 default: return "name";
             }
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtAdd.Text))
             {
                 MessageBox.Show("Введите название для добавления!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            string name = txtAdd.Text.Trim(); 
+            bool exists = false;
+
+            switch (SelectedSpravochnikId)
+            {
+                case 1: exists = guideBD.DublicateVidLica(name); break;
+                case 2: exists = guideBD.DublicateCity(name); break;
+                case 3: exists = guideBD.DublicateFloor(name); break;
+                case 4: exists = guideBD.DublicateOffice(name); break;
+                case 5: exists = guideBD.DublicateRoll(name); break;
+            }
+
+            if (exists)
+            {
+                MessageBox.Show($"Запись с названием «{name}» уже существует!",
+                                "Дубликат", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             try
             {
                 switch (SelectedSpravochnikId)
                 {
-                    case 1: guideBD.AddVidLica(txtAdd.Text); break;
+                    case 1: guideBD.AddVidLica(txtAdd.Text.Trim()); break;
                     case 2: guideBD.AddCity(txtAdd.Text.Trim()); break;
                     case 3: guideBD.AddFloor(txtAdd.Text.Trim()); break;
                     case 4: guideBD.AddOffice(txtAdd.Text.Trim()); break;
@@ -275,8 +293,8 @@ namespace rccs_new
                 MessageBox.Show("Запись успешно удалена!", "Успех",
                                 MessageBoxButton.OK, MessageBoxImage.Information);
 
-                RefreshCurrentTable();           // обновляем таблицу
-                Upp.Visibility = Visibility.Collapsed;   // скрываем панель редактирования
+                RefreshCurrentTable();         
+                Upp.Visibility = Visibility.Collapsed;  
                 selectedItemId = null;
             }
             catch (Exception ex)
@@ -286,7 +304,7 @@ namespace rccs_new
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void ButtonUpp_Click(object sender, RoutedEventArgs e)
         {
             if (selectedItemId == null || string.IsNullOrWhiteSpace(txtUpp.Text))
             {
@@ -326,6 +344,24 @@ namespace rccs_new
                                 $"Она используется в таблице «{tableName}»",
                                 "Запрет удаления",
                                 MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            string name = txtAdd.Text.Trim();
+            bool exists = false;
+
+            switch (SelectedSpravochnikId)
+            {
+                case 1: exists = guideBD.DublicateVidLica(name); break;
+                case 2: exists = guideBD.DublicateCity(name); break;
+                case 3: exists = guideBD.DublicateFloor(name); break;
+                case 4: exists = guideBD.DublicateOffice(name); break;
+                case 5: exists = guideBD.DublicateRoll(name); break;
+            }
+
+            if (exists)
+            {
+                MessageBox.Show($"Запись с названием «{name}» уже существует!",
+                                "Дубликат", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             try

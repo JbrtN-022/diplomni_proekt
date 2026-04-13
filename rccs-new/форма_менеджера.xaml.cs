@@ -47,10 +47,21 @@ namespace rccs_new
 
             this.Close();
         }
-
+        private void ReplaceText(DocumentFormat.OpenXml.Wordprocessing.Body body, string placeholder, string newText)
+        {
+            foreach (var text in body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>())
+            {
+                if (text.Text.Contains(placeholder))
+                {
+                    text.Text = text.Text.Replace(placeholder, newText);
+                }
+            }
+        }
         private void печать_Click(object sender, RoutedEventArgs e)
         {
 
         }
+        
+
     }
 }

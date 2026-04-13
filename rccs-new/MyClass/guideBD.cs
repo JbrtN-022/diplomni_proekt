@@ -17,7 +17,7 @@ namespace rccs.MyClass
         }
         public static void selectGoroda()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.city order by id_city asc;";
+            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.city order by city asc;";
             ConnectionBD.dtGoroda.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtGoroda);
         }
@@ -46,6 +46,25 @@ namespace rccs.MyClass
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtCompanyCombobox);
 
         }
+        public static void selectPrograms()
+        {
+            ConnectionBD.mycommand.CommandText =
+                "SELECT id_program, name FROM rccs.program";
+
+            ConnectionBD.dtProgramsComboBox.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtProgramsComboBox);
+        }
+
+        public static void selectServices()
+        {
+            ConnectionBD.mycommand.CommandText =
+                "SELECT id_services, name FROM rccs.services";
+
+            ConnectionBD.dtServicesComboBox.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtServicesComboBox);
+        }
+
+        
         //vidlica
 
         public static void AddVidLica(string name)
@@ -65,6 +84,16 @@ namespace rccs.MyClass
             ConnectionBD.mycommand.CommandText = $@"DELETE FROM rccs.type_of_face WHERE id_type_of_face = '{name}';";
             ConnectionBD.mycommand.ExecuteNonQuery();
         }
+
+        public static bool DublicateVidLica(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $"SELECT COUNT(*) FROM rccs.type_of_face WHERE type_of_face = @name";
+            ConnectionBD.mycommand.Parameters.Clear();
+            ConnectionBD.mycommand.Parameters.AddWithValue("@name", name);
+
+            int count = Convert.ToInt32(ConnectionBD.mycommand.ExecuteScalar());
+            return count > 0;
+        }
         // city
 
         public static void AddCity(string name)
@@ -83,6 +112,15 @@ namespace rccs.MyClass
         {
             ConnectionBD.mycommand.CommandText = $@"DELETE FROM rccs.city WHERE id_city = '{name}';";
             ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static bool DublicateCity(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $"SELECT COUNT(*) FROM rccs.city WHERE city = @name";
+            ConnectionBD.mycommand.Parameters.Clear();
+            ConnectionBD.mycommand.Parameters.AddWithValue("@name", name);
+
+            int count = Convert.ToInt32(ConnectionBD.mycommand.ExecuteScalar());
+            return count > 0;
         }
         // roll
 
@@ -104,6 +142,15 @@ namespace rccs.MyClass
             ConnectionBD.mycommand.CommandText = $@"DELETE FROM rccs.roll WHERE id_roll = '{name}';";
             ConnectionBD.mycommand.ExecuteNonQuery();
         }
+        public static bool DublicateRoll(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $"SELECT COUNT(*) FROM rccs.roll WHERE roll = @name";
+            ConnectionBD.mycommand.Parameters.Clear();
+            ConnectionBD.mycommand.Parameters.AddWithValue("@name", name);
+
+            int count = Convert.ToInt32(ConnectionBD.mycommand.ExecuteScalar());
+            return count > 0;
+        }
         // office
 
         public static void AddOffice(string name)
@@ -123,6 +170,15 @@ namespace rccs.MyClass
             ConnectionBD.mycommand.CommandText = $@"DELETE FROM rccs.office WHERE id_office = '{name}';";
             ConnectionBD.mycommand.ExecuteNonQuery();
         }
+        public static bool DublicateOffice(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $"SELECT COUNT(*) FROM rccs.office WHERE office = @name";
+            ConnectionBD.mycommand.Parameters.Clear();
+            ConnectionBD.mycommand.Parameters.AddWithValue("@name", name);
+
+            int count = Convert.ToInt32(ConnectionBD.mycommand.ExecuteScalar());
+            return count > 0;
+        }
         // floor 
 
         public static void AddFloor(string name)
@@ -141,6 +197,15 @@ namespace rccs.MyClass
         {
             ConnectionBD.mycommand.CommandText = $@"DELETE FROM rccs.floor WHERE id_floor  = '{name}';";
             ConnectionBD.mycommand.ExecuteNonQuery();
+        }
+        public static bool DublicateFloor(string name)
+        {
+            ConnectionBD.mycommand.CommandText = $"SELECT COUNT(*) FROM rccs.floor WHERE floor = @name";
+            ConnectionBD.mycommand.Parameters.Clear();
+            ConnectionBD.mycommand.Parameters.AddWithValue("@name", name);
+
+            int count = Convert.ToInt32(ConnectionBD.mycommand.ExecuteScalar());
+            return count > 0;
         }
     }
 }

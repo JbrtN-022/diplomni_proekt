@@ -58,7 +58,7 @@ namespace rccs_new
                 txtFIO.Text = row["name"]?.ToString() ?? "";
                 txtPhone.Text = row["number"]?.ToString() ?? "";
                 txtLogin.Text = row["login"]?.ToString() ?? "";
-                txtPassword.Text = row["password"]?.ToString() ?? "";
+               
 
                 if (row["work_device_data"] != DBNull.Value && row["work_device_data"] != null)
                 {
@@ -130,11 +130,7 @@ namespace rccs_new
                 MessageBox.Show("Введите логин сотрудника!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (string.IsNullOrWhiteSpace(txtPassword.Text))
-            {
-                MessageBox.Show("Введите пароль сотрудника!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            
             if (string.IsNullOrWhiteSpace(txtPhone.Text))
             {
                 MessageBox.Show("Введите телефон сотрудника!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -157,7 +153,6 @@ namespace rccs_new
                 ConnectionBD.mycommand.CommandText = $@"
                     UPDATE rccs.users 
                     SET login = '{txtLogin.Text.Replace("'", "''")}',
-                        password = '{txtPassword.Text.Replace("'", "''")}',
                         id_roll = {cmbRole.SelectedValue}
                     WHERE id_workers = {currentWorkerId}";
 

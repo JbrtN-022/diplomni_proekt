@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
@@ -23,12 +24,16 @@ namespace rccs_new
     /// </summary>
     public partial class UserControlCounterparty : UserControl
     {
-        public UserControlCounterparty(string name, string city, string typeFace,
+        public int Id { get; private set; }
+        public event EventHandler<int> CardClicked;
+        public UserControlCounterparty(string id, string name, string city, string typeFace,
                                        string actualAddress, string legalAddress,
                                        string email, string phone, string inn, string bic,
                                        string contPerson)
         {
             InitializeComponent();
+            Id = int.Parse(id);
+
             txtName.Text = $@"{name} • {typeFace}";
             txtAdress.Text = $"{city ?? "—"} • {actualAddress ?? "—"}";                  
             txtContPerson.Text = contPerson ?? "—";
@@ -37,5 +42,14 @@ namespace rccs_new
             txtINN.Text = inn ?? "—";
             txtBIC.Text = bic ?? "—";
         }
+
+        private void UserControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            CardClicked?.Invoke(this, Id);
+        }
+        public event EventHandler SelectionChanged;
+
+        
+        
     }
 }

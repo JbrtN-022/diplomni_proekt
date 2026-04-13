@@ -1,0 +1,118 @@
+﻿<Window x:Class="rccs_new.форма_прайса"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:rccs_new"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="форма_прайса" Height="380" Width="702">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition Width="593*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Background="#FF2196F3" Height="60" VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <TextBlock Text="История цен"
+       Foreground="White"
+       FontSize="22"
+       FontWeight="Medium"
+       VerticalAlignment="Center"
+       Margin="25,0,0,0"/>
+
+            <!-- Панель кнопок -->
+            <StackPanel Orientation="Horizontal"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Center"
+        Margin="0,0,20,0">
+
+                <Button x:Name="Back"
+        Style="{StaticResource MaterialDesignToolButton}"
+        Width="45" Height="45"
+        ToolTip="Назад"
+        Margin="5,0" Click="Back_Click"
+        >
+                    <materialDesign:PackIcon Kind="ArrowBack" Width="26" Height="26" Foreground="White"/>
+                </Button>
+
+                
+            </StackPanel>
+
+        </Grid>
+        <Grid Margin="6,75,15,15" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="275*"/>
+                <ColumnDefinition Width="188*"/>
+                <ColumnDefinition Width="173*"/>
+                <ColumnDefinition Width="58*"/>
+            </Grid.ColumnDefinitions>
+            <Border CornerRadius="10" Background="White" BorderBrush="#FF2196F3" BorderThickness="1" Height="35"  Width="260" HorizontalAlignment ="Left" VerticalAlignment="Top" Padding="2">
+
+                <ComboBox x:Name="cmbPrice" FontSize="15"
+                Background="Transparent"
+                BorderBrush="#FF2196F3"
+                BorderThickness="0"  VerticalAlignment="Top" SelectionChanged="cmbPrice_SelectionChanged"/>
+            </Border>
+            <Border CornerRadius="10" BorderBrush="#CCCCCC" BorderThickness="1" Margin="0,40,0,0">
+                <Grid Background="Transparent">
+                    <Border CornerRadius="10" Background="#F8F8F8" BorderBrush="#CCCCCC" BorderThickness="1" Margin ="10 20 10 0" Height="30" VerticalAlignment="Top">
+                        <TextBox  x:Name="txtPrice" TextWrapping="Wrap" Text=""  FontSize="15"  Background="Transparent"  BorderThickness="0" BorderBrush="#CCCCCC"/>
+                    </Border>
+                    <Border CornerRadius="10" Background="#F8F8F8" BorderBrush="#CCCCCC" BorderThickness="1" Height="30"  VerticalAlignment="Top" Margin ="10 60 10 0">
+
+                        <ComboBox x:Name="cmbLink" Height="30" FontSize="15"
+                            Background="Transparent"
+                            BorderBrush="#CCCCCC"
+                            BorderThickness="0"/>
+                    </Border>
+                    <Button  x:Name="addBtn" Content="Добавить"
+                         Height="35"
+                         Margin="10 20 10 10"
+                         Style="{StaticResource MaterialDesignRaisedButton}" Click="addBtn_Click"/>
+                    <Button  x:Name="DelBtn" Content="Удалить"
+                         Height="35"
+                         Margin="10 100 10 6"
+                         Style="{StaticResource MaterialDesignRaisedButton}"  Click="DelBtn_Click"/>
+                </Grid>
+            </Border>
+            <DataGrid x:Name="dgPriceTable"
+          Grid.Column="1"
+          Margin="15,0,0,0"
+          
+          CanUserAddRows="False"
+          CanUserDeleteRows="False"
+          CanUserResizeRows="False"
+          GridLinesVisibility="Horizontal"
+          AutoGenerateColumns="True"
+          Background="#F8F8F8"
+          Foreground="Black"
+          BorderBrush="#CCCCCC"
+          BorderThickness="1"
+          SelectionMode="Single"
+          Style="{StaticResource MaterialDesignDataGrid}" SelectionChanged="dgSpravochnik_SelectionChanged" Grid.ColumnSpan="3">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Ключ"
+                            Binding="{Binding Code}"
+                            Width="70"
+                            IsReadOnly="True"/>
+
+                    <DataGridTextColumn Header="Прайс"
+                            Binding="{Binding price}"
+                            Width="*"
+                            IsReadOnly="True"
+                                        />
+                    <DataGridTextColumn Header="дата"
+                            Binding="{Binding date}"
+                            Width="*"
+                            
+                            IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="Объект" Header="Объект"
+                            Binding="{Binding Объект}"
+                            Width="*"
+                            IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>

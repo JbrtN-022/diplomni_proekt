@@ -49,6 +49,11 @@
                             Height="45"
                             Margin="5,8"
                     Style="{StaticResource MaterialDesignRaisedButton}" Click="контрагенты_Click"  />
+                    <Button x:Name="прайс"
+                            Content="История цен"
+                            Height="45"
+                            Margin="5,8"
+                    Style="{StaticResource MaterialDesignRaisedButton}" Click="прайс_Click"   />
 
                     <Button x:Name="выйти" Content="Выйти"
                             Height="45"

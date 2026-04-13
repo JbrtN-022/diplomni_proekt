@@ -121,11 +121,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MyClass\counterparty.cs" />
+    <Compile Include="MyClass\PriceHistory.cs" />
     <Compile Include="UserControlCounterparty.xaml.cs">
       <DependentUpon>UserControlCounterparty.xaml</DependentUpon>
     </Compile>
     <Compile Include="добавление пользователей.xaml.cs">
       <DependentUpon>добавление пользователей.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="добавление_контрагента.xaml.cs">
+      <DependentUpon>добавление_контрагента.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="редактирование_контрагентов.xaml.cs">
+      <DependentUpon>редактирование_контрагентов.xaml</DependentUpon>
     </Compile>
     <Compile Include="редактирование_пользователей.xaml.cs">
       <DependentUpon>редактирование_пользователей.xaml</DependentUpon>
@@ -144,6 +151,9 @@
     </Compile>
     <Compile Include="форма_пользователей.xaml.cs">
       <DependentUpon>форма_пользователей.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="форма_прайса.xaml.cs">
+      <DependentUpon>форма_прайса.xaml</DependentUpon>
     </Compile>
     <Compile Include="форма_справочников.xaml.cs">
       <DependentUpon>форма_справочников.xaml</DependentUpon>
@@ -172,6 +182,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="добавление_контрагента.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="редактирование_контрагентов.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="редактирование_пользователей.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -193,6 +211,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="форма_пользователей.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="форма_прайса.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

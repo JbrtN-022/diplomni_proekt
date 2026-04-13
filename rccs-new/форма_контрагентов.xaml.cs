@@ -22,23 +22,13 @@ namespace rccs_new
     /// </summary>
     public partial class форма_контрагентов : Window
     {
+        
+        private int? selectedCounterpartyId = null;
         public форма_контрагентов()
         {
             InitializeComponent();
             LoadAllCounterparties();
-            //guideBD.selectVidLica();
-            //cmbTypeFace.ItemsSource = ConnectionBD.dtVidLica.DefaultView;
-            //cmbTypeFace.DisplayMemberPath = "type_of_face";
-            //cmbTypeFace.SelectedValuePath = "id_type_of_face";
-            //guideBD.selectGoroda();
-            //cmbCity.ItemsSource = ConnectionBD.dtGoroda.DefaultView;
-            //cmbCity.DisplayMemberPath = "city";
-            //cmbCity.SelectedValuePath = "id_city";
-            //cmbCity.Items.Insert(0, new { city = "Все города", id_city = 0 });
-            //cmbTypeFace.Items.Insert(0, new { type_of_face = "Все типы", id_type_of_face = 0 });
-
-            //cmbCity.SelectedIndex = 0;
-            //cmbTypeFace.SelectedIndex = 0;
+           
             LoadFilters();
             if (ConnectionBD.roll == "1")
             {
@@ -82,7 +72,28 @@ namespace rccs_new
         }
         private void LoadAllCounterparties(string search = "", int cityId = 0, int typeId = 0)
         {
+            selectedCounterpartyId = null;
+            UppBtn.IsEnabled = false;
+            DelBtn.IsEnabled = false;
+
             counterparty.SelectCounterparty(itemsControlCounterparty, search, cityId, typeId);
+
+           
+            foreach (UserControlCounterparty card in itemsControlCounterparty.Items)
+            {
+                card.CardClicked -= Card_CardClicked;   
+                card.CardClicked += Card_CardClicked;   
+            }
+        }
+        private void Card_CardClicked(object sender, int id)
+        {
+            selectedCounterpartyId = id;
+
+
+            UppBtn.IsEnabled = true;
+            DelBtn.IsEnabled = true;
+
+          
         }
         private void Back_Click(object sender, RoutedEventArgs e)
         {
@@ -114,24 +125,55 @@ namespace rccs_new
 
         private void addBtn_Click(object sender, RoutedEventArgs e)
         {
+            var addForm = new добавление_контрагента();
 
+           
+            if (addForm.ShowDialog() == true)
+            {
+                
+                LoadAllCounterparties(
+                    search: txtSearch.Text.Trim(),
+                    cityId: cmbCity.SelectedValue != null ? Convert.ToInt32(cmbCity.SelectedValue) : 0,
+                    typeId: cmbTypeFace.SelectedValue != null ? Convert.ToInt32(cmbTypeFace.SelectedValue) : 0
+                );
+            }
         }
 
         private void DelBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (selectedCounterpartyId == null) return;
+            MessageBox.Show(selectedCounterpartyId.Value.ToString());
 
-        }
+            var result = MessageBox.Show("Удалить этого контрагента?", "Подтверждение",
+                                         MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-        private void dgSpravochnik_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            if (result == MessageBoxResult.Yes)
+            {
+                counterparty.DeleteCounterparty(selectedCounterpartyId.Value);
+                LoadAllCounterparties();   
+            }
         }
 
         private void UppBtn_Click(object sender, RoutedEventArgs e)
         {
+            var addForm = new редактирование_контрагентов(selectedCounterpartyId.Value);
+
+
+            if (addForm.ShowDialog() == true)
+            {
+
+                LoadAllCounterparties(
+                    search: txtSearch.Text.Trim(),
+                    cityId: cmbCity.SelectedValue != null ? Convert.ToInt32(cmbCity.SelectedValue) : 0,
+                    typeId: cmbTypeFace.SelectedValue != null ? Convert.ToInt32(cmbTypeFace.SelectedValue) : 0
+                );
+            }
+        }
+        
+        private void dgSpravochnik_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
         }
-
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchText = txtSearch.Text.Trim();

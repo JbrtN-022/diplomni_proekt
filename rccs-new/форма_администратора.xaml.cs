@@ -66,6 +66,15 @@ namespace rccs_new
 
             this.Close();
         }
+
+        private void прайс_Click(object sender, RoutedEventArgs e)
+        {
+            форма_прайса spravochnik = new форма_прайса();
+            Application.Current.MainWindow = spravochnik;
+            spravochnik.Show();
+
+            this.Close();
+        }
     }
 }
 

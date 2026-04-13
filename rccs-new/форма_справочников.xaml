@@ -104,7 +104,7 @@
                         Foreground="White"
                         FontSize="15"
                         FontWeight="Medium"
-                        BorderThickness="0" Click="Button_Click"
+                        BorderThickness="0" Click="ButtonAdd_Click"
                        />
                     </StackPanel>
                 </Border>
@@ -145,7 +145,7 @@
                         Foreground="White"
                         FontSize="15"
                         FontWeight="Medium"
-                        BorderThickness="0" Click="Button_Click_1"
+                        BorderThickness="0" Click="ButtonUpp_Click"
                         />
                     </StackPanel>
                 </Border>

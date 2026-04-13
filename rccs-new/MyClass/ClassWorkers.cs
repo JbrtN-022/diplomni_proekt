@@ -52,7 +52,7 @@ namespace rccs.MyClass
             ConnectionBD.mycommand.Parameters.AddWithValue("@name", name);
             ConnectionBD.mycommand.Parameters.AddWithValue("@number", number);
 
-            ConnectionBD.dtTemp.Clear();                    // используем временную таблицу
+            ConnectionBD.dtTemp.Clear();                    
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtTemp);
 
             if (ConnectionBD.dtTemp.Rows.Count > 0)
