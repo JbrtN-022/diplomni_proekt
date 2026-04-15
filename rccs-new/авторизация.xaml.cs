@@ -74,7 +74,11 @@ namespace rccs_new
                         this.Close();
                         break;
                     case "2":
+                        форма_бухгалтера formBuch = new форма_бухгалтера();
+                        Application.Current.MainWindow = formBuch;
+                        formBuch.Show();
 
+                        this.Close();
                         break;
                     case "3":
                         форма_администратора formadm = new форма_администратора();

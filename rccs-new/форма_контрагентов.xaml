@@ -61,7 +61,8 @@
         <Grid Margin="0,70,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="380"/>
-                <ColumnDefinition Width="490"/>
+                <ColumnDefinition Width="19"/>
+                <ColumnDefinition Width="471"/>
             </Grid.ColumnDefinitions>
 
             <Border Margin="20,20,10,20"
@@ -112,7 +113,7 @@
                           
                           VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled" Width=" 490"
-                          HorizontalAlignment="Right">
+                          HorizontalAlignment="Left" Grid.ColumnSpan="2">
                 <ItemsControl x:Name="itemsControlCounterparty" BorderBrush="#FF424242"  BorderThickness="1" Width="450" Margin="10">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

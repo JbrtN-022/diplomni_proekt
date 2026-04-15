@@ -12,7 +12,7 @@
             <ColumnDefinition Width="395*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.ColumnSpan="2">
-            <!-- Название + Тип лица -->
+            
             <TextBlock x:Name="txtName" 
                            FontSize="16" 
                            FontWeight="SemiBold"

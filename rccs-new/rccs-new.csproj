@@ -121,15 +121,35 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MyClass\counterparty.cs" />
+    <Compile Include="MyClass\leaseAgreement.cs" />
+    <Compile Include="MyClass\licenseAgreement.cs" />
     <Compile Include="MyClass\PriceHistory.cs" />
     <Compile Include="UserControlCounterparty.xaml.cs">
       <DependentUpon>UserControlCounterparty.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLease.xaml.cs">
+      <DependentUpon>UserControlLease.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLicense.xaml.cs">
+      <DependentUpon>UserControlLicense.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserOverlap.xaml.cs">
+      <DependentUpon>UserOverlap.xaml</DependentUpon>
     </Compile>
     <Compile Include="добавление пользователей.xaml.cs">
       <DependentUpon>добавление пользователей.xaml</DependentUpon>
     </Compile>
     <Compile Include="добавление_контрагента.xaml.cs">
       <DependentUpon>добавление_контрагента.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="лицензия_по.xaml.cs">
+      <DependentUpon>лицензия_по.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="просмотр договоров аренды.xaml.cs">
+      <DependentUpon>просмотр договоров аренды.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="просмотр лицензий.xaml.cs">
+      <DependentUpon>просмотр лицензий.xaml</DependentUpon>
     </Compile>
     <Compile Include="редактирование_контрагентов.xaml.cs">
       <DependentUpon>редактирование_контрагентов.xaml</DependentUpon>
@@ -142,6 +162,9 @@
     </Compile>
     <Compile Include="форма_администратора.xaml.cs">
       <DependentUpon>форма_администратора.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="форма_бухгалтера.xaml.cs">
+      <DependentUpon>форма_бухгалтера.xaml</DependentUpon>
     </Compile>
     <Compile Include="форма_контрагентов.xaml.cs">
       <DependentUpon>форма_контрагентов.xaml</DependentUpon>
@@ -159,6 +182,18 @@
       <DependentUpon>форма_справочников.xaml</DependentUpon>
     </Compile>
     <Page Include="UserControlCounterparty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControlLease.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControlLicense.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserOverlap.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -186,6 +221,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="лицензия_по.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="просмотр договоров аренды.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="просмотр лицензий.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="редактирование_контрагентов.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -199,6 +246,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="форма_администратора.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="форма_бухгалтера.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

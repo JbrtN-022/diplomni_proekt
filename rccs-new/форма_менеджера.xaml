@@ -29,7 +29,7 @@
                     <Button x:Name="viewingLicense" Content="Просмотр лицензий"
                             Height="45"
                             Margin="5,8"
-                            Style="{StaticResource MaterialDesignRaisedButton}" />
+                            Style="{StaticResource MaterialDesignRaisedButton}" Click="viewingLicense_Click" />
                     <Button x:Name="контрагенты"
                             Content="Список контрагентов"
                             Height="45"
@@ -79,7 +79,16 @@
                     CommandParameter="Left">
                 <materialDesign:PackIcon Kind="Menu" Width="30" Height="30"/>
             </Button>
-
+            <Button x:Name="пользователь" Style="{StaticResource MaterialDesignFlatButton}"
+                    Width="50" 
+                    Height="50"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="15 50 15 0"
+                    
+                    CommandParameter="Left" Padding="0 0 0 0" Click="пользователь_Click">
+                <materialDesign:PackIcon Kind="Account" Width="25" Height="40" VerticalAlignment="Center"/>
+            </Button>
             <Border Height="25"
                     VerticalAlignment="Bottom"
                     Background="#2196F3" Panel.ZIndex="-1"/>

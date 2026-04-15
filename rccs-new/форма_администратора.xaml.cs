@@ -75,6 +75,18 @@ namespace rccs_new
 
             this.Close();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void пользователь_Click(object sender, RoutedEventArgs e)
+        {
+            UserOverlap overlap = new UserOverlap();
+            Application.Current.MainWindow = overlap;
+            overlap.Show();
+        }
     }
 }
 

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace rccs_new
 {
     /// <summary>
-    /// Логика взаимодействия для форма_менеджера.xaml
+    /// Логика взаимодействия для форма_бухгалтера.xaml
     /// </summary>
-    public partial class форма_менеджера : Window
+    public partial class форма_бухгалтера : Window
     {
-        public форма_менеджера()
+        public форма_бухгалтера()
         {
             InitializeComponent();
             if (ConnectionBD.resFio.Length == 0)
@@ -39,24 +39,6 @@ namespace rccs_new
             this.Close();
         }
 
-        private void выйти_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindow autoriz = new MainWindow();
-            Application.Current.MainWindow = autoriz;
-            autoriz.Show();
-
-            this.Close();
-        }
-        private void ReplaceText(DocumentFormat.OpenXml.Wordprocessing.Body body, string placeholder, string newText)
-        {
-            foreach (var text in body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>())
-            {
-                if (text.Text.Contains(placeholder))
-                {
-                    text.Text = text.Text.Replace(placeholder, newText);
-                }
-            }
-        }
         private void печать_Click(object sender, RoutedEventArgs e)
         {
 
@@ -69,11 +51,22 @@ namespace rccs_new
             overlap.Show();
         }
 
-        private void viewingLicense_Click(object sender, RoutedEventArgs e)
+        private void выйти_Click(object sender, RoutedEventArgs e)
         {
-            просмотр_лицензий prosmotrlicens = new просмотр_лицензий();
-            Application.Current.MainWindow = prosmotrlicens;
-            prosmotrlicens.Show();
+            MainWindow autoriz = new MainWindow();
+            Application.Current.MainWindow = autoriz;
+            autoriz.Show();
+
+            this.Close();
+        }
+
+        private void Просмотр_договоров_аренды_Click(object sender, RoutedEventArgs e)
+        {
+            просмотр_договоров_аренды arenda = new просмотр_договоров_аренды();
+            Application.Current.MainWindow = arenda;
+            arenda.Show();
+
+            this.Close();
         }
     }
 }

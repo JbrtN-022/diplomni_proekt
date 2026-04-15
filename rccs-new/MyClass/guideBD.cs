@@ -64,7 +64,14 @@ namespace rccs.MyClass
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtServicesComboBox);
         }
 
-        
+        public static void selectWorkers()
+        {
+            ConnectionBD.mycommand.CommandText =
+                "SELECT id_workers,name FROM rccs.workers;";
+
+            ConnectionBD.dtWorkersComboBox.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtWorkersComboBox);
+        }
         //vidlica
 
         public static void AddVidLica(string name)
