@@ -32,6 +32,7 @@ namespace rccs_new
 
         private void контрагенты_Click(object sender, RoutedEventArgs e)
         {
+          
             форма_контрагентов spravochnik = new форма_контрагентов();
             Application.Current.MainWindow = spravochnik;
             spravochnik.Show();
@@ -53,6 +54,7 @@ namespace rccs_new
 
         private void выйти_Click(object sender, RoutedEventArgs e)
         {
+           
             MainWindow autoriz = new MainWindow();
             Application.Current.MainWindow = autoriz;
             autoriz.Show();
@@ -62,9 +64,20 @@ namespace rccs_new
 
         private void Просмотр_договоров_аренды_Click(object sender, RoutedEventArgs e)
         {
+          
             просмотр_договоров_аренды arenda = new просмотр_договоров_аренды();
             Application.Current.MainWindow = arenda;
             arenda.Show();
+
+            this.Close();
+        }
+
+        private void Оформление_договоров_Click(object sender, RoutedEventArgs e)
+        {
+            
+            создание_договора_аренды oform = new создание_договора_аренды();
+            Application.Current.MainWindow = oform;
+            oform.Show();
 
             this.Close();
         }

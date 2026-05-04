@@ -87,6 +87,11 @@ namespace rccs_new
             Application.Current.MainWindow = overlap;
             overlap.Show();
         }
+
+        private void документы_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
 

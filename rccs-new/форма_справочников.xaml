@@ -171,8 +171,8 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Ключ"
                                         Binding="{Binding Code}"
-                                        Width="130"
-                                        IsReadOnly="True"/>
+                                        Width="0"
+                                        IsReadOnly="True" Visibility="Collapsed"/>
 
                     <DataGridTextColumn Header="Наименование"
                                         Binding="{Binding Name}"

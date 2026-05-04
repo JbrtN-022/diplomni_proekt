@@ -20,20 +20,10 @@
                            Foreground="{DynamicResource PrimaryHueMidBrush}"/>
 
                 <StackPanel Margin="15,0">
-                    <TextBlock Text="Документы аренды"
-                               FontSize="14" 
-                               FontWeight="Medium" 
-                               Margin="5,10,5,5"/>
-                    <ComboBox materialDesign:HintAssist.Hint="Выберите документ" 
-                              Margin="5,0,5,10"/>
-
-                    <TextBlock Text="Документы продаж"
-                               FontSize="14" 
-                               FontWeight="Medium" 
-                               Margin="5,10,5,5"/>
-                    <ComboBox materialDesign:HintAssist.Hint="Выберите документ" 
-                              Margin="5,0,5,15"/>
-
+                    <Button x:Name="документы" Content="Список документов"
+                             Height="45"
+                             Margin="5,8"
+                             Style="{StaticResource MaterialDesignRaisedButton}" Click="документы_Click"/>            
                     <Button x:Name="справочники" Content="Список справочников"
                             Height="45"
                             Margin="5,8"

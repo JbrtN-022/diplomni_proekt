@@ -75,5 +75,12 @@ namespace rccs_new
             Application.Current.MainWindow = prosmotrlicens;
             prosmotrlicens.Show();
         }
+
+        private void addLicense_Click(object sender, RoutedEventArgs e)
+        {
+            Форма_оформления_лицензии oformlenieLicens = new Форма_оформления_лицензии();
+            Application.Current.MainWindow = oformlenieLicens;
+            oformlenieLicens.Show();
+        }
     }
 }

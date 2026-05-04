@@ -43,7 +43,7 @@
 
                         <TextBlock Text="Город *" FontSize="14" Margin="0,14,0,6"/>
                         <Border CornerRadius="10" Background="#F8F8F8" BorderBrush="#CCCCCC" BorderThickness="1">
-                            <ComboBox x:Name="cmbCity" Height="38" FontSize="15" Background="Transparent" BorderThickness="0"/>
+                            <ComboBox x:Name="cmbCity" Height="38" FontSize="15" Background="Transparent" BorderThickness="0" SelectionChanged="cmbCity_SelectionChanged"/>
                         </Border>
 
                         <TextBlock Text="Тип лица *" FontSize="14" Margin="0,14,0,6"/>

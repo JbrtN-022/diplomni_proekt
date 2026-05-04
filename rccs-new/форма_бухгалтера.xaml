@@ -28,6 +28,11 @@
                             Height="45"
                             Margin="5,8"
                     Style="{StaticResource MaterialDesignRaisedButton}" Click="контрагенты_Click"  />
+                    <Button x:Name="Оформление_договоров_аренды"
+                             Content="Оформление договоров аренды"
+                             Height="45"
+                             Margin="5,8"
+                     Style="{StaticResource MaterialDesignRaisedButton}" Click="Оформление_договоров_Click"  />
                     <Button x:Name="Просмотр_договоров_аренды"
                              Content="Список договоров аренды"
                              Height="45"

@@ -94,84 +94,34 @@ namespace rccs_new
             }
         }
 
-        private void chkShowPassword_Checked(object sender, RoutedEventArgs e)
-        {
-            bool isChecked = chkShowPassword.IsChecked == true;
-
-            
-            var parent = txtPassword.Parent as Grid;
-            if (parent == null) return;
-
-            if (isChecked)
-            {
-                
-                _visiblePasswordBox = new TextBox
-                {
-                    Text = txtPassword.Password,
-                    Height = 50,
-                    FontSize = 15,
-                    Padding = new Thickness(10, 0, 10, 0),
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Background = txtPassword.Background,
-                    BorderBrush = txtPassword.BorderBrush,
-                    BorderThickness = txtPassword.BorderThickness,
-
-                   
-                };
-
-
-                int index = parent.Children.IndexOf(txtPassword);
-                parent.Children.Remove(txtPassword);
-                parent.Children.Insert(index, _visiblePasswordBox);
-
-                _visiblePasswordBox.Focus();
-                _visiblePasswordBox.CaretIndex = _visiblePasswordBox.Text.Length;
-            }
-            else
-            {
-
-                if (_visiblePasswordBox != null)
-                {
-                    txtPassword.Password = _visiblePasswordBox.Text;
-
-                    int index = parent.Children.IndexOf(_visiblePasswordBox);
-                    parent.Children.Remove(_visiblePasswordBox);
-                    parent.Children.Insert(index, txtPassword);
-
-                    _visiblePasswordBox = null;
-                    txtPassword.Focus();
-                }
-            }
-        }
-
         private void chkShowPassword_Click(object sender, RoutedEventArgs e)
         {
             bool show = chkShowPassword.IsChecked == true;
 
-            var parentGrid = txtPassword.Parent as Grid;
-            if (parentGrid == null) return;
+            var parent = txtPassword.Parent as Grid;
+            if (parent == null) return;
 
             if (show)
             {
-                // Показываем пароль как обычный TextBox
+                // Показываем пароль
                 _visiblePasswordBox = new TextBox
                 {
                     Text = txtPassword.Password,
+                    Style = (Style)FindResource("MaterialDesignOutlinedTextBox"),   // ← обязательно
                     Height = txtPassword.Height,
                     FontSize = txtPassword.FontSize,
                     Padding = txtPassword.Padding,
-                    VerticalAlignment = txtPassword.VerticalAlignment,
-                    HorizontalAlignment = txtPassword.HorizontalAlignment,
+                    VerticalAlignment = VerticalAlignment.Center,
                     Background = txtPassword.Background,
                     BorderBrush = txtPassword.BorderBrush,
                     BorderThickness = txtPassword.BorderThickness,
-                    FontFamily = txtPassword.FontFamily,
-                    Margin = txtPassword.Margin
+                    Margin = txtPassword.Margin,
+                    FontFamily = txtPassword.FontFamily
                 };
 
-                int index = parentGrid.Children.IndexOf(txtPassword);
-                parentGrid.Children.Remove(txtPassword);
-                parentGrid.Children.Insert(index, _visiblePasswordBox);
+                int index = parent.Children.IndexOf(txtPassword);
+                parent.Children.Remove(txtPassword);
+                parent.Children.Insert(index, _visiblePasswordBox);
 
                 _visiblePasswordBox.Focus();
                 _visiblePasswordBox.CaretIndex = _visiblePasswordBox.Text.Length;
@@ -183,9 +133,9 @@ namespace rccs_new
                 {
                     txtPassword.Password = _visiblePasswordBox.Text;
 
-                    int index = parentGrid.Children.IndexOf(_visiblePasswordBox);
-                    parentGrid.Children.Remove(_visiblePasswordBox);
-                    parentGrid.Children.Insert(index, txtPassword);
+                    int index = parent.Children.IndexOf(_visiblePasswordBox);
+                    parent.Children.Remove(_visiblePasswordBox);
+                    parent.Children.Insert(index, txtPassword);
 
                     _visiblePasswordBox = null;
                     txtPassword.Focus();

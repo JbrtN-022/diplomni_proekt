@@ -189,5 +189,10 @@ namespace rccs_new
             cmbTypeFace.DisplayMemberPath = "type_of_face";
             cmbTypeFace.SelectedValuePath = "id_type_of_face";
         }
+
+        private void cmbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -9,33 +9,63 @@ namespace rccs.MyClass
 {
     internal class guideBD
     {
+        public static void selectVidLicaForTable()
+        {
+            ConnectionBD.mycommand.CommandText = "SELECT type_of_face as 'тип лица' FROM rccs.type_of_face order by type_of_face asc;";
+            ConnectionBD.dtVidLica.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtVidLica);
+        }
+        public static void selectGorodaForTable()
+        {
+            ConnectionBD.mycommand.CommandText = "SELECT  city as 'города' FROM rccs.city order by city asc;";
+            ConnectionBD.dtGoroda.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtGoroda);
+        }
+        public static void selectEtajForTable()
+        {
+            ConnectionBD.mycommand.CommandText = "SELECT floor as 'этаж' FROM rccs.floor order by floor asc;";
+            ConnectionBD.dtEtaj.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtEtaj);
+        }
+        public static void selectOfficeForTable()
+        {
+            ConnectionBD.mycommand.CommandText = "SELECT office as 'помещение' FROM rccs.office order by office asc;";
+            ConnectionBD.dtOffice.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtOffice);
+        }
+        public static void selectRollForTable()
+        {
+            ConnectionBD.mycommand.CommandText = "SELECT roll as 'роль работника' FROM rccs.roll order by roll asc;";
+            ConnectionBD.dtRoll.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtRoll);
+        }
         public static void selectVidLica()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.type_of_face order by id_type_of_face asc;";
+            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.type_of_face order by type_of_face asc;";
             ConnectionBD.dtVidLica.Clear(); 
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtVidLica);
         }
         public static void selectGoroda()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.city order by city asc;";
+            ConnectionBD.mycommand.CommandText = "SELECT  * FROM rccs.city order by city asc;";
             ConnectionBD.dtGoroda.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtGoroda);
         }
         public static void selectEtaj()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.floor order by id_floor asc;";
+            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.floor order by floor asc;";
             ConnectionBD.dtEtaj.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtEtaj);
         }
         public static void selectOffice()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.office order by id_office asc;";
+            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.office order by office asc;";
             ConnectionBD.dtOffice.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtOffice);
         }
         public static void selectRoll()
         {
-            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.roll order by id_roll asc;";
+            ConnectionBD.mycommand.CommandText = "SELECT * FROM rccs.roll order by roll asc;";
             ConnectionBD.dtRoll.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtRoll);
         }
@@ -72,6 +102,14 @@ namespace rccs.MyClass
             ConnectionBD.dtWorkersComboBox.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtWorkersComboBox);
         }
+        public static void selectCounterpartyComboBox()
+        {
+            ConnectionBD.mycommand.CommandText =
+                "SELECT id_counterparty,name FROM rccs.counterparty;";
+
+            ConnectionBD.dtCounterpartyComboBox.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtCounterpartyComboBox);
+        }
         //vidlica
 
         public static void AddVidLica(string name)
@@ -94,7 +132,7 @@ namespace rccs.MyClass
 
         public static bool DublicateVidLica(string name)
         {
-            ConnectionBD.mycommand.CommandText = $"SELECT COUNT(*) FROM rccs.type_of_face WHERE type_of_face = @name";
+            ConnectionBD.mycommand.CommandText = $"SELECT id_type_of_face FROM rccs.type_of_face WHERE type_of_face = @name";
             ConnectionBD.mycommand.Parameters.Clear();
             ConnectionBD.mycommand.Parameters.AddWithValue("@name", name);
 
@@ -122,7 +160,7 @@ namespace rccs.MyClass
         }
         public static bool DublicateCity(string name)
         {
-            ConnectionBD.mycommand.CommandText = $"SELECT COUNT(*) FROM rccs.city WHERE city = @name";
+            ConnectionBD.mycommand.CommandText = $"SELECT id_city FROM rccs.city WHERE city = @name";
             ConnectionBD.mycommand.Parameters.Clear();
             ConnectionBD.mycommand.Parameters.AddWithValue("@name", name);
 
@@ -151,7 +189,7 @@ namespace rccs.MyClass
         }
         public static bool DublicateRoll(string name)
         {
-            ConnectionBD.mycommand.CommandText = $"SELECT COUNT(*) FROM rccs.roll WHERE roll = @name";
+            ConnectionBD.mycommand.CommandText = $"SELECT id_roll FROM rccs.roll WHERE roll = @name";
             ConnectionBD.mycommand.Parameters.Clear();
             ConnectionBD.mycommand.Parameters.AddWithValue("@name", name);
 
@@ -207,7 +245,7 @@ namespace rccs.MyClass
         }
         public static bool DublicateFloor(string name)
         {
-            ConnectionBD.mycommand.CommandText = $"SELECT COUNT(*) FROM rccs.floor WHERE floor = @name";
+            ConnectionBD.mycommand.CommandText = $"SELECT id_floor FROM rccs.floor WHERE floor = @name";
             ConnectionBD.mycommand.Parameters.Clear();
             ConnectionBD.mycommand.Parameters.AddWithValue("@name", name);
 

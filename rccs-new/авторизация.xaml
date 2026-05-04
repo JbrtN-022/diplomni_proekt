@@ -50,7 +50,7 @@
                           Content="Показать пароль"
                           Margin="0,12,0,25"
                           Style="{StaticResource MaterialDesignCheckBox}"
-                          Click="chkShowPassword_Click" Checked="chkShowPassword_Click"/>
+                         Checked="chkShowPassword_Click"/>
 
              
                 <Button x:Name="btnLogin"

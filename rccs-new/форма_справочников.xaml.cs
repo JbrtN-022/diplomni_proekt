@@ -63,23 +63,23 @@ namespace rccs_new
                 switch (SelectedSpravochnikId)
                 {
                     case 1:
-                        guideBD.selectVidLica();
+                        guideBD.selectEtajForTable();
                         dgSpravochnik.ItemsSource = ConnectionBD.dtVidLica.DefaultView;
                         break;
                     case 2:
-                        guideBD.selectGoroda();
+                        guideBD.selectGorodaForTable();
                         dgSpravochnik.ItemsSource = ConnectionBD.dtGoroda.DefaultView;
                         break;
                     case 3:
-                        guideBD.selectEtaj();
+                        guideBD.selectEtajForTable();
                         dgSpravochnik.ItemsSource = ConnectionBD.dtEtaj.DefaultView;
                         break;
                     case 4:
-                        guideBD.selectOffice();
+                        guideBD.selectOfficeForTable();
                         dgSpravochnik.ItemsSource = ConnectionBD.dtOffice.DefaultView;
                         break;
                     case 5:
-                        guideBD.selectRoll();
+                        guideBD.selectRollForTable();
                         dgSpravochnik.ItemsSource = ConnectionBD.dtRoll.DefaultView;
                         break;
                 }
@@ -90,13 +90,35 @@ namespace rccs_new
                 addtxt.Text = $"Добавление: {selected.Value}";
             }
         }
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private string GetNameFromRow(DataRowView row)
         {
-            форма_администратора formadm = new форма_администратора();
-            Application.Current.MainWindow = formadm;
-            formadm.Show();
+            if (row == null) return "";
 
-            this.Close();
+            switch (SelectedSpravochnikId)
+            {
+                case 1: return row["тип лица"]?.ToString() ?? "";
+                case 2: return row["города"]?.ToString() ?? "";
+                case 3: return row["этаж"]?.ToString() ?? "";
+                case 4: return row["помещение"]?.ToString() ?? "";
+                case 5: return row["роль работника"]?.ToString() ?? "";
+                default: return row[0]?.ToString() ?? "";
+            }
+        }
+        private int? GetIdFromDublicateQuery(string idColumnName)
+        {
+            try
+            {
+              
+                object result = ConnectionBD.mycommand.ExecuteScalar();
+
+                if (result != null && result != DBNull.Value)
+                {
+                    return Convert.ToInt32(result);
+                }
+            }
+            catch { }
+
+            return null;
         }
 
         private void dgSpravochnik_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -106,55 +128,60 @@ namespace rccs_new
 
             if (dgSpravochnik.SelectedItem is DataRowView row)
             {
-                string idColumnName = GetIdColumnName();
+                string name = GetNameFromRow(row);
 
-                if (row.Row.Table.Columns.Contains(idColumnName))
+                if (!string.IsNullOrWhiteSpace(name))
                 {
-                    selectedItemId = Convert.ToInt32(row[idColumnName]);
+                    
+                    bool exists = false;
+                    int? foundId = null;
 
-                  
-                    string nameColumn = GetNameColumnName();
-
-                    if (row.Row.Table.Columns.Contains(nameColumn))
+                    switch (SelectedSpravochnikId)
                     {
-                        txtUpp.Text = row[nameColumn]?.ToString() ?? "";
-                    }
-                    else
-                    {
-                        txtUpp.Text = row[1]?.ToString() ?? ""; 
+                        case 1:
+                            exists = guideBD.DublicateVidLica(name);
+                            if (exists) foundId = GetIdFromDublicateQuery("id_type_of_face");
+                            break;
+
+                        case 2:
+                            exists = guideBD.DublicateCity(name);
+                            if (exists) foundId = GetIdFromDublicateQuery("id_city");
+                            break;
+
+                        case 3:
+                            exists = guideBD.DublicateFloor(name);
+                            if (exists) foundId = GetIdFromDublicateQuery("id_floor");
+                            break;
+
+                        case 4:
+                            exists = guideBD.DublicateOffice(name);
+                            if (exists) foundId = GetIdFromDublicateQuery("id_office");
+                            break;
+
+                        case 5:
+                            exists = guideBD.DublicateRoll(name);
+                            if (exists) foundId = GetIdFromDublicateQuery("id_roll");
+                            break;
                     }
 
-                    upptxt.Text = $"Редактирование: {cmbSpravochnik.Text}";   
-                    Upp.Visibility = Visibility.Visible;
+                    if (exists && foundId.HasValue)
+                    {
+                        selectedItemId = foundId;
+                        txtUpp.Text = name;
+                        upptxt.Text = $"Редактирование: {cmbSpravochnik.Text}";
+                        Upp.Visibility = Visibility.Visible;
+                    }
                 }
             }
         }
-        private string GetIdColumnName()
-        {
-            switch (SelectedSpravochnikId)
-            {
-                case 2: return "id_city";      
-                case 3: return "id_floor";   
-                case 4: return "id_office";    
-                case 5: return "id_roll";     
-                case 1: return "id_type_of_face";      
-                default: return "id";
-            }
-        }
-
        
-        private string GetNameColumnName()
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
-            switch (SelectedSpravochnikId)
-            {
-                
-                case 2: return "city";
-                case 3: return "floor";
-                case 4: return "office";
-                case 5: return "roll";
-                case 1: return "type_of_face";    
-                default: return "name";
-            }
+            форма_администратора formadm = new форма_администратора();
+            Application.Current.MainWindow = formadm;
+            formadm.Show();
+
+            this.Close();
         }
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
@@ -214,11 +241,11 @@ namespace rccs_new
 
             switch (SelectedSpravochnikId)
             {
-                case 1: guideBD.selectVidLica(); dgSpravochnik.ItemsSource = ConnectionBD.dtVidLica.DefaultView; break;
-                case 2: guideBD.selectGoroda(); dgSpravochnik.ItemsSource = ConnectionBD.dtGoroda.DefaultView; break;
-                case 3: guideBD.selectEtaj(); dgSpravochnik.ItemsSource = ConnectionBD.dtEtaj.DefaultView; break;
-                case 4: guideBD.selectOffice(); dgSpravochnik.ItemsSource = ConnectionBD.dtOffice.DefaultView; break;
-                case 5: guideBD.selectRoll(); dgSpravochnik.ItemsSource = ConnectionBD.dtRoll.DefaultView; break;
+                case 1: guideBD.selectVidLicaForTable(); dgSpravochnik.ItemsSource = ConnectionBD.dtVidLica.DefaultView; break;
+                case 2: guideBD.selectGorodaForTable(); dgSpravochnik.ItemsSource = ConnectionBD.dtGoroda.DefaultView; break;
+                case 3: guideBD.selectEtajForTable(); dgSpravochnik.ItemsSource = ConnectionBD.dtEtaj.DefaultView; break;
+                case 4: guideBD.selectOfficeForTable(); dgSpravochnik.ItemsSource = ConnectionBD.dtOffice.DefaultView; break;
+                case 5: guideBD.selectRollForTable(); dgSpravochnik.ItemsSource = ConnectionBD.dtRoll.DefaultView; break;
             }
         }
 
@@ -346,7 +373,7 @@ namespace rccs_new
                                 MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            string name = txtAdd.Text.Trim();
+            string name = txtUpp.Text.Trim();
             bool exists = false;
 
             switch (SelectedSpravochnikId)
