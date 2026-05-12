@@ -1,4 +1,5 @@
 ﻿using rccs.MyClass;
+using rccs_new.MyClass;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,18 +25,21 @@ namespace rccs_new
         public форма_пользователей()
         {
             InitializeComponent();
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл окно управления сотрудниками");
             LoadWorkers();
         }
 
         public  void LoadWorkers()
         {
-           ClassWorkers.SelectWorkers();                   
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список сотрудников");
+            ClassWorkers.SelectWorkers();                   
             dgSpravochnik.ItemsSource = ConnectionBD.dtWorkers.DefaultView;   
         }
      
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} вернулся в панель администратора из окна управления сотрудниками");
             форма_администратора formadm = new форма_администратора();
             Application.Current.MainWindow = formadm;
             formadm.Show();
@@ -100,24 +104,36 @@ namespace rccs_new
             if (row == null) return;
 
             int id_workers = Convert.ToInt32(row["id_workers"]);
+            string workerName = row["name"]?.ToString() ?? "Неизвестно";
 
-          
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму редактирования сотрудника ID {id_workers} ({workerName})");
             редактирование_пользователей editForm = new редактирование_пользователей(id_workers);
             editForm.Owner = this;
 
             if (editForm.ShowDialog() == true)
             {
-                LoadWorkers();        
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно отредактировал сотрудника ID {id_workers} ({workerName})");
+                LoadWorkers();
+            }
+            else
+            {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} отменил редактирование сотрудника ID {id_workers}");
             }
         }
         private void addBtn_Click(object sender, RoutedEventArgs e)
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму добавления нового сотрудника");
             добавление_пользователей addform = new добавление_пользователей();
             addform.Owner = this;
 
             if (addform.ShowDialog() == true)
             {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно добавил нового сотрудника");
                 LoadWorkers();
+            }
+            else
+            {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} отменил добавление сотрудника");
             }
 
 

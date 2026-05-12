@@ -1,0 +1,171 @@
+﻿<Window x:Class="rccs_new.форма__насторойки_подключения_бд"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Настройки подключения" 
+        Height="520" 
+        Width="720"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#F8F9FA">
+
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Style TargetType="PasswordBox">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Верхняя синяя панель -->
+        <Grid Background="#2196F3" Height="60" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       Text="Настройки подключения к базе данных"
+                       Foreground="White"
+                       FontSize="22"
+                       FontWeight="Medium"
+                       VerticalAlignment="Center"
+                       Margin="25,0,0,0"/>
+
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,20,0">
+                <Button x:Name="Back"
+                        Width="45" Height="45"
+                        ToolTip="Назад"
+                        Margin="5,0" Click="Back_Click"
+                        Background="Transparent"
+                        BorderBrush="Transparent">
+                    <materialDesign:PackIcon Kind="ArrowBack" Width="26" Height="26" Foreground="White" Margin="-10"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Основное содержимое -->
+        <Grid Margin="30,80,30,30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Поля ввода -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,30">
+
+                <Grid Margin="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Хост:"/>
+                    <TextBox x:Name="txtHost" Grid.Column="1"/>
+                </Grid>
+
+                <Grid Margin="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Пользователь:"/>
+                    <TextBox x:Name="txtUser" Grid.Column="1"/>
+                </Grid>
+
+                <Grid Margin="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Пароль:"/>
+                    <TextBox x:Name="txtPassword" Grid.Column="1"/>
+                </Grid>
+
+                <Grid Margin="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="База данных:"/>
+                    <ComboBox x:Name="cmbDatabase" Grid.Column="1" Height="38" 
+                              FontSize="14" VerticalContentAlignment="Center"/>
+                </Grid>
+
+            </StackPanel>
+
+            <!-- Кнопка "Подключиться к серверу" -->
+            <Button x:Name="podkluchKServeru" Grid.Row="1" 
+                    Content="Подключиться к серверу"
+                    Height="48"
+                    Width="280"
+                    HorizontalAlignment="Right"
+                    Margin="0,10,0,30"
+                    Background="#2196F3"
+                    Foreground="White"
+                    FontSize="15"
+                    FontWeight="Medium"
+                    BorderThickness="0" Click="podkluchKServeru_Click"/>
+
+            <!-- Нижние кнопки -->
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Подключиться -->
+                <Button x:Name="podkluchKBD" Grid.Column="1"
+                        Content="Подключиться"
+                        Width="190"
+                        Height="48"
+                        Background="#2196F3"
+                        Foreground="White"
+                        FontSize="15"
+                        FontWeight="SemiBold"
+                        BorderThickness="0"
+                        HorizontalAlignment="Center" Click="podkluchKBD_Click"/>
+
+                <!-- Отменить -->
+                <Button Grid.Column="2"
+                        Content="Отменить"
+                        Width="140"
+                        Height="42"
+                        Background="Transparent"
+                        Foreground="#2196F3"
+                        BorderBrush="#2196F3"
+                        BorderThickness="2"
+                        FontSize="14"
+                        FontWeight="Medium" Click="Button_Click"/>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Window>

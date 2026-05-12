@@ -1,4 +1,5 @@
 ﻿using rccs.MyClass;
+using rccs_new.MyClass;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,12 +27,13 @@ namespace rccs_new
         public форма_справочников()
         {
             InitializeComponent();
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл окно управления справочниками");
             LoadSpravochniki();
             cmbSpravochnik.SelectedIndex = 0;
         }
         private void LoadSpravochniki()
         {
-
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список справочников");
             var spravochniki = new List<KeyValuePair<int, string>>
             {
                 new KeyValuePair<int, string>(1, "Вид лица"),
@@ -55,6 +57,7 @@ namespace rccs_new
             {
                 SelectedSpravochnikId = selected.Key;
                 selectedItemId = null;
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} выбрал справочник: {selected.Value} (ID: {selected.Key})");
                 Add.Visibility = Visibility.Collapsed;
                 Upp.Visibility = Visibility.Collapsed;
                 dgSpravochnik.ItemsSource = null;
@@ -177,6 +180,8 @@ namespace rccs_new
        
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} вернулся в панель администратора из окна справочников");
+
             форма_администратора formadm = new форма_администратора();
             Application.Current.MainWindow = formadm;
             formadm.Show();
@@ -190,7 +195,8 @@ namespace rccs_new
                 MessageBox.Show("Введите название для добавления!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            string name = txtAdd.Text.Trim(); 
+            string name = txtAdd.Text.Trim();
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} пытается добавить запись в справочник ID {SelectedSpravochnikId}: '{name}'");
             bool exists = false;
 
             switch (SelectedSpravochnikId)
@@ -201,9 +207,10 @@ namespace rccs_new
                 case 4: exists = guideBD.DublicateOffice(name); break;
                 case 5: exists = guideBD.DublicateRoll(name); break;
             }
-
+          
             if (exists)
             {
+
                 MessageBox.Show($"Запись с названием «{name}» уже существует!",
                                 "Дубликат", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -221,11 +228,13 @@ namespace rccs_new
                 }
 
                 MessageBox.Show("Запись успешно добавлена!", "Успех");
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно добавил запись '{name}' в справочник ID {SelectedSpravochnikId}");
                 txtAdd.Text = "";
                 RefreshCurrentTable();
             }
             catch (Exception ex)
             {
+                HistoryLogger.Log($"ОШИБКА! Пользователь {ConnectionBD.resFio} не смог добавить запись '{name}'. Ошибка: {ex.Message}");
                 MessageBox.Show($"Ошибка добавления:\n{ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -257,7 +266,7 @@ namespace rccs_new
                 return;
             }
 
-            
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} пытается удалить запись ID {selectedItemId} из справочника {SelectedSpravochnikId}");
             int count = 0;
             string tableName = "";
 
@@ -319,6 +328,8 @@ namespace rccs_new
 
                 MessageBox.Show("Запись успешно удалена!", "Успех",
                                 MessageBoxButton.OK, MessageBoxImage.Information);
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно удалил запись ID {selectedItemId} из справочника {SelectedSpravochnikId}");
+
 
                 RefreshCurrentTable();         
                 Upp.Visibility = Visibility.Collapsed;  
@@ -326,6 +337,7 @@ namespace rccs_new
             }
             catch (Exception ex)
             {
+                HistoryLogger.Log($"ОШИБКА! Пользователь {ConnectionBD.resFio} не смог удалить запись ID {selectedItemId}. Ошибка: {ex.Message}");
                 MessageBox.Show($"Ошибка при удалении:\n{ex.Message}", "Ошибка",
                                 MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -404,10 +416,12 @@ namespace rccs_new
                 }
 
                 MessageBox.Show("Запись успешно обновлена!", "Успех");
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно обновил запись ID {selectedItemId} на '{name}' в справочнике {SelectedSpravochnikId}");
                 RefreshCurrentTable();
             }
             catch (Exception ex)
             {
+                HistoryLogger.Log($"ОШИБКА! Пользователь {ConnectionBD.resFio} не смог обновить запись ID {selectedItemId}. Ошибка: {ex.Message}");
                 MessageBox.Show($"Ошибка обновления:\n{ex.Message}", "Ошибка");
             }
         }

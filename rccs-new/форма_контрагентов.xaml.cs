@@ -27,13 +27,16 @@ namespace rccs_new
         public форма_контрагентов()
         {
             InitializeComponent();
+            HistoryLogger.Log(
+               $"Пользователь {ConnectionBD.resFio} открыл форму контрагентов");
             LoadAllCounterparties();
            
             LoadFilters();
             if (ConnectionBD.roll == "1")
             {
                 DelBtn.Visibility = Visibility.Collapsed;
-
+                HistoryLogger.Log(
+                   $"Для пользователя {ConnectionBD.resFio} скрыта кнопка удаления контрагентов");
             }
         }
         private void LoadFilters()
@@ -69,6 +72,8 @@ namespace rccs_new
             cmbTypeFace.DisplayMemberPath = "type_of_face";
             cmbTypeFace.SelectedValuePath = "id_type_of_face";
             cmbTypeFace.SelectedIndex = 0;
+            HistoryLogger.Log(
+                $"Пользователь {ConnectionBD.resFio} загрузил фильтры контрагентов");
         }
         private void LoadAllCounterparties(string search = "", int cityId = 0, int typeId = 0)
         {
@@ -84,6 +89,8 @@ namespace rccs_new
                 card.CardClicked -= Card_CardClicked;   
                 card.CardClicked += Card_CardClicked;   
             }
+            HistoryLogger.Log(
+               $"Пользователь {ConnectionBD.resFio} обновил список контрагентов");
         }
         private void Card_CardClicked(object sender, int id)
         {
@@ -92,15 +99,20 @@ namespace rccs_new
 
             UppBtn.IsEnabled = true;
             DelBtn.IsEnabled = true;
+            HistoryLogger.Log(
+                $"Пользователь {ConnectionBD.resFio} выбрал контрагента ID: {id}");
 
-          
         }
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            HistoryLogger.Log(
+                $"Пользователь {ConnectionBD.resFio} нажал кнопку Назад");
             switch (ConnectionBD.roll)
             {
                 case null:
                     MessageBox.Show("Неверные данные!");
+                    HistoryLogger.Log(
+                        "Ошибка: роль пользователя не определена");
                     break;
                 case "1":
                     форма_менеджера formMEN = new форма_менеджера();
@@ -122,6 +134,8 @@ namespace rccs_new
                     break;
                 default:
                     MessageBox.Show("Неверные данные!");
+                    HistoryLogger.Log(
+                        "Ошибка: неизвестная роль пользователя");
                     break;
 
             }
@@ -130,6 +144,8 @@ namespace rccs_new
 
         private void addBtn_Click(object sender, RoutedEventArgs e)
         {
+            HistoryLogger.Log(
+               $"Пользователь {ConnectionBD.resFio} открыл форму добавления контрагента");
             var addForm = new добавление_контрагента();
 
            
@@ -141,12 +157,16 @@ namespace rccs_new
                     cityId: cmbCity.SelectedValue != null ? Convert.ToInt32(cmbCity.SelectedValue) : 0,
                     typeId: cmbTypeFace.SelectedValue != null ? Convert.ToInt32(cmbTypeFace.SelectedValue) : 0
                 );
+                HistoryLogger.Log(
+                   $"Пользователь {ConnectionBD.resFio} обновил список после добавления контрагента");
             }
         }
 
         private void DelBtn_Click(object sender, RoutedEventArgs e)
         {
             if (selectedCounterpartyId == null) return;
+            HistoryLogger.Log(
+                $"Пользователь {ConnectionBD.resFio} пытается удалить контрагента ID: {selectedCounterpartyId.Value}");
             MessageBox.Show(selectedCounterpartyId.Value.ToString());
 
             var result = MessageBox.Show("Удалить этого контрагента?", "Подтверждение",
@@ -155,7 +175,15 @@ namespace rccs_new
             if (result == MessageBoxResult.Yes)
             {
                 counterparty.DeleteCounterparty(selectedCounterpartyId.Value);
-                LoadAllCounterparties();   
+                HistoryLogger.Log(
+                    $"Пользователь {ConnectionBD.resFio} удалил контрагента ID: {selectedCounterpartyId.Value}");
+                LoadAllCounterparties();
+            }
+            else
+            {
+                
+                HistoryLogger.Log(
+                    $"Пользователь {ConnectionBD.resFio} отменил удаление контрагента");
             }
         }
 
@@ -172,6 +200,8 @@ namespace rccs_new
                     cityId: cmbCity.SelectedValue != null ? Convert.ToInt32(cmbCity.SelectedValue) : 0,
                     typeId: cmbTypeFace.SelectedValue != null ? Convert.ToInt32(cmbTypeFace.SelectedValue) : 0
                 );
+                HistoryLogger.Log(
+                   $"Пользователь {ConnectionBD.resFio} изменил контрагента ID: {selectedCounterpartyId.Value}");
             }
         }
         
@@ -186,6 +216,8 @@ namespace rccs_new
             int typeId = cmbTypeFace.SelectedValue is int t && t > 0 ? t : 0;
 
             LoadAllCounterparties(searchText, cityId, typeId);
+            HistoryLogger.Log(
+               $"Пользователь {ConnectionBD.resFio} выполнил поиск контрагентов: {searchText}");
         }
       
         private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -197,6 +229,8 @@ namespace rccs_new
             int typeId = cmbTypeFace.SelectedValue is int t && t > 0 ? t : 0;
 
             LoadAllCounterparties(searchText, cityId, typeId);
+            HistoryLogger.Log(
+               $"Пользователь {ConnectionBD.resFio} изменил фильтры контрагентов");
         }
     }
 }

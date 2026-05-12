@@ -90,7 +90,70 @@ namespace rccs_new
 
         private void документы_Click(object sender, RoutedEventArgs e)
         {
+            форма_договоров__лицензий spravochnik = new форма_договоров__лицензий ();
+            Application.Current.MainWindow = spravochnik;
+            spravochnik.Show();
 
+            this.Close();
+
+        }
+
+        private void подключение_Click(object sender, RoutedEventArgs e)
+        {
+            форма__насторойки_подключения_бд openedWindow = null;
+
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is форма__насторойки_подключения_бд)
+                {
+                    openedWindow =
+                        (форма__насторойки_подключения_бд)window;
+
+                    break;
+                }
+            }
+
+            if (openedWindow == null)
+            {
+                форма__насторойки_подключения_бд formpodkl =
+                    new форма__насторойки_подключения_бд(
+                        ConnectionBD.currentDataSource,
+                        ConnectionBD.currentUser,
+                        ConnectionBD.currentPassword,
+                        ConnectionBD.currentDataBase);
+
+                bool? result = formpodkl.ShowDialog();
+
+
+
+                if (result == true)
+                {
+                    if (ConnectionBD.ConnectBD(
+                        formpodkl.NovayaBD,
+                        formpodkl.NovyyHost,
+                        formpodkl.NovyyUser,
+                        formpodkl.NovyyPassword))
+                    {
+                        MessageBox.Show(
+                            "Настройки подключения обновлены",
+                            "Успешно",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                    }
+                }
+            }
+
+            else
+            {
+                MessageBox.Show(
+                    "Нельзя открыть больше 1 окна!",
+                    "Предупреждение",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                openedWindow.Activate();
+                openedWindow.Focus();
+            }
         }
     }
 }

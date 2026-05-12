@@ -19,7 +19,8 @@ namespace rccs_new
             txtDateUntil.Text = dateUntil ?? "-";
             txtConclusionDate.Text = conclusionDate ?? "-";
             txtWorker.Text = "Ответственный: " + (workerName ?? "-");
-            txtServicesList.Text = servicesList ?? "Услуги не указаны";
+            txtServicesList.Text = servicesList
+             ?? "Услуги не указаны";
             if (approved == "Не утверждён") 
             {
                 txtApproved.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFCE4436"));

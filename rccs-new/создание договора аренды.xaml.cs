@@ -166,11 +166,11 @@ namespace rccs_new
 
             txtLicenseNumber.Text = row["id_lease_agreement"].ToString();
 
-            // Контрагент
+          
             if (row["id_counterparty"] != DBNull.Value)
                 cmbClient.SelectedValue = Convert.ToInt32(row["id_counterparty"]);
 
-            // Этаж
+         
             if (row["floor_name"] != DBNull.Value)
             {
                 string floorName = row["floor_name"].ToString();

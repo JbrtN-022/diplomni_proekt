@@ -26,7 +26,7 @@ namespace rccs_new
         public MainWindow()
         {
             InitializeComponent();
-            if (!ConnectionBD.ConnectBD())
+            if (!ConnectionBD.ConnectBD("rccs", "localhost", "root", "qwerty") == true)
             {
                 MessageBox.Show("Не удалось подключиться к базе данных!\n\nПриложение будет закрыто.",
                                 "Ошибка подключения",

@@ -12,10 +12,15 @@ namespace rccs.MyClass
 {
     internal class ConnectionBD
     {
-        public static string connectionString = @"Database = rccs; Data Source = localhost; password =qwerty; user=root; charset = utf8;";
+        //public static string connectionString = @"Database = rccs; Data Source = localhost; password =qwerty; user=root; charset = utf8;";
         public static MySqlConnection myconnection;
         public static MySqlCommand mycommand;
         public static MySqlDataAdapter myDataAdapter;
+
+        public static string currentDataBase;
+        public static string currentDataSource;
+        public static string currentUser;
+        public static string currentPassword;
 
         public static string login;
         public static string roll;
@@ -39,11 +44,21 @@ namespace rccs.MyClass
         public static DataTable dtWorkersComboBox = new DataTable();
         public static  DataTable dtCounterparty = new DataTable();
         public static DataTable dtLoadDraftById = new DataTable();
+        public static DataTable dtLoadAllServices = new DataTable();
+        public static DataTable dtLoadDraftByIdLicense = new DataTable();
+        public static DataTable dtLoadDraftLicensesComboBox = new DataTable(); 
         public static DataTable dtCounterpartyComboBox = new DataTable(); 
-        public static bool ConnectBD()
+        public static bool ConnectBD(string dataBase, string dataSource, string user, string password)
         {
             try
             {
+                currentDataBase = dataBase;
+                currentDataSource = dataSource;
+                currentUser = user;
+                currentPassword = password;
+
+
+                string connectionString = $@"Database = {dataBase}; Data Source = {dataSource}; password ={password}; user={user}; charset = utf8;";
                 myconnection = new MySqlConnection(connectionString);
                 myconnection.Open();
                 mycommand = new MySqlCommand();

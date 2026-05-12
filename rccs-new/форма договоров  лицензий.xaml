@@ -80,7 +80,7 @@
                                   Margin="5,12,0,0"
                                   Style="{StaticResource MaterialDesignCheckBox}"
                                   Checked="chkOnlyApproved_Checked"
-                                  Unchecked="chkOnlyApproved_Checked"/>
+                                  Unchecked="chkOnlyApproved_Unchecked"/>
                     </StackPanel>
 
                     <!-- 3. Кнопки действий -->

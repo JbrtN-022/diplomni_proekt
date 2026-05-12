@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:rccs_new"
         mc:Ignorable="d"
         Title="создание_договора_лицензии" Height="450" Width="800">
-    <Grid Margin="0,0,0,0">
+    <Grid>
         
     </Grid>
 </Window>

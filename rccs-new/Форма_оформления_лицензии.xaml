@@ -78,7 +78,7 @@
             <DataGrid x:Name="dgAllServices"
                       Height="180"
                       AutoGenerateColumns="False"
-                      CanUserAddRows="False" Foreground="Black" >
+                      CanUserAddRows="False" Foreground="Black"  >
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="Выбрать" 
                                             Binding="{Binding IsSelected}" 
@@ -86,8 +86,14 @@
                     <DataGridTextColumn Header="Название услуги" 
                                         Binding="{Binding Name}" 
                                         Width="*" IsReadOnly="True"/>
-                    <DataGridComboBoxColumn Header="Работник" 
-                                            Width="200" />
+                    <DataGridComboBoxColumn Header="Работник"
+                        Width="200"
+                        SelectedValueBinding="{Binding IdWorker, Mode=TwoWay}"
+                        DisplayMemberPath="name"
+                        SelectedValuePath="id_workers"/>
+                    <DataGridTextColumn Header="Количество" 
+                                             Binding="{Binding Quantity, Mode=TwoWay}" 
+                                             Width="150" IsReadOnly="False"/>
                 </DataGrid.Columns>
             </DataGrid>
 

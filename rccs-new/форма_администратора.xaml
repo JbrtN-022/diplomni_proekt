@@ -44,7 +44,11 @@
                             Height="45"
                             Margin="5,8"
                     Style="{StaticResource MaterialDesignRaisedButton}" Click="прайс_Click"   />
-
+                    <Button x:Name="подключение"
+                             Content="настройки подключения"
+                             Height="45"
+                             Margin="5,8"
+                     Style="{StaticResource MaterialDesignRaisedButton}" Click="подключение_Click"   />
                     <Button x:Name="выйти" Content="Выйти"
                             Height="45"
                             Margin="5,15,5,5"

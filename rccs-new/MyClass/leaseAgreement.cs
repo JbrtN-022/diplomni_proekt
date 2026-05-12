@@ -204,7 +204,37 @@ namespace rccs_new.MyClass
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtFloorForLeaseComboBox);
         }
 
-       
+        public static bool UpdateLeaseAgreement( int idLeaseAgreement, int idCounterparty, int idRoom, DateTime dateFrom, DateTime dateUntil, string approved)
+        {
+            try
+            {
+                string sql = @"
+                UPDATE rccs.lease_agreement
+                SET
+                    id_counterparty = @id_counterparty,
+                    id_room = @id_room,
+                    rental_date_from = @date_from,
+                    rental_date_until = @date_until,
+                    approved = @approved
+                WHERE id_lease_agreement = @id";
+
+                ConnectionBD.mycommand.CommandText = sql;
+                ConnectionBD.mycommand.Parameters.Clear();
+                ConnectionBD.mycommand.Parameters.AddWithValue("@id",idLeaseAgreement);
+                ConnectionBD.mycommand.Parameters.AddWithValue("@id_counterparty",idCounterparty);
+                ConnectionBD.mycommand.Parameters.AddWithValue("@id_room",idRoom);
+                ConnectionBD.mycommand.Parameters.AddWithValue("@date_from",dateFrom);
+                ConnectionBD.mycommand.Parameters.AddWithValue("@date_until",dateUntil);
+                ConnectionBD.mycommand.Parameters.AddWithValue("@approved",approved);
+                ConnectionBD.mycommand.ExecuteNonQuery();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public static int SaveAsDraft(string leaseNumber, int idCounterparty, int idRoom,
                                       DateTime dateFrom, DateTime dateUntil, int idWorker)
         {

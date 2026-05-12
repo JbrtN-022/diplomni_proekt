@@ -141,7 +141,9 @@
     <Compile Include="MyClass\document\document_license_agreement.cs" />
     <Compile Include="MyClass\KeySource.cs" />
     <Compile Include="MyClass\leaseAgreement.cs" />
+    <Compile Include="MyClass\leaseAndLicenseAgreement.cs" />
     <Compile Include="MyClass\licenseAgreement.cs" />
+    <Compile Include="MyClass\Logger.cs" />
     <Compile Include="MyClass\PriceHistory.cs" />
     <Compile Include="UserControlCounterparty.xaml.cs">
       <DependentUpon>UserControlCounterparty.xaml</DependentUpon>
@@ -173,6 +175,12 @@
     <Compile Include="просмотр лицензий.xaml.cs">
       <DependentUpon>просмотр лицензий.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Редактирование  лицензий на ПО.xaml.cs">
+      <DependentUpon>Редактирование  лицензий на ПО.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Редактирование договоров  аренды.xaml.cs">
+      <DependentUpon>Редактирование договоров  аренды.xaml</DependentUpon>
+    </Compile>
     <Compile Include="редактирование_контрагентов.xaml.cs">
       <DependentUpon>редактирование_контрагентов.xaml</DependentUpon>
     </Compile>
@@ -184,6 +192,9 @@
     </Compile>
     <Compile Include="создание договора лицензии.xaml.cs">
       <DependentUpon>создание договора лицензии.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="форма  насторойки подключения бд.xaml.cs">
+      <DependentUpon>форма  насторойки подключения бд.xaml</DependentUpon>
     </Compile>
     <Compile Include="форма договоров  лицензий.xaml.cs">
       <DependentUpon>форма договоров  лицензий.xaml</DependentUpon>
@@ -268,6 +279,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Редактирование  лицензий на ПО.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Редактирование договоров  аренды.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="редактирование_контрагентов.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -281,6 +300,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="создание договора лицензии.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="форма  насторойки подключения бд.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

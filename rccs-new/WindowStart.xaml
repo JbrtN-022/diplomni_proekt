@@ -5,8 +5,67 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:rccs_new"
         mc:Ignorable="d"
-        Title="WindowStart" Height="450" Width="800" Loaded="Window_Loaded">
-    <Grid Loaded="Grid_Loaded">
-        
+        Title="Мурманский колледж экономики и информационных технологий"
+        Height="320" Width="680"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="White"
+        Loaded="Window_Loaded">
+
+    <Grid>
+       
+
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40">
+
+            <TextBlock Text="Государственное автономное профессиональное образовательное учреждение Мурманской области"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       FontSize="15"
+                       FontWeight="Medium"
+                       Foreground="#2C3E50"
+                       Margin="0,0,0,8"
+                       Width="580"/>
+
+            <TextBlock Text="'Мурманский колледж экономики и информационных технологий'"
+                       TextAlignment="Center"
+                       FontSize="17"
+                       FontWeight="SemiBold"
+                       Foreground="#1A5270"
+                       Margin="0,0,0,30"/>
+
+
+            <TextBlock Text="Название темы" 
+                       FontSize="26" 
+                       FontWeight="Bold"
+                       Foreground="#1A5270"
+                       TextAlignment="Center"
+                       Margin="0,0,0,25"/>
+
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Разработчик:" 
+                               FontSize="15" 
+                               Foreground="#555"/>
+                <TextBlock Text=" Астафьев М.А." 
+                               FontSize="15" 
+                               FontWeight="SemiBold"
+                               Foreground="#2C3E50"
+                               Margin="5,0,0,0"/>
+                <TextBlock Text=" • 4П2 • Выпуск 2026" 
+                               FontSize="14" 
+                               Foreground="#777"
+                               Margin="12,0,0,0"/>
+            </StackPanel>
+
+
+        </StackPanel>
+
+        <!-- Нижняя синяя полоса -->
+        <Border Background="#2196F3" Height="34" VerticalAlignment="Top" Margin="0,270,0,0"/>
     </Grid>
+
+    <!-- Тень для окон (опционально) -->
+    <Window.Effect>
+        <DropShadowEffect BlurRadius="25" ShadowDepth="8" Opacity="0.15" Color="#000000"/>
+    </Window.Effect>
 </Window>
