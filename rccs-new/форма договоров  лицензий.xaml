@@ -4,7 +4,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Просмотр договоров и лицензий"
         Height="760"
-        Width="1320"
+        Width="1020"
         WindowStartupLocation="CenterScreen"
         Background="#F5F5F5">
 
@@ -35,27 +35,21 @@
 
         <!-- Основное содержимое -->
         <Grid Margin="0,90,0,20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="450"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <!-- Панель фильтров (3 колонки) -->
-            <Border Grid.Row="0" Margin="25,10,25,15" Padding="25" 
+            <!-- Панель фильтров (левая колонка) -->
+            <Border Grid.Column="0" Margin="25,10,15,25" Padding="25" 
                     Background="White" CornerRadius="12">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="12" Opacity="0.12"/>
                 </Border.Effect>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="420"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
+                <StackPanel>
                     <!-- 1. Тип документа -->
-                    <StackPanel Grid.Column="0" Margin="0,0,40,0">
+                    <StackPanel Margin="0,0,0,25">
                         <TextBlock Text="Тип документа" FontSize="14" Margin="0,0,0,8" FontWeight="Medium"/>
                         <ComboBox x:Name="cmbDocumentType" 
                                   Width="280" Height="40" FontSize="15"
@@ -66,72 +60,78 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <!-- 2. Выбор документа + чекбокс -->
-                    <StackPanel Grid.Column="1">
+                    <!-- 2. Выбор документа -->
+                    <StackPanel Margin="0,0,0,25">
                         <TextBlock Text="Документ" FontSize="14" Margin="0,0,0,8" FontWeight="Medium"/>
                         <ComboBox x:Name="cmbDocumentList" 
-                                  Width="400" Height="40" FontSize="15"
+                                  Width="280" Height="40" FontSize="15"
                                   materialDesign:HintAssist.Hint="Выберите документ"
                                   SelectionChanged="cmbDocumentList_SelectionChanged"/>
-
-                        <!-- Чекбокс под комбобоксом -->
-                        <CheckBox x:Name="chkOnlyApproved"
-                                  Content="Показывать только утверждённые документы"
-                                  Margin="5,12,0,0"
-                                  Style="{StaticResource MaterialDesignCheckBox}"
-                                  Checked="chkOnlyApproved_Checked"
-                                  Unchecked="chkOnlyApproved_Unchecked"/>
                     </StackPanel>
 
-                    <!-- 3. Кнопки действий -->
-                    <StackPanel Grid.Column="2" VerticalAlignment="Bottom" Margin="240,0,0,25" Orientation="Horizontal">
+                    <!-- 3. Чекбокс -->
+                    <CheckBox x:Name="chkOnlyApproved"
+                              Content="Показывать только утверждённые документы"
+                              Margin="0,0,0,25"
+                              Style="{StaticResource MaterialDesignCheckBox}"
+                              Checked="chkOnlyApproved_Checked"
+                              Unchecked="chkOnlyApproved_Unchecked"/>
+
+                    <!-- 4. Кнопки действий -->
+                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
                         <Button x:Name="btnEdit"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
-                                Width="52" Height="52" Margin="8,0"
+                                Height="40" Margin="0,0,10,0"
                                 ToolTip="Редактировать"
                                 Click="btnEdit_Click">
-                            <materialDesign:PackIcon Kind="Pencil" Width="26" Height="26" Margin="-8 0"/>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Pencil" Width="20" Height="20" Margin="0,0,5,0"/>
+                                <TextBlock Text="Изменить"/>
+                            </StackPanel>
                         </Button>
 
                         <Button x:Name="btnDelete"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
-                                Width="52" Height="52" Margin="8,0"
+                                Height="40" Margin="0,0,10,0"
                                 ToolTip="Удалить"
                                 Click="btnDelete_Click">
-                            <materialDesign:PackIcon Kind="Delete" Width="26" Height="26" Margin="-8 0"/>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Delete" Width="20" Height="20" Margin="0,0,5,0"/>
+                                <TextBlock Text="Удалить"/>
+                            </StackPanel>
                         </Button>
 
                         <Button x:Name="btnPrint"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
-                                Width="52" Height="52" Margin="8,0"
+                                Height="40"
                                 Background="#FF2196F3"
                                 ToolTip="Печать"
                                 Click="btnPrint_Click">
-                            <materialDesign:PackIcon Kind="Printer" Width="26" Height="26" Foreground="White" Margin="-8 0"/>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Printer" Width="20" Height="20" Foreground="White" Margin="0,0,5,0"/>
+                                <TextBlock Text="Печать" Foreground="White"/>
+                            </StackPanel>
                         </Button>
                     </StackPanel>
-                </Grid>
+                </StackPanel>
             </Border>
 
-            <!-- Карточки -->
            
-                <ScrollViewer Grid.Row="1" Margin="25,0,25,25" 
-                          VerticalScrollBarVisibility="Auto">
-                <Border BorderBrush="#FF2196F3" BorderThickness ="2" CornerRadius="20">
+            <Border Grid.Column="1" Margin="0,10,25,25" CornerRadius="12" BorderBrush="#FF2196F3">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl x:Name="itemsControlDocuments">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal"
-                                       HorizontalAlignment="Left"
-                                       ItemWidth="520"
-                                       ItemHeight="245"
-                                       Margin="8"/>
+                                          HorizontalAlignment="Left"
+                                          ItemWidth="520"
+                                          ItemHeight="245"
+                                          Margin="8"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-                </Border>
-            </ScrollViewer>
-           
+                </ScrollViewer>
+            </Border>
         </Grid>
     </Grid>
 </Window>

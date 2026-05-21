@@ -36,15 +36,11 @@
                             Margin="5,8"
                     Style="{StaticResource MaterialDesignRaisedButton}" Click="контрагенты_Click"  />
                     <Button x:Name="печать"
-                            Content="Распечатать договор ТС"
+                            Content="Распечатать форму заполнения"
                             Height="45"
                             Margin="5,8"
                     Style="{StaticResource MaterialDesignRaisedButton}" Click="печать_Click"   />
-                    <Button x:Name="подключение"
-                             Content="настройки подключения"
-                             Height="45"
-                             Margin="5,8"
-                     Style="{StaticResource MaterialDesignRaisedButton}" Click="подключение_Click"   />
+                    
                     <Button x:Name="выйти" Content="Выйти"
                             Height="45"
                             Margin="5,15,5,5"

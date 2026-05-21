@@ -27,6 +27,14 @@ namespace rccs_new
         public форма_контрагентов()
         {
             InitializeComponent();
+            this.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.F1)
+                {
+                    ShowHelp();
+                    e.Handled = true;
+                }
+            };
             HistoryLogger.Log(
                $"Пользователь {ConnectionBD.resFio} открыл форму контрагентов");
             LoadAllCounterparties();
@@ -39,9 +47,61 @@ namespace rccs_new
                    $"Для пользователя {ConnectionBD.resFio} скрыта кнопка удаления контрагентов");
             }
         }
+        private void ShowHelp()
+        {
+            MessageBox.Show(
+@"ФОРМА КОНТРАГЕНТОВ
+
+Назначение формы:
+Управление базой данных контрагентов (партнеров, клиентов, поставщиков).
+
+Что можно сделать на этой форме:
+• Просматривать список всех контрагентов
+• Добавлять новых контрагентов
+• Редактировать данные существующих контрагентов
+• Удалять контрагентов (только для администратора)
+• Искать контрагентов по различным критериям
+• Фильтровать список по городам и типам лиц
+
+Функциональные возможности:
+
+1. ДОБАВЛЕНИЕ КОНТРАГЕНТА
+   • Кнопка ""+""
+   • Открывает форму для ввода информации о новом контрагенте
+   • Обязательные поля: название, город, тип лица
+
+2. РЕДАКТИРОВАНИЕ КОНТРАГЕНТА
+   • Выберите контрагента из списка
+   • Нажмите кнопку ""✎"" (карандаш)
+   • Измените необходимые данные
+
+3. УДАЛЕНИЕ КОНТРАГЕНТА
+   • Доступно только для администратора
+   • Выберите контрагента из списка
+   • Нажмите кнопку ""🗑"" (корзина)
+   • Подтвердите удаление
+
+4. ПОИСК И ФИЛЬТРАЦИЯ
+   • Поле ""Поиск"" - поиск по названию контрагента
+   • Фильтр ""Город"" - отбор по городу
+   • Фильтр ""Тип лица"" - отбор по типу (юр. лицо/физ. лицо)
+
+5. КАРТОЧКИ КОНТРАГЕНТОВ
+   • Отображают основную информацию
+   • Клик по карточке - выбор контрагента
+
+
+
+Примечание:
+Перед удалением контрагента убедитесь, что он не используется в документах.
+Удалить контрагента невозможно, если на него ссылаются договоры.",
+                "Помощь - Форма контрагентов",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
         private void LoadFilters()
         {
-            // Города
+            
             guideBD.selectGoroda();
             var cities = ConnectionBD.dtGoroda.AsEnumerable()
                 .Select(row => new
@@ -57,7 +117,7 @@ namespace rccs_new
             cmbCity.SelectedValuePath = "id_city";
             cmbCity.SelectedIndex = 0;
 
-            // Типы лица
+          
             guideBD.selectVidLica();
             var types = ConnectionBD.dtVidLica.AsEnumerable()
                 .Select(row => new
@@ -92,7 +152,7 @@ namespace rccs_new
             HistoryLogger.Log(
                $"Пользователь {ConnectionBD.resFio} обновил список контрагентов");
         }
-        private void Card_CardClicked(object sender, int id)
+        private void Card_CardClicked(object sender, int id) 
         {
             selectedCounterpartyId = id;
 
@@ -167,7 +227,7 @@ namespace rccs_new
             if (selectedCounterpartyId == null) return;
             HistoryLogger.Log(
                 $"Пользователь {ConnectionBD.resFio} пытается удалить контрагента ID: {selectedCounterpartyId.Value}");
-            MessageBox.Show(selectedCounterpartyId.Value.ToString());
+           
 
             var result = MessageBox.Show("Удалить этого контрагента?", "Подтверждение",
                                          MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -200,8 +260,7 @@ namespace rccs_new
                     cityId: cmbCity.SelectedValue != null ? Convert.ToInt32(cmbCity.SelectedValue) : 0,
                     typeId: cmbTypeFace.SelectedValue != null ? Convert.ToInt32(cmbTypeFace.SelectedValue) : 0
                 );
-                HistoryLogger.Log(
-                   $"Пользователь {ConnectionBD.resFio} изменил контрагента ID: {selectedCounterpartyId.Value}");
+
             }
         }
         

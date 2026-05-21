@@ -6,37 +6,40 @@
         Height="220" 
         Width="250"
         WindowStartupLocation="CenterScreen"
-        Background="#F5F5F5">
+        Background="#F5F5F5"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True">
 
-    <Grid Margin="15">
+    <Grid Margin=" 15 10 15 15">
         <!-- Иконка редактирования в правом верхнем углу -->
         
         <Button x:Name="редактировать" Style="{StaticResource MaterialDesignFlatButton}"
-         Width="20" 
-         Height="20"
+         Width="25" 
+         Height="25"
          HorizontalAlignment="Right"
          VerticalAlignment="Top"
          Margin="0,5,30,0"
         
          CommandParameter="Left" Padding="0 0 0 0" Click="пользователь_Click" Cursor="Hand" >
-            <materialDesign:PackIcon Kind="Pencil" Width="15" Height="20" VerticalAlignment="Center" Foreground="#FF555555"/>
+            <materialDesign:PackIcon Kind="Pencil" Width="20" Height="25" VerticalAlignment="Center" Foreground="#FF555555"/>
         </Button>
         <Button x:Name="закрыть" Style="{StaticResource MaterialDesignFlatButton}"
-         Width="20" 
-         Height="20"
+         Width="25" 
+         Height="25"
          HorizontalAlignment="Right"
          VerticalAlignment="Top"
          Margin="0,5,5,0"
 
          CommandParameter="Left" Padding="0 0 0 0"  Cursor="Hand" Click="закрыть_Click" >
-            
-            <materialDesign:PackIcon Kind="Close" Width="15" Height="20" VerticalAlignment="Center" Foreground="#FF555555"/>
+
+            <materialDesign:PackIcon Kind="Close" Width="20" Height="25" VerticalAlignment="Center" Foreground="#FF555555"/>
 
         </Button>
         
-        <StackPanel Margin="0,20,0,0">
+        <StackPanel Margin="0,30,0,0">
 
-            <!-- Логин -->
+            
             <TextBlock Text="Логин" 
                        FontSize="14" 
                        Margin="5,0,0,6"
@@ -54,7 +57,6 @@
                          BorderThickness="0"/>
             </Border>
 
-            <!-- Пароль -->
             <TextBlock Text="Пароль" 
                        FontSize="14" 
                        Margin="5,13,0,6"

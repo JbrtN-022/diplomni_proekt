@@ -71,8 +71,11 @@
       <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4797.1004\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="MySql.Data, Version=9.6.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.9.6.0\lib\net462\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=9.7.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.9.7.0\lib\net462\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySqlBackup, Version=2.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySqlBackup.NET.2.7.1\lib\net462\MySqlBackup.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -166,9 +169,6 @@
     <Compile Include="добавление_контрагента.xaml.cs">
       <DependentUpon>добавление_контрагента.xaml</DependentUpon>
     </Compile>
-    <Compile Include="лицензия_по.xaml.cs">
-      <DependentUpon>лицензия_по.xaml</DependentUpon>
-    </Compile>
     <Compile Include="просмотр договоров аренды.xaml.cs">
       <DependentUpon>просмотр договоров аренды.xaml</DependentUpon>
     </Compile>
@@ -189,9 +189,6 @@
     </Compile>
     <Compile Include="создание договора аренды.xaml.cs">
       <DependentUpon>создание договора аренды.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="создание договора лицензии.xaml.cs">
-      <DependentUpon>создание договора лицензии.xaml</DependentUpon>
     </Compile>
     <Compile Include="форма  насторойки подключения бд.xaml.cs">
       <DependentUpon>форма  насторойки подключения бд.xaml</DependentUpon>
@@ -267,10 +264,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="лицензия_по.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="просмотр договоров аренды.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -296,10 +289,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="создание договора аренды.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="создание договора лицензии.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

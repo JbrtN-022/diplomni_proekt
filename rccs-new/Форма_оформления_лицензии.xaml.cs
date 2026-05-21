@@ -19,15 +19,22 @@ using static rccs_new.MyClass.licenseAgreement;
 
 namespace rccs_new
 {
-    /// <summary>
-    /// Логика взаимодействия для Форма_оформления_лицензии.xaml
-    /// </summary>
+    
     public partial class Форма_оформления_лицензии : Window
     {
         private bool isFirstOpen = true;
+        private bool isDraftLoaded = false;
         public Форма_оформления_лицензии()
         {
             InitializeComponent();
+            this.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.F1)
+                {
+                    ShowHelp();
+                    e.Handled = true;
+                }
+            };
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму оформления лицензии на ПО");
 
             GenerateLicenseNumber();
@@ -35,6 +42,64 @@ namespace rccs_new
             LoadProgram();
             LoadServices();
             licenseAgreement.LoadDraftLicensesComboBox(cmbDraft);
+        }
+        private void ShowHelp()
+        {
+            MessageBox.Show(
+@"ФОРМА ОФОРМЛЕНИЯ ЛИЦЕНЗИИ
+
+Назначение формы:
+Оформление лицензионных договоров на программное обеспечение.
+
+Что можно сделать на этой форме:
+• Создать новую лицензию
+• Выбрать контрагента (клиента)
+• Выбрать программу лицензирования
+• Выбрать дополнительные услуги
+• Установить срок действия лицензии
+• Сохранить черновик лицензии
+• Загрузить ранее сохраненный черновик
+• Создать и сохранить договор в формате Word
+
+Поля для заполнения:
+
+1. НОМЕР ЛИЦЕНЗИИ
+   • Генерируется автоматически
+   • Уникальный 5-значный номер
+
+2. КОНТРАГЕНТ
+   • Выбор из списка существующих
+   • Кнопка ""+"" для добавления нового
+
+3. ПРОГРАММА
+   • Выбор лицензируемого ПО из списка
+
+4. СРОК ДЕЙСТВИЯ
+   • Дата начала лицензии
+   • Дата окончания лицензии
+
+5. УСЛУГИ
+   • Таблица с доступными услугами
+   • Выберите нужные услуги (галочка)
+   • Укажите количество для каждой услуги
+
+Кнопки управления:
+
+• СОЗДАТЬ - создает лицензию и формирует Word-договор
+• СОХРАНИТЬ - сохраняет черновик лицензии
+• ЗАГРУЗИТЬ - загружает сохраненный черновик из списка
+• НАЗАД - возврат в главное меню
+
+
+
+Примечание:
+Лицензионный договор создается в формате Word и сохраняется в выбранную папку.
+Черновики позволяют отложить оформление и завершить позже.
+Перед созданием лицензии убедитесь, что все обязательные поля заполнены.
+Все услуги с отмеченными галочками и количеством будут включены в договор.",
+                "Помощь - Форма оформления лицензии",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
         private List<ServiceItem> GetSelectedServices()
         {
@@ -152,14 +217,13 @@ namespace rccs_new
                 dgAllServices.Items.Refresh();
             }
             cmbClient.Focus();
-
+            isDraftLoaded = false;
         }
-
+       
         private void Create_Click(object sender, RoutedEventArgs e)
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} начал создание лицензии. Номер: {txtLicenseNumber.Text}");
 
-            
             if (cmbClient.SelectedValue == null)
             {
                 MessageBox.Show("Выберите контрагента!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -206,74 +270,161 @@ namespace rccs_new
                 int idProgram = Convert.ToInt32(cmbProgram.SelectedValue);
                 string licenseNumber = txtLicenseNumber.Text.Trim();
 
-                ConnectionBD.mycommand.CommandText = "SELECT id_workers FROM rccs.workers WHERE name = @fio";
+                ConnectionBD.mycommand.CommandText =
+                    "SELECT id_workers FROM rccs.workers WHERE name = @fio";
+
                 ConnectionBD.mycommand.Parameters.Clear();
                 ConnectionBD.mycommand.Parameters.AddWithValue("@fio", ConnectionBD.resFio);
+
                 object workerResult = ConnectionBD.mycommand.ExecuteScalar();
-                int idWorker = workerResult != null ? Convert.ToInt32(workerResult) : 1;
 
-                string licenseId = licenseAgreement.AddlicenseAgreement(
-                     id: licenseNumber,
-                     IDcounterparty: idCounterparty,
-                     IDprogram: idProgram,
-                     dateFrom: dpStart.SelectedDate.Value,
-                     dateUntil: dpEnd.SelectedDate.Value,
-                     idWorker: idWorker
-                 );
+                int idWorker =
+                    workerResult != null
+                    ? Convert.ToInt32(workerResult)
+                    : 1;
 
-                if (string.IsNullOrEmpty(licenseId))
+                string licenseId = "";
+
+                // ЕСЛИ ЗАГРУЖЕН ЧЕРНОВИК
+                if (isDraftLoaded)
                 {
-                    MessageBox.Show("Ошибка создания лицензии");
-                    return;
+                    bool updated =
+                        licenseAgreement.UpdateLicenseAgreement(
+                            idLicenseAgreement: Convert.ToInt32(licenseNumber),
+                            idCounterparty: idCounterparty,
+                            idProgram: idProgram,
+                            dateFrom: dpStart.SelectedDate.Value,
+                            dateUntil: dpEnd.SelectedDate.Value,
+                            approved: "Утверждён"
+                        );
+
+                    if (!updated)
+                    {
+                        MessageBox.Show("Не удалось обновить черновик!");
+                        return;
+                    }
+
+                    // удаляем старые услуги
+                    licenseAgreement.DeleteServicesFromLicense(
+                        Convert.ToInt32(licenseNumber));
+
+                    licenseId = licenseNumber;
+                }
+                // ЕСЛИ НОВАЯ ЛИЦЕНЗИЯ
+                else
+                {
+                    licenseId =
+                        licenseAgreement.AddlicenseAgreement(
+                            id: licenseNumber,
+                            IDcounterparty: idCounterparty,
+                            IDprogram: idProgram,
+                            dateFrom: dpStart.SelectedDate.Value,
+                            dateUntil: dpEnd.SelectedDate.Value,
+                            idWorker: idWorker
+                        );
+
+                    if (string.IsNullOrEmpty(licenseId))
+                    {
+                        MessageBox.Show("Ошибка создания лицензии");
+                        return;
+                    }
                 }
 
-                licenseAgreement.AddServicesToLicense(int.Parse(licenseId), selectedServices);
+                // добавляем услуги
+                licenseAgreement.AddServicesToLicense(
+                    int.Parse(licenseId),
+                    selectedServices);
 
-                DataRow licenseRow = licenseAgreement.GetLicenseAgreementForPrint(int.Parse(licenseId));
-                DataTable servicesTable = licenseAgreement.GetLicenseAgreementForPrintTable(int.Parse(licenseId));
+                DataRow licenseRow =
+                    licenseAgreement.GetLicenseAgreementForPrint(
+                        int.Parse(licenseId));
 
+                DataTable servicesTable =
+                    licenseAgreement.GetLicenseAgreementForPrintTable(
+                        int.Parse(licenseId));
 
                 var saveDialog = new Microsoft.Win32.SaveFileDialog();
-                saveDialog.Filter = "Word документ (*.docx)|*.docx";
-                saveDialog.FileName = $"Договор_{licenseNumber}.docx";
+
+                saveDialog.Filter =
+                    "Word документ (*.docx)|*.docx";
+
+                saveDialog.FileName =
+                    $"Договор_{licenseNumber}.docx";
 
                 if (saveDialog.ShowDialog() != true)
                     return;
 
                 string filePath = saveDialog.FileName;
 
-               
-                string templatePath = @"E:\ДИПЛОМ\rccs\rccs-new\document\Шаблон_ТС_А0_2026_с_НДС.docx";
+                string baseDirectory =
+                    AppDomain.CurrentDomain.BaseDirectory;
+
+                string projectDirectory =
+                    System.IO.Path.GetFullPath(
+                        System.IO.Path.Combine(
+                            baseDirectory,
+                            @"..\..\"));
 
 
-                bool result = document_license_agreement.CreateLicenseAgreement(
-                     templatePath,
-                     filePath,
-                     licenseNumber,
-                     licenseRow["counterparty_name"]?.ToString() ?? "",
-                     licenseRow["cont_person_name"]?.ToString() ?? "",
-                     licenseRow["program_name"]?.ToString() ?? "",
-                     Convert.ToDateTime(licenseRow["rental_date_from"]).ToShortDateString(),
-                     Convert.ToDateTime(licenseRow["rental_date_until"]).ToShortDateString(),
-                     Convert.ToDateTime(licenseRow["conclusion_date"]).ToShortDateString(),
-                     licenseId
-                 );
+                string documentPath =
+                    System.IO.Path.Combine(
+                        projectDirectory,
+                        "document");
+
+                string templatePath =
+                    System.IO.Path.Combine(
+                        documentPath,
+                        "Шаблон_ТС_А0_2026_с_НДС.docx");
+
+                bool result =
+                    document_license_agreement.CreateLicenseAgreement(
+                        templatePath,
+                        filePath,
+                        licenseNumber,
+                        licenseRow["counterparty_name"]?.ToString() ?? "",
+                        licenseRow["cont_person_name"]?.ToString() ?? "",
+                        licenseRow["program_name"]?.ToString() ?? "",
+                        Convert.ToDateTime(
+                            licenseRow["rental_date_from"])
+                            .ToShortDateString(),
+
+                        Convert.ToDateTime(
+                            licenseRow["rental_date_until"])
+                            .ToShortDateString(),
+
+                        licenseRow["conclusion_date"] != DBNull.Value
+                        ? Convert.ToDateTime(
+                            licenseRow["conclusion_date"])
+                            .ToShortDateString()
+                        : DateTime.Today.ToShortDateString(),
+
+                        licenseId
+                    );
 
                 if (result)
                 {
-                    HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно создал и сохранил лицензию №{licenseNumber} (ID: {licenseId})");
+                    HistoryLogger.Log(
+                        $"Пользователь {ConnectionBD.resFio} успешно создал и сохранил лицензию №{licenseNumber} (ID: {licenseId})");
 
                     MessageBox.Show("Документ успешно создан!");
-                    string folder = System.IO.Path.GetDirectoryName(filePath);
-                    System.Diagnostics.Process.Start("explorer.exe", folder);
+
+                    string folder =
+                        System.IO.Path.GetDirectoryName(filePath);
+
+                    System.Diagnostics.Process.Start(
+                        "explorer.exe",
+                        folder);
                 }
 
                 ClearForm();
+
                 licenseAgreement.LoadDraftLicensesComboBox(cmbDraft);
             }
             catch (Exception ex)
             {
-                HistoryLogger.Log($"ОШИБКА! Пользователь {ConnectionBD.resFio} не смог создать лицензию. Ошибка: {ex.Message}");
+                HistoryLogger.Log(
+                    $"ОШИБКА! Пользователь {ConnectionBD.resFio} не смог создать лицензию. Ошибка: {ex.Message}");
+
                 MessageBox.Show("Ошибка:\n" + ex.Message);
             }
         }
@@ -424,6 +575,7 @@ namespace rccs_new
                 dpEnd.SelectedDate = Convert.ToDateTime(row["rental_date_until"]);
 
             LoadSelectedServicesForLicense(licenseId);
+            isDraftLoaded = true;
         }
         private void LoadSelectedServicesForLicense(int licenseId)
         {

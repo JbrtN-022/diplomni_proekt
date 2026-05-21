@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,12 +24,105 @@ namespace rccs_new
     public partial class редактирование_контрагентов : Window
     {
         private int currenCounterpartId;
+
         public редактирование_контрагентов(int id_workers)
         {
             InitializeComponent();
+            this.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.F1)
+                {
+                    ShowHelp();
+                    e.Handled = true;
+                }
+            };
             currenCounterpartId = id_workers;
+
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл редактирование контрагента ID {currenCounterpartId}");
+
             LoadComboBoxes();
             LoadDataForEdit();
+        }
+        private void ShowHelp()
+        {
+            MessageBox.Show(
+@"ФОРМА РЕДАКТИРОВАНИЯ КОНТРАГЕНТА
+
+Назначение формы:
+Редактирование информации о существующем контрагенте (партнере, клиенте, поставщике).
+
+Что можно сделать на этой форме:
+• Изменить название контрагента
+• Изменить город и тип лица
+• Обновить адреса (фактический и юридический)
+• Изменить контактные данные (телефон, email, веб-сайт)
+• Обновить реквизиты (ИНН, БИК)
+• Изменить контактное лицо
+
+Поля для заполнения:
+
+1. НАЗВАНИЕ КОНТРАГЕНТА (обязательное поле)
+   • Полное наименование организации или ФИО
+   • Должно быть уникальным
+
+2. ГОРОД (обязательное поле)
+   • Выбор из списка городов
+   • Определяет местонахождение контрагента
+
+3. ТИП ЛИЦА (обязательное поле)
+   • Юридическое лицо
+   • Физическое лицо
+
+4. ФАКТИЧЕСКИЙ АДРЕС
+   • Адрес фактического местонахождения
+   • Необязательное поле
+
+5. ЮРИДИЧЕСКИЙ АДРЕС
+   • Юридический адрес организации
+   • Необязательное поле
+
+6. EMAIL
+   • Адрес электронной почты
+   • Проверяется формат (user@domain.ru)
+   • Необязательное поле
+
+7. ВЕБ-САЙТ
+   • Адрес сайта контрагента
+   • Проверяется корректность URL
+   • Необязательное поле
+
+8. ИНН
+   • Идентификационный номер налогоплательщика
+   • Необязательное поле
+
+9. БИК
+   • Банковский идентификационный код
+   • Необязательное поле
+
+10. КОНТАКТНОЕ ЛИЦО
+    • ФИО контактного сотрудника
+    • Только буквы, пробелы, дефисы, точки
+    • Необязательное поле
+
+11. ТЕЛЕФОН КОНТАКТНОГО ЛИЦА
+    • Контактный телефон
+    • Проверяется формат номера
+    • Необязательное поле
+
+Валидация:
+• Обязательные поля выделены красным при пустом значении
+• При корректном вводе рамка становится зеленой
+• Необязательные поля проверяются только если заполнены
+
+
+
+Примечание:
+Перед сохранением проверьте правильность введенных данных.
+ИНН и БИК рекомендуется заполнять для юридических лиц.
+После сохранения изменения применятся во всех связанных документах.",
+                "Помощь - Редактирование контрагента",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -54,15 +148,70 @@ namespace rccs_new
                 cmbTypeFace.Focus();
                 return;
             }
-            //if (counterparty.IsDuplicate(txtName.Text.Trim(), txtINN.Text.Trim(), txtLegalAddress.Text.Trim()))
-            //{
-            //    MessageBox.Show("Контрагент с таким названием и ИНН уже существует!",
-            //                    "Дубликат", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
+
+            // Проверка email (если заполнен)
+            if (!string.IsNullOrWhiteSpace(txtEmail.Text))
+            {
+                if (!IsValidEmail(txtEmail.Text.Trim()))
+                {
+                    MessageBox.Show("Введите корректный email адрес!\nПример: user@domain.ru",
+                                    "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtEmail.Focus();
+                    return;
+                }
+            }
+
+            // Проверка телефона (если заполнен)
+            if (!string.IsNullOrWhiteSpace(txtContPhone.Text))
+            {
+                if (!IsValidPhone(txtContPhone.Text.Trim()))
+                {
+                    MessageBox.Show("Введите корректный номер телефона!\n" +
+                                    "Допустимые форматы:\n" +
+                                    "+7 (123) 456-78-90\n" +
+                                    "8 (123) 456-78-90\n" +
+                                    "1234567890\n" +
+                                    "+1234567890",
+                                    "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtContPhone.Focus();
+                    return;
+                }
+            }
+
+            // Проверка веб-сайта (если заполнен)
+            if (!string.IsNullOrWhiteSpace(txtWebPage.Text))
+            {
+                if (!IsValidWebsite(txtWebPage.Text.Trim()))
+                {
+                    MessageBox.Show("Введите корректный URL веб-сайта!\n" +
+                                    "Примеры:\n" +
+                                    "https://example.com\n" +
+                                    "http://example.com\n" +
+                                    "www.example.com\n" +
+                                    "example.com",
+                                    "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtWebPage.Focus();
+                    return;
+                }
+            }
+
+            // Проверка контактного лица (только буквы, пробелы, дефисы, точки - если заполнен)
+            if (!string.IsNullOrWhiteSpace(txtContName.Text))
+            {
+                if (!IsValidContactPerson(txtContName.Text.Trim()))
+                {
+                    MessageBox.Show("Контактное лицо должно содержать только буквы, пробелы, дефисы и точки!\n" +
+                                    "Пример: Иванов И.И.",
+                                    "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtContName.Focus();
+                    return;
+                }
+            }
 
             try
             {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} пытается обновить контрагента ID {currenCounterpartId}");
+
                 bool success = counterparty.UpdateCounterparty(
                     id_counterparty: currenCounterpartId,
                     name: txtName.Text.Trim(),
@@ -80,6 +229,8 @@ namespace rccs_new
 
                 if (success)
                 {
+                    HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно обновил контрагента ID {currenCounterpartId}");
+
                     MessageBox.Show("Данные контрагента успешно обновлены!", "Успех",
                                     MessageBoxButton.OK, MessageBoxImage.Information);
                     this.DialogResult = true;
@@ -87,16 +238,100 @@ namespace rccs_new
                 }
                 else
                 {
+                    HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} не смог обновить контрагента ID {currenCounterpartId}");
+
                     MessageBox.Show("Не удалось обновить данные.", "Ошибка",
                                     MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
+                HistoryLogger.Log($"ОШИБКА! Пользователь {ConnectionBD.resFio} получил ошибку при обновлении контрагента ID {currenCounterpartId}. Ошибка: {ex.Message}");
+
                 MessageBox.Show($"Ошибка при обновлении:\n{ex.Message}", "Ошибка",
                                 MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        // Валидация email
+        private bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return true; // Пустое поле допустимо
+
+            try
+            {
+                var regex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+                return regex.IsMatch(email);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // Валидация телефона
+        private bool IsValidPhone(string phone)
+        {
+            if (string.IsNullOrWhiteSpace(phone))
+                return true; // Пустое поле допустимо
+
+            // Удаляем все нецифровые символы для проверки
+            string digitsOnly = Regex.Replace(phone, @"[^\d+]", "");
+
+            // Проверяем различные форматы телефонов
+            // Допустимые форматы: 
+            // 10-15 цифр, может начинаться с +
+            var regex = new Regex(@"^\+?\d{10,15}$");
+            return regex.IsMatch(digitsOnly);
+        }
+
+        // Валидация веб-сайта
+        private bool IsValidWebsite(string website)
+        {
+            if (string.IsNullOrWhiteSpace(website))
+                return true; // Пустое поле допустимо
+
+            // Добавляем http:// если нет протокола
+            string urlToCheck = website;
+            if (!website.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                !website.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                urlToCheck = "http://" + website;
+            }
+
+            try
+            {
+                Uri uriResult;
+                bool result = Uri.TryCreate(urlToCheck, UriKind.Absolute, out uriResult) &&
+                             (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+
+                // Дополнительная проверка на домен верхнего уровня
+                if (result)
+                {
+                    var regex = new Regex(@"^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(/.*)?$");
+                    result = regex.IsMatch(website);
+                }
+
+                return result;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // Валидация контактного лица (только буквы, пробелы, дефисы, точки)
+        private bool IsValidContactPerson(string contactPerson)
+        {
+            if (string.IsNullOrWhiteSpace(contactPerson))
+                return true; // Пустое поле допустимо
+
+            // Разрешаем: буквы (русские и английские), пробелы, дефисы, точки, запятые
+            var regex = new Regex(@"^[a-zA-Zа-яА-ЯёЁ\s\-\.\,]+$");
+            return regex.IsMatch(contactPerson);
+        }
+
         private void LoadDataForEdit()
         {
             ConnectionBD.mycommand.CommandText = @"
@@ -128,6 +363,8 @@ namespace rccs_new
 
             if (ConnectionBD.dtTemp.Rows.Count > 0)
             {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил данные контрагента ID {currenCounterpartId}");
+
                 DataRow row = ConnectionBD.dtTemp.Rows[0];
 
                 txtName.Text = row["name"]?.ToString() ?? "";
@@ -139,7 +376,7 @@ namespace rccs_new
                 txtINN.Text = row["INN"]?.ToString() ?? "";
                 txtWebPage.Text = row["web_page"]?.ToString() ?? "";
                 txtEmail.Text = row["e-mail"]?.ToString() ?? "";
-             
+
                 if (row["id_city"] != DBNull.Value && row["id_city"] != null)
                 {
                     int cityId = Convert.ToInt32(row["id_city"]);
@@ -154,7 +391,6 @@ namespace rccs_new
                     }
                 }
 
-                // Тип лица
                 if (row["id_type_of_face"] != DBNull.Value && row["id_type_of_face"] != null)
                 {
                     int typeId = Convert.ToInt32(row["id_type_of_face"]);
@@ -171,19 +407,21 @@ namespace rccs_new
             }
             else
             {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} не смог загрузить данные контрагента ID {currenCounterpartId}");
+
                 MessageBox.Show("Не удалось загрузить данные контрагента.", "Ошибка");
             }
-        
         }
+
         private void LoadComboBoxes()
         {
-            // Загрузка городов
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил справочники для редактирования контрагента");
+
             guideBD.selectGoroda();
             cmbCity.ItemsSource = ConnectionBD.dtGoroda.DefaultView;
             cmbCity.DisplayMemberPath = "city";
             cmbCity.SelectedValuePath = "id_city";
 
-            // Загрузка типов лица (Вид лица)
             guideBD.selectVidLica();
             cmbTypeFace.ItemsSource = ConnectionBD.dtVidLica.DefaultView;
             cmbTypeFace.DisplayMemberPath = "type_of_face";

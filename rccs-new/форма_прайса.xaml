@@ -78,39 +78,43 @@
             <DataGrid x:Name="dgPriceTable"
           Grid.Column="1"
           Margin="15,0,0,0"
-          
+          Grid.ColumnSpan="3"
+
+          AutoGenerateColumns="False"
+
           CanUserAddRows="False"
           CanUserDeleteRows="False"
           CanUserResizeRows="False"
+
           GridLinesVisibility="Horizontal"
-          AutoGenerateColumns="True"
+
           Background="#F8F8F8"
           Foreground="Black"
+
           BorderBrush="#CCCCCC"
           BorderThickness="1"
+
           SelectionMode="Single"
-          Style="{StaticResource MaterialDesignDataGrid}" SelectionChanged="dgSpravochnik_SelectionChanged" Grid.ColumnSpan="3">
+
+          Style="{StaticResource MaterialDesignDataGrid}">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Ключ"
-                            Binding="{Binding Code}"
-                            Width="70"
-                            IsReadOnly="True"/>
 
-                    <DataGridTextColumn Header="Прайс"
-                            Binding="{Binding price}"
-                            Width="*"
-                            IsReadOnly="True"
-                                        />
-                    <DataGridTextColumn Header="дата"
-                            Binding="{Binding date}"
-                            Width="*"
-                            
-                            IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="Объект" Header="Объект"
+                    <DataGridTextColumn Header="Объект"
                             Binding="{Binding Объект}"
                             Width="*"
                             IsReadOnly="True"/>
+
+                    <DataGridTextColumn Header="Дата"
+                            Binding="{Binding Дата}"
+                            Width="*"
+                            IsReadOnly="True"/>
+
+                    <DataGridTextColumn Header="Прайс"
+                            Binding="{Binding Прайс}"
+                            Width="120"
+                            IsReadOnly="True"/>
+
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

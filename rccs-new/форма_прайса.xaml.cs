@@ -27,7 +27,14 @@ namespace rccs_new
         public форма_прайса()
         {
             InitializeComponent();
-
+            this.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.F1)
+                {
+                    ShowHelp();
+                    e.Handled = true;
+                }
+            };
 
             cmbPrice.Items.Add("Прайс за м²");
             cmbPrice.Items.Add("Прайс программ");
@@ -35,35 +42,69 @@ namespace rccs_new
 
             cmbPrice.SelectedIndex = 0;
         }
-        private void LoadRoomsForLink()
+        private void ShowHelp()
         {
-            guideBD.selectOffice(); 
+            MessageBox.Show(
+@"ФОРМА УПРАВЛЕНИЯ ПРАЙС-ЛИСТАМИ
 
-            cmbLink.ItemsSource = ConnectionBD.dtOfficeComboBox.DefaultView;
-            cmbLink.DisplayMemberPath = "office";      
-            cmbLink.SelectedValuePath = "id_room";    
-            cmbLink.SelectedIndex = 0;
-        }
+Назначение формы:
+Управление ценами на аренду помещений, программное обеспечение и услуги.
 
-        private void LoadProgramsForLink()
-        {
-            
-            guideBD.selectPrograms();
+Что можно сделать на этой форме:
+• Просматривать историю изменения цен
+• Добавлять новые цены
+• Удалять устаревшие цены
+• Переключаться между разными типами прайсов
 
-            cmbLink.ItemsSource = ConnectionBD.dtProgramsComboBox.DefaultView; 
-            cmbLink.DisplayMemberPath = "name";
-            cmbLink.SelectedValuePath = "id_program";
-            cmbLink.SelectedIndex = 0;
-        }
+Типы прайс-листов:
 
-        private void LoadServicesForLink()
-        {
-            guideBD.selectServices();
+1. ПРАЙС ЗА М²
+   • Цены на аренду 1 квадратного метра помещения
+   • Привязка к конкретным офисам/помещениям
+   • Позволяет отслеживать изменение стоимости аренды
 
-            cmbLink.ItemsSource = ConnectionBD.dtServicesComboBox.DefaultView;
-            cmbLink.DisplayMemberPath = "name";
-            cmbLink.SelectedValuePath = "id_services";
-            cmbLink.SelectedIndex = 0;
+2. ПРАЙС ПРОГРАММ
+   • Цены на лицензирование программного обеспечения
+   • Привязка к конкретным программам
+   • История изменения стоимости ПО
+
+3. ПРАЙС УСЛУГ
+   • Цены на дополнительные услуги
+   • Привязка к конкретным услугам
+   • Отслеживание изменения стоимости услуг
+
+Функциональные возможности:
+
+1. ДОБАВЛЕНИЕ ЦЕНЫ
+   • Выберите тип прайса в выпадающем списке
+   • Выберите объект (помещение/программу/услугу)
+   • Введите новую цену
+   • Нажмите кнопку ""+""
+
+2. УДАЛЕНИЕ ЦЕНЫ
+   • Выберите запись в таблице
+   • Нажмите кнопку ""🗑"" (корзина)
+   • Цена будет удалена из истории
+
+3. ПРОСМОТР ИСТОРИИ
+   • Таблица показывает все изменения цен
+   • Столбцы: Объект, Прайс, Дата
+   • История сохраняется для анализа динамики цен
+
+4. ПЕРЕКЛЮЧЕНИЕ МЕЖДУ ТИПАМИ
+   • Выпадающий список для выбора типа прайса
+   • При переключении автоматически загружаются соответствующие данные
+
+
+
+Примечание:
+Все изменения цен сохраняются с датой изменения.
+Система хранит полную историю изменения цен.
+Новые цены автоматически применяются при оформлении документов.
+Цены можно удалять, но рекомендуется оставлять историю для отчетности.",
+                "Помощь - Управление прайс-листами",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
         private void Back_Click(object sender, RoutedEventArgs e)
         {
@@ -77,16 +118,36 @@ namespace rccs_new
         {
             if (dgPriceTable.SelectedItem == null)
             {
-                MessageBox.Show("Выбери запись!");
+                MessageBox.Show("Выберите запись!");
                 return;
             }
 
-            DataRowView row = dgPriceTable.SelectedItem as DataRowView;
-            int id = Convert.ToInt32(row[0]);
+            DataRowView row =
+                dgPriceTable.SelectedItem as DataRowView;
 
-            if (PriceHistory.DeletePrice(currentType, id))
+            string objectName =
+                row["Объект"].ToString();
+
+            decimal price =
+                Convert.ToDecimal(row["Прайс"]);
+
+            string date =
+                row["Дата"].ToString();
+
+            bool result =
+                PriceHistory.DeletePrice(
+                    currentType,
+                    objectName,
+                    price,
+                    date);
+
+            if (result)
             {
-                PriceHistory.LoadPriceData(dgPriceTable, currentType);
+                MessageBox.Show("Удалено!");
+
+                PriceHistory.LoadPriceData(
+                    dgPriceTable,
+                    currentType);
             }
         }
 

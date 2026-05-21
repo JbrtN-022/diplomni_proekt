@@ -157,21 +157,34 @@ namespace rccs_new.MyClass
         public static DataRow LoadDraftById(int idLeaseAgreement)
         {
             string sql = @"
-                     SELECT
-            lease_agreement.id_lease_agreement,
-            lease_agreement.id_counterparty,
-            floor.floor       AS floor_name,
-            office.office     AS office_name,
-            lease_agreement.rental_date_from,
-            lease_agreement.rental_date_until,
-            lease_agreement.conclusion_date,
-            lease_agreement.id_workers,
-            lease_agreement.approved
-        FROM rccs.lease_agreement
-        JOIN room   ON room.id_room = lease_agreement.id_room
-        JOIN office ON office.id_office = room.id_office
-        JOIN floor  ON floor.id_floor = room.id_floor
-        WHERE lease_agreement.id_lease_agreement = @id";
+                   
+SELECT
+    lease_agreement.id_lease_agreement,
+    lease_agreement.id_counterparty,
+    lease_agreement.id_room,
+    room.id_floor,
+
+    floor.floor AS floor_name,
+    office.office AS office_name,
+
+    lease_agreement.rental_date_from,
+    lease_agreement.rental_date_until,
+    lease_agreement.conclusion_date,
+    lease_agreement.id_workers,
+    lease_agreement.approved
+
+FROM rccs.lease_agreement
+
+JOIN room
+    ON room.id_room = lease_agreement.id_room
+
+JOIN office
+    ON office.id_office = room.id_office
+
+JOIN floor
+    ON floor.id_floor = room.id_floor
+
+WHERE lease_agreement.id_lease_agreement = @id";
 
             ConnectionBD.mycommand.CommandText = sql;
             ConnectionBD.mycommand.Parameters.Clear();
@@ -183,23 +196,41 @@ namespace rccs_new.MyClass
             return ConnectionBD.dtLoadDraftById.Rows.Count > 0 ? ConnectionBD.dtLoadDraftById.Rows[0] : null;
         }
 
-        public static void SelectComboBoxRoom(int? floor)
+        public static void SelectComboBoxRoom(int? floor, int? currentRoomId = null)
         {
-            string sql = @"SELECT r.id_room, o.office
-            FROM rccs.room AS r
-            JOIN floor AS f ON f.id_floor = r.id_floor
-            JOIN office AS o ON o.id_office = r.id_office
-            LEFT JOIN lease_agreement AS la ON la.id_room = r.id_room
-            WHERE  (
-                la.id_room IS NULL
-                OR la.rental_date_until <= CURRENT_DATE()
-                OR la.approved != 'Утверждён'
-              ) ";
+            string sql = @"
+    SELECT DISTINCT r.id_room, o.office
+    FROM rccs.room AS r
+    JOIN floor AS f ON f.id_floor = r.id_floor
+    JOIN office AS o ON o.id_office = r.id_office
+    LEFT JOIN lease_agreement AS la ON la.id_room = r.id_room
+    WHERE (
+        la.id_room IS NULL
+        OR la.rental_date_until <= CURRENT_DATE()
+        OR la.approved != 'Утверждён'";
+
+           
+            if (currentRoomId.HasValue)
+            {
+                sql += " OR r.id_room = @currentRoomId";
+            }
+
+            sql += ")";
+
             if (floor.HasValue)
             {
-                sql += $@" AND f.floor = {floor}";
+                sql += " AND f.floor = @floor";
             }
+
             ConnectionBD.mycommand.CommandText = sql;
+            ConnectionBD.mycommand.Parameters.Clear();
+
+            if (floor.HasValue)
+                ConnectionBD.mycommand.Parameters.AddWithValue("@floor", floor.Value);
+
+            if (currentRoomId.HasValue)
+                ConnectionBD.mycommand.Parameters.AddWithValue("@currentRoomId", currentRoomId.Value);
+
             ConnectionBD.dtFloorForLeaseComboBox.Clear();
             ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtFloorForLeaseComboBox);
         }

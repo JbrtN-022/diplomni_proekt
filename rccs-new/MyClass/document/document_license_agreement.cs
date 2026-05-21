@@ -123,27 +123,35 @@ namespace rccs_new.MyClass.document
                 }
                 int totalRow = dt.Rows.Count + 2;
 
-                table.Cell(totalRow, 1).Range.Text = "Итого:";
+                
+                table.Cell(totalRow, 2).Range.Text = "Итого:";
+                for (int i = 2; i <= 6; i++)
+                {
+                    table.Cell(totalRow, i).Range.Text = "";
+                }
+                for (int i = 1; i <= 5; i++)
+                {
+                    table.Cell(totalRow, i).Borders[Word.WdBorderType.wdBorderRight].LineStyle =
+                        Word.WdLineStyle.wdLineStyleNone;
 
-                table.Cell(totalRow, 2).Range.Text = "";
-                table.Cell(totalRow, 3).Range.Text = "";
-                table.Cell(totalRow, 4).Range.Text = "";
-                table.Cell(totalRow, 5).Range.Text = "";
-                table.Cell(totalRow, 6).Range.Text = "";
+                    table.Cell(totalRow, i + 1).Borders[Word.WdBorderType.wdBorderLeft].LineStyle =
+                        Word.WdLineStyle.wdLineStyleNone;
+                }
+                
 
                 table.Cell(totalRow, 7).Range.Text =
                     totalNds.ToString("N2");
 
                 table.Cell(totalRow, 8).Range.Text =
                     totalSum.ToString("N2");
-                table.Columns[1].Width = 40;   
-                table.Columns[2].Width = 220;  
-                table.Columns[3].Width = 50;
-                table.Columns[4].Width = 70;
-                table.Columns[5].Width = 70;
-                table.Columns[6].Width = 70;
-                table.Columns[7].Width = 70;
-                table.Columns[8].Width = 80;
+                table.Columns[1].Width = 35.15f;
+                table.Columns[2].Width = 155.93f;
+                table.Columns[3].Width = 49.61f;
+                table.Columns[4].Width = 56.69f;
+                table.Columns[5].Width = 62.37f;
+                table.Columns[6].Width = 49.61f;
+                table.Columns[7].Width = 51.03f;
+                table.Columns[8].Width = 63.78f;
 
                 doc.SaveAs2(filePath);
 

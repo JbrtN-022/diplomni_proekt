@@ -15,7 +15,7 @@
     <Grid>
        
 
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40 30 40 40">
 
             <TextBlock Text="Государственное автономное профессиональное образовательное учреждение Мурманской области"
                        TextWrapping="Wrap"
@@ -34,12 +34,13 @@
                        Margin="0,0,0,30"/>
 
 
-            <TextBlock Text="Название темы" 
-                       FontSize="26" 
+            <TextBlock 
+                       FontSize="24" 
                        FontWeight="Bold"
                        Foreground="#1A5270"
                        TextAlignment="Center"
-                       Margin="0,0,0,25"/>
+                       Margin="0,-10,0,10" Width="600" Height="99" 
+                       ><Run Text="Учет предоставления услуг в ООО "/><LineBreak/><Run Text="«Региональный центр ценообразования"/><LineBreak/><Run Text=" строительства»"/></TextBlock>
 
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

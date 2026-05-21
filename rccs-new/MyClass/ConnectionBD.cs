@@ -48,6 +48,8 @@ namespace rccs.MyClass
         public static DataTable dtLoadDraftByIdLicense = new DataTable();
         public static DataTable dtLoadDraftLicensesComboBox = new DataTable(); 
         public static DataTable dtCounterpartyComboBox = new DataTable(); 
+        public static DataTable dtGetLicenseAgreementForPrint = new DataTable(); 
+        public static DataTable GetLicenseAgreementForPrintTable = new DataTable();
         public static bool ConnectBD(string dataBase, string dataSource, string user, string password)
         {
             try

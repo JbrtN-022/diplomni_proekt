@@ -1,4 +1,5 @@
 ﻿using rccs.MyClass;
+using rccs_new.MyClass;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -25,18 +26,73 @@ namespace rccs_new
         public форма_бухгалтера()
         {
             InitializeComponent();
+            this.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.F1)
+                {
+                    ShowHelp();
+                    e.Handled = true;
+                }
+            };
             if (ConnectionBD.resFio.Length == 0)
             {
                 title.Text = "ошибка";
             }
             title.Text = $@"С возвращением, {ConnectionBD.resFio}";
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} авторизовался как бухгалтер");
         }
+        private void ShowHelp()
+        {
+            MessageBox.Show(
+@"ФОРМА БУХГАЛТЕРА
 
+Назначение формы:
+Главная панель управления для сотрудника бухгалтерии с доступом к финансовым документам.
+
+Что можно сделать на этой форме:
+• Управлять контрагентами
+• Просматривать и создавать договоры аренды
+• Просматривать данные текущего пользователя
+• Выход из системы
+
+Доступные разделы:
+
+1. КОНТРАГЕНТЫ
+   • Просмотр списка контрагентов
+   • Добавление новых контрагентов
+   • Редактирование данных контрагентов
+   • Удаление контрагентов
+
+2. ПРОСМОТР ДОГОВОРОВ АРЕНДЫ
+   • Просмотр всех заключенных договоров аренды
+   • Поиск и фильтрация договоров
+   • Печать договоров
+
+3. ОФОРМЛЕНИЕ ДОГОВОРОВ
+   • Создание новых договоров аренды
+   • Заполнение информации по договору
+   • Расчет арендной платы
+   • Сохранение и печать договоров
+
+4. ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
+   • Просмотр информации о текущем пользователе
+
+5. ВЫХОД
+   • Завершение текущей сессии и возврат к форме авторизации
+
+
+
+",
+                "Помощь - Форма бухгалтера",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
         private void контрагенты_Click(object sender, RoutedEventArgs e)
         {
           
             форма_контрагентов spravochnik = new форма_контрагентов();
             Application.Current.MainWindow = spravochnik;
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму контрагентов");
             spravochnik.Show();
 
             this.Close();
@@ -51,6 +107,7 @@ namespace rccs_new
         {
             UserOverlap overlap = new UserOverlap();
             Application.Current.MainWindow = overlap;
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму списка пользователей");
             overlap.Show();
         }
 
@@ -59,9 +116,13 @@ namespace rccs_new
            
             MainWindow autoriz = new MainWindow();
             Application.Current.MainWindow = autoriz;
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} вышел из профиля");
             autoriz.Show();
 
             this.Close();
+            ConnectionBD.roll = null;
+            ConnectionBD.resFio = null;
+           
         }
 
         private void Просмотр_договоров_аренды_Click(object sender, RoutedEventArgs e)
@@ -69,6 +130,7 @@ namespace rccs_new
           
             просмотр_договоров_аренды arenda = new просмотр_договоров_аренды();
             Application.Current.MainWindow = arenda;
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму просмотр договоров аренды");
             arenda.Show();
 
             this.Close();
@@ -79,68 +141,12 @@ namespace rccs_new
             
             создание_договора_аренды oform = new создание_договора_аренды();
             Application.Current.MainWindow = oform;
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму создание договоров аренды");
             oform.Show();
 
             this.Close();
         }
 
-        private void подключение_Click(object sender, RoutedEventArgs e)
-        {
-            форма__насторойки_подключения_бд openedWindow = null;
-
-            foreach (Window window in Application.Current.Windows)
-            {
-                if (window is форма__насторойки_подключения_бд)
-                {
-                    openedWindow =
-                        (форма__насторойки_подключения_бд)window;
-
-                    break;
-                }
-            }
-
-            if (openedWindow == null)
-            {
-                форма__насторойки_подключения_бд formpodkl =
-                    new форма__насторойки_подключения_бд(
-                        ConnectionBD.currentDataSource,
-                        ConnectionBD.currentUser,
-                        ConnectionBD.currentPassword,
-                        ConnectionBD.currentDataBase);
-
-                bool? result = formpodkl.ShowDialog();
-
-
-
-                if (result == true)
-                {
-                    if (ConnectionBD.ConnectBD(
-                        formpodkl.NovayaBD,
-                        formpodkl.NovyyHost,
-                        formpodkl.NovyyUser,
-                        formpodkl.NovyyPassword))
-                    {
-                        MessageBox.Show(
-                            "Настройки подключения обновлены",
-                            "Успешно",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-                    }
-                }
-            }
-
-            else
-            {
-                MessageBox.Show(
-                    "Нельзя открыть больше 1 окна!",
-                    "Предупреждение",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
-
-                openedWindow.Activate();
-                openedWindow.Focus();
-            }
-
-        }
+       
     }
 }

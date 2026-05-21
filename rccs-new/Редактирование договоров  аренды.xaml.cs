@@ -23,25 +23,101 @@ namespace rccs_new
     public partial class Редактирование_договоров__аренды : Window
     {
         private int _idLeaseAgreement;
+
         public Редактирование_договоров__аренды(int idLeaseAgreement)
         {
             _idLeaseAgreement = idLeaseAgreement;
 
             InitializeComponent();
+            this.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.F1)
+                {
+                    ShowHelp();
+                    e.Handled = true;
+                }
+            };
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл редактирование договора аренды ID {_idLeaseAgreement}");
+
             LoadClients();
             LoadFloor();
-          
 
             LoadData();
+        }
+        private void ShowHelp()
+        {
+            MessageBox.Show(
+@"ФОРМА РЕДАКТИРОВАНИЯ ДОГОВОРА АРЕНДЫ
+
+Назначение формы:
+Редактирование существующего договора аренды помещения.
+
+Что можно сделать на этой форме:
+• Изменить контрагента (арендатора)
+• Изменить этаж и помещение
+• Изменить срок действия договора
+• Утвердить или снять утверждение договора
+• Сохранить изменения
+
+Поля для заполнения:
+
+1. НОМЕР ДОГОВОРА
+   • Отображается автоматически
+   • Не подлежит редактированию
+
+2. КОНТРАГЕНТ (обязательное поле)
+   • Выбор из списка существующих
+   • Определяет арендатора помещения
+
+3. ЭТАЖ (обязательное поле)
+   • Выбор из списка этажей
+   • Влияет на доступные помещения
+
+4. ПОМЕЩЕНИЕ (обязательное поле)
+   • Выбор из списка помещений
+   • Зависит от выбранного этажа
+   • Определяет арендуемое помещение
+
+5. СРОК ДЕЙСТВИЯ (обязательное поле)
+   • Дата начала аренды
+   • Дата окончания аренды
+   • Окончание не может быть раньше начала
+
+6. СТАТУС ДОГОВОРА
+   • Чекбокс ""Утверждён""
+   • Отмечается при одобрении договора
+
+Кнопки управления:
+
+• СОХРАНИТЬ - сохраняет все изменения
+• НАЗАД - закрывает форму без сохранения
+
+Валидация:
+• Проверяется заполнение всех обязательных полей
+• Проверяется выбор помещения
+• Проверяется корректность дат
+
+
+
+Примечание:
+При изменении этажа список помещений автоматически обновляется.
+Помещение должно быть свободно на выбранный период.
+После сохранения изменения вступают в силу немедленно.
+Для создания нового договора используйте форму ""Оформление договоров"".",
+                "Помощь - Редактирование договора аренды",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
         private void LoadData()
         {
             DataRow row =
                 leaseAgreement.LoadDraftById(
                     _idLeaseAgreement);
-           
+
             if (row == null)
             {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} не смог загрузить договор аренды ID {_idLeaseAgreement}");
+
                 MessageBox.Show(
                     "Договор не найден!",
                     "Ошибка",
@@ -52,16 +128,20 @@ namespace rccs_new
                 return;
             }
 
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил данные договора аренды ID {_idLeaseAgreement}");
+
             txtLicenseNumber.Text =
                 row["id_lease_agreement"].ToString();
+
             cmbClient.SelectedValue =
                 row["id_counterparty"].ToString();
+
             cmbFloor.Text =
                 row["floor_name"].ToString();
-           
 
             cmbRoom.Text =
                 row["office_name"].ToString();
+
             if (row["rental_date_from"] != DBNull.Value)
             {
                 dpStart.SelectedDate =
@@ -75,28 +155,39 @@ namespace rccs_new
                     Convert.ToDateTime(
                         row["rental_date_until"]);
             }
+
             chkApproved.IsChecked =
                 row["approved"].ToString() == "Утверждён";
         }
+
         private void LoadClients()
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список контрагентов");
+
             guideBD.selectCounterpartyComboBox();
 
             cmbClient.ItemsSource = ConnectionBD.dtCounterpartyComboBox.DefaultView;
             cmbClient.DisplayMemberPath = "name";
             cmbClient.SelectedValuePath = "id_counterparty";
         }
-       
+
         private void LoadFloor()
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список этажей");
+
             guideBD.selectEtaj();
+
             cmbFloor.ItemsSource = ConnectionBD.dtEtaj.DefaultView;
             cmbFloor.DisplayMemberPath = "floor";
             cmbFloor.SelectedValuePath = "id_floor";
         }
-        private void LoadRoom(int? room)
+
+        private void LoadRoom(int? room, int? currentRoomId = null)
         {
-            leaseAgreement.SelectComboBoxRoom(room);
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список помещений");
+
+            leaseAgreement.SelectComboBoxRoom(room, currentRoomId);
+
             cmbRoom.ItemsSource = ConnectionBD.dtFloorForLeaseComboBox.DefaultView;
             cmbRoom.DisplayMemberPath = "office";
             cmbRoom.SelectedValuePath = "id_room";
@@ -116,6 +207,7 @@ namespace rccs_new
 
                 return;
             }
+
             if (cmbFloor.SelectedValue == null)
             {
                 MessageBox.Show(
@@ -128,6 +220,7 @@ namespace rccs_new
 
                 return;
             }
+
             if (cmbRoom.SelectedValue == null)
             {
                 MessageBox.Show(
@@ -140,6 +233,7 @@ namespace rccs_new
 
                 return;
             }
+
             if (dpStart.SelectedDate == null)
             {
                 MessageBox.Show(
@@ -152,6 +246,7 @@ namespace rccs_new
 
                 return;
             }
+
             if (dpEnd.SelectedDate == null)
             {
                 MessageBox.Show(
@@ -164,10 +259,13 @@ namespace rccs_new
 
                 return;
             }
+
             string approved =
                 chkApproved.IsChecked == true
                 ? "Утверждён"
                 : "Не утверждён";
+
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} пытается обновить договор аренды ID {_idLeaseAgreement}");
 
             bool result =
                 leaseAgreement.UpdateLeaseAgreement(
@@ -180,6 +278,8 @@ namespace rccs_new
 
             if (result)
             {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно обновил договор аренды ID {_idLeaseAgreement}");
+
                 MessageBox.Show(
                     "Изменения сохранены!",
                     "Успех",
@@ -190,6 +290,8 @@ namespace rccs_new
             }
             else
             {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} не смог обновить договор аренды ID {_idLeaseAgreement}");
+
                 MessageBox.Show(
                     "Ошибка сохранения!",
                     "Ошибка",
@@ -200,6 +302,8 @@ namespace rccs_new
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} закрыл редактирование договора аренды ID {_idLeaseAgreement}");
+
             this.Close();
         }
 
@@ -209,14 +313,15 @@ namespace rccs_new
             {
                 int floorNumber = Convert.ToInt32(row["floor"]);
 
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} выбрал этаж {floorNumber} при редактировании договора аренды");
+
                 MessageBox.Show(floorNumber.ToString());
+
                 LoadRoom(floorNumber);
-              
             }
             else
             {
                 LoadRoom(null);
-                
             }
         }
     }

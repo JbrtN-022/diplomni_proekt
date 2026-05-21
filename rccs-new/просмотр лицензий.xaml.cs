@@ -24,13 +24,98 @@ namespace rccs_new
         public просмотр_лицензий()
         {
             InitializeComponent();
+            this.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.F1)
+                {
+                    ShowHelp();
+                    e.Handled = true;
+                }
+            };
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл просмотр лицензий");
+
             LoadWorkersCombo();
             LoadProgramsCombo();
+
             licenseAgreement.licenseAgreementSelect(itemsControlLicenses);
+
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список лицензий");
+        }
+        private void ShowHelp()
+        {
+            MessageBox.Show(
+@"ФОРМА ПРОСМОТРА ЛИЦЕНЗИЙ
+
+Назначение формы:
+Просмотр и фильтрация оформленных лицензий на программное обеспечение.
+
+Что можно сделать на этой форме:
+• Просматривать список всех лицензий
+• Искать лицензии по контрагенту
+• Фильтровать по ответственному сотруднику
+• Фильтровать по программе лицензирования
+• Фильтровать по датам
+• Очищать все фильтры
+
+Функциональные возможности:
+
+1. ПОИСК ПО КОНТРАГЕНТУ
+   • Поле ""Поиск""
+   • Введите название контрагента
+   • Поиск происходит автоматически при вводе
+   • Регистронезависимый поиск
+
+2. ФИЛЬТР ПО СОТРУДНИКУ
+   • Выпадающий список ""Ответственный сотрудник""
+   • Показывает лицензии, оформленные конкретным сотрудником
+   • Можно выбрать ""Пусто"" для отключения фильтра
+
+3. ФИЛЬТР ПО ПРОГРАММЕ
+   • Выпадающий список ""Программа""
+   • Показывает лицензии на конкретное ПО
+   • Можно выбрать ""Пусто"" для отключения фильтра
+
+4. ФИЛЬТР ПО ДАТАМ
+   • Поле ""Дата от"" - начало периода
+   • Поле ""Дата до"" - конец периода
+   • Показывает лицензии в указанном диапазоне дат
+   • Можно выбрать даты из календаря или ввести вручную
+
+5. КНОПКА ""ОЧИСТИТЬ ФИЛЬТРЫ""
+   • Сбрасывает все фильтры
+   • Возвращает полный список лицензий
+
+6. КАРТОЧКИ ЛИЦЕНЗИЙ
+   • Отображают основную информацию
+   • Номер лицензии
+   • Контрагент
+   • Программа
+   • Ответственный сотрудник
+   • Срок действия
+   • Дополнительные услуги
+
+Фильтрация:
+• Все фильтры работают одновременно
+• Поиск происходит автоматически при изменении любого параметра
+• Даты можно вводить в формате ДД.ММ.ГГГГ
+
+
+
+Примечание:
+Для создания новой лицензии используйте форму ""Оформление лицензии"".
+Лицензию можно распечатать из карточки лицензии.
+При наведении на карточку отображается дополнительная информация.
+Фильтры применяются автоматически для удобства работы.",
+                "Помощь - Просмотр лицензий",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
         private void LoadWorkersCombo()
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список работников");
+
             guideBD.selectWorkers();
+
             cmbWorker.ItemsSource = ConnectionBD.dtWorkersComboBox.DefaultView;
             cmbWorker.DisplayMemberPath = "name";
             cmbWorker.SelectedValuePath = "id_workers";
@@ -38,13 +123,19 @@ namespace rccs_new
 
         private void LoadProgramsCombo()
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список программ");
+
             guideBD.selectPrograms();
+
             cmbProgram.ItemsSource = ConnectionBD.dtProgramsComboBox.DefaultView;
             cmbProgram.DisplayMemberPath = "name";
             cmbProgram.SelectedValuePath = "id_program";
         }
+
         private void RefreshLicenses()
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} обновил фильтрацию лицензий");
+
             itemsControlLicenses.Items.Clear();
 
             string searchText = txtSearch.Text.Trim();
@@ -63,8 +154,11 @@ namespace rccs_new
                 dateFrom,
                 dateTo);
         }
+
         private void btnClearFilters_Click(object sender, RoutedEventArgs e)
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} очистил фильтры лицензий");
+
             txtSearch.Clear();
             cmbWorker.SelectedIndex = -1;
             cmbProgram.SelectedIndex = -1;
@@ -96,9 +190,14 @@ namespace rccs_new
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} вернулся в форму менеджера из просмотра лицензий");
+
             форма_менеджера formMEN = new форма_менеджера();
+
             Application.Current.MainWindow = formMEN;
+
             formMEN.Show();
+
             this.Close();
         }
     }

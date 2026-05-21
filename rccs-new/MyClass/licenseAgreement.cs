@@ -82,13 +82,16 @@ namespace rccs_new.MyClass
 
                 ConnectionBD.dtTempLicense.Clear();
                 ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtTempLicense);
-
-                foreach (DataRow row in ConnectionBD.dtTempLicense.Rows)
+            if (!ConnectionBD.dtTempLicense.Columns.Contains("services_list"))
+            {
+                ConnectionBD.dtTempLicense.Columns.Add("services_list");
+            }
+            foreach (DataRow row in ConnectionBD.dtTempLicense.Rows)
                 {
                     int idLicense = Convert.ToInt32(row["id_license_agreement"]);
                     string servicesList = GetServicesForLicense(idLicense);
-
-                    string dateFromStr = row["rental_date_from"] != DBNull.Value
+                    row["services_list"] = servicesList;
+                string dateFromStr = row["rental_date_from"] != DBNull.Value
                 ? Convert.ToDateTime(row["rental_date_from"]).ToShortDateString()
                 : "-";
 
@@ -101,24 +104,38 @@ namespace rccs_new.MyClass
                         : "-";
 
                     string approvedText = row["approved"]?.ToString() ?? "Не утверждён";
+                var card = new UserControlLicenseAgreement(row);
 
-                    var card = new UserControlLicenseAgreement(
-                licenseId: idLicense.ToString(),
-                counterpartyName: row["counterparty_name"]?.ToString() ?? "-",
-                programName: row["program_name"]?.ToString() ?? "-",
-                dateFrom: dateFromStr,
-                dateUntil: dateUntilStr,
-                conclusionDate: conclusionDateStr,
-                workerName: row["worker_name"]?.ToString() ?? "-",
-                servicesList: servicesList,
-                approved: approvedText
-            );
-
-                    itemsControl.Items.Add(card);
+                itemsControl.Items.Add(card);
                 }
             }
+        public static string GetServicesForLicense(int idLicenseAgreement)
+        {
+            string sql = @"
+                 SELECT concat(services.name, ' : ' ,service_in_agreement.kolvo, ' шт.')  as name
+                 FROM rccs.service_in_agreement
+                 JOIN rccs.services ON services.id_services = service_in_agreement.id_services
+                 WHERE service_in_agreement.id_license_agreement = @id";
 
-            public static DataTable GetLicenseAgreementForPrintTable(int idLicenseAgreement)
+            ConnectionBD.mycommand.CommandText = sql;
+            ConnectionBD.mycommand.Parameters.Clear();
+            ConnectionBD.mycommand.Parameters.AddWithValue("@id", idLicenseAgreement);
+
+            ConnectionBD.dtTemp.Clear();
+            ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtTemp);
+
+            if (ConnectionBD.dtTemp.Rows.Count == 0)
+                return "Услуги не указаны";
+
+            string result = "";
+            foreach (DataRow row in ConnectionBD.dtTemp.Rows)
+            {
+                result += "• " + row["name"].ToString() + "\n";
+            }
+
+            return result.TrimEnd('\n');
+        }
+        public static DataTable GetLicenseAgreementForPrintTable(int idLicenseAgreement)
             {
                 string sql = @"
             SELECT
@@ -144,10 +161,10 @@ namespace rccs_new.MyClass
                 ConnectionBD.mycommand.Parameters.Clear();
                 ConnectionBD.mycommand.Parameters.AddWithValue("@id", idLicenseAgreement);
 
-                ConnectionBD.dtTemp.Clear();
-                ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtTemp);
+                ConnectionBD.GetLicenseAgreementForPrintTable.Clear();
+                ConnectionBD.myDataAdapter.Fill(ConnectionBD.GetLicenseAgreementForPrintTable);
 
-                return ConnectionBD.dtTemp;
+                return ConnectionBD.GetLicenseAgreementForPrintTable;
             }
             public static DataRow GetLicenseAgreementForPrint(int idLicenseAgreement)
             {
@@ -172,38 +189,13 @@ namespace rccs_new.MyClass
                 ConnectionBD.mycommand.Parameters.Clear();
                 ConnectionBD.mycommand.Parameters.AddWithValue("@id", idLicenseAgreement);
 
-                ConnectionBD.dtTemp.Clear();
-                ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtTemp);
+                ConnectionBD.dtGetLicenseAgreementForPrint.Clear();
+                ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtGetLicenseAgreementForPrint);
 
-                return ConnectionBD.dtTemp.Rows.Count > 0 ? ConnectionBD.dtTemp.Rows[0] : null;
+                return ConnectionBD.dtGetLicenseAgreementForPrint.Rows.Count > 0 ? ConnectionBD.dtGetLicenseAgreementForPrint.Rows[0] : null;
             }
 
-            public static string GetServicesForLicense(int idLicenseAgreement)
-            {
-                string sql = @"
-                 SELECT concat(services.name, ' : ' ,service_in_agreement.kolvo, ' шт.')  as name
-                 FROM rccs.service_in_agreement
-                 JOIN rccs.services ON services.id_services = service_in_agreement.id_services
-                 WHERE service_in_agreement.id_license_agreement = @id";
-
-                ConnectionBD.mycommand.CommandText = sql;
-                ConnectionBD.mycommand.Parameters.Clear();
-                ConnectionBD.mycommand.Parameters.AddWithValue("@id", idLicenseAgreement);
-
-                ConnectionBD.dtTemp.Clear();
-                ConnectionBD.myDataAdapter.Fill(ConnectionBD.dtTemp);
-
-                if (ConnectionBD.dtTemp.Rows.Count == 0)
-                    return "Услуги не указаны";
-
-                string result = "";
-                foreach (DataRow row in ConnectionBD.dtTemp.Rows)
-                {
-                    result += "• " + row["name"].ToString() + "\n";
-                }
-
-                return result.TrimEnd('\n');
-            }
+          
             public static string AddlicenseAgreement(string id, int IDcounterparty, int IDprogram,
                                           DateTime dateFrom, DateTime dateUntil, int idWorker)
             {
@@ -445,6 +437,7 @@ SET
     id_program = @id_program,
     rental_date_from = @date_from,
     rental_date_until = @date_until,
+    conclusion_date = CURDATE(),
     approved = @approved
 WHERE id_license_agreement = @id";
 

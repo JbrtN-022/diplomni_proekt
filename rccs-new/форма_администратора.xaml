@@ -44,15 +44,28 @@
                             Height="45"
                             Margin="5,8"
                     Style="{StaticResource MaterialDesignRaisedButton}" Click="прайс_Click"   />
-                    <Button x:Name="подключение"
-                             Content="настройки подключения"
-                             Height="45"
-                             Margin="5,8"
-                     Style="{StaticResource MaterialDesignRaisedButton}" Click="подключение_Click"   />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                            <Button x:Name="экспорт" Content="Экспортировать БД"
+                        Height="65"
+                       
+                        Style="{StaticResource MaterialDesignFlatButton}" BorderBrush="#FF2196F3" FontSize="12" Click="экспорт_Click"  />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                            <Button x:Name="импорт" Content="Импортировать БД"
+                        Height="65"
+                       
+                        Style="{StaticResource MaterialDesignFlatButton}" BorderBrush="#FF2196F3" FontSize="12" Click="импорт_Click" />
+                        </StackPanel>
+                    </Grid>
                     <Button x:Name="выйти" Content="Выйти"
                             Height="45"
                             Margin="5,15,5,5"
-                            Style="{StaticResource MaterialDesignFlatButton}" Click="выйти_Click" />
+                            Style="{StaticResource MaterialDesignFlatButton}" Click="выйти_Click"  />
                 </StackPanel>
             </StackPanel>
         </materialDesign:DrawerHost.LeftDrawerContent>

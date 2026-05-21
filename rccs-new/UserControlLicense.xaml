@@ -18,7 +18,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Левая часть - основная информация -->
-            <StackPanel Grid.Column="0">
+            <StackPanel Grid.Column="0" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown">
                 <!-- Номер договора + Название контрагента -->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Договор №" FontSize="15" FontWeight="SemiBold"/>

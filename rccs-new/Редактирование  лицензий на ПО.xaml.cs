@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace rccs_new
 {
@@ -19,8 +20,17 @@ namespace rccs_new
         public Редактирование__лицензий_на_ПО(int idLicenseAgreement)
         {
             InitializeComponent();
-
+            this.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.F1)
+                {
+                    ShowHelp();
+                    e.Handled = true;
+                }
+            };
             _idLicenseAgreement = idLicenseAgreement;
+
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл редактирование лицензии ID {_idLicenseAgreement}");
 
             LoadClients();
             LoadProgram();
@@ -28,9 +38,76 @@ namespace rccs_new
 
             LoadLicenseData();
         }
+        private void ShowHelp()
+        {
+            MessageBox.Show(
+@"ФОРМА РЕДАКТИРОВАНИЯ ЛИЦЕНЗИИ ПО
 
+Назначение формы:
+Редактирование существующей лицензии на программное обеспечение.
+
+Что можно сделать на этой форме:
+• Изменить контрагента (лицензиата)
+• Изменить программу лицензирования
+• Изменить срок действия лицензии
+• Изменить состав услуг
+• Утвердить или снять утверждение лицензии
+• Сохранить изменения
+
+Поля для заполнения:
+
+1. НОМЕР ЛИЦЕНЗИИ
+   • Отображается автоматически
+   • Не подлежит редактированию
+
+2. КОНТРАГЕНТ (обязательное поле)
+   • Выбор из списка существующих
+   • Определяет владельца лицензии
+
+3. ПРОГРАММА (обязательное поле)
+   • Выбор из списка ПО
+   • Определяет объект лицензирования
+
+4. СРОК ДЕЙСТВИЯ (обязательное поле)
+   • Дата начала лицензии
+   • Дата окончания лицензии
+   • Окончание не может быть раньше начала
+
+5. УСЛУГИ (обязательное поле)
+   • Таблица доступных услуг
+   • Выберите услуги (галочка)
+   • Укажите количество для каждой услуги
+   • Минимум одна услуга должна быть выбрана
+
+6. СТАТУС ЛИЦЕНЗИИ
+   • Чекбокс ""Утверждена""
+   • Отмечается при одобрении лицензии
+
+Кнопки управления:
+
+• СОХРАНИТЬ - сохраняет все изменения
+• НАЗАД - закрывает форму без сохранения
+
+Валидация:
+• Проверяется заполнение всех обязательных полей
+• Проверяется наличие выбранных услуг
+• Проверяется корректность количества услуг
+• Дата окончания не может быть раньше даты начала
+
+
+
+Примечание:
+При редактировании утвержденной лицензии будьте внимательны.
+Изменение услуг полностью заменяет предыдущий список.
+После сохранения изменения вступают в силу немедленно.",
+                "Помощь - Редактирование лицензии",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
         private void LoadServices()
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список услуг");
+
             licenseAgreement.LoadAllServices(
                 dgAllServices,
                 dgAllServices);
@@ -38,6 +115,8 @@ namespace rccs_new
 
         private void LoadClients()
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список контрагентов");
+
             guideBD.selectCounterpartyComboBox();
 
             cmbClient.ItemsSource =
@@ -51,6 +130,8 @@ namespace rccs_new
 
         private void LoadProgram()
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список программ");
+
             guideBD.selectPrograms();
 
             cmbProgram.ItemsSource =
@@ -70,6 +151,8 @@ namespace rccs_new
 
             if (row == null)
             {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} не смог загрузить лицензию ID {_idLicenseAgreement}");
+
                 MessageBox.Show(
                     "Лицензия не найдена!",
                     "Ошибка",
@@ -80,6 +163,8 @@ namespace rccs_new
 
                 return;
             }
+
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил данные лицензии ID {_idLicenseAgreement}");
 
             txtLicenseNumber.Text =
                 row["id_license_agreement"]
@@ -124,6 +209,8 @@ namespace rccs_new
         private void LoadSelectedServicesForLicense(
             int licenseId)
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил услуги для лицензии ID {licenseId}");
+
             if (dgAllServices.ItemsSource
                 is List<licenseAgreement.ServiceItem>
                 allServices)
@@ -294,6 +381,8 @@ WHERE id_license_agreement = @id";
                 ? "Утверждён"
                 : "Не утверждён";
 
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} пытается обновить лицензию ID {_idLicenseAgreement}");
+
             bool result =
                 licenseAgreement.UpdateLicenseAgreement(
                     _idLicenseAgreement,
@@ -316,6 +405,8 @@ WHERE id_license_agreement = @id";
                         _idLicenseAgreement,
                         selectedServices);
 
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно обновил лицензию ID {_idLicenseAgreement}");
+
                 MessageBox.Show(
                     "Изменения сохранены!",
                     "Успех",
@@ -326,6 +417,8 @@ WHERE id_license_agreement = @id";
             }
             else
             {
+                HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} не смог обновить лицензию ID {_idLicenseAgreement}");
+
                 MessageBox.Show(
                     "Ошибка сохранения!",
                     "Ошибка",
@@ -338,6 +431,8 @@ WHERE id_license_agreement = @id";
             object sender,
             RoutedEventArgs e)
         {
+            HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} закрыл окно редактирования лицензии ID {_idLicenseAgreement}");
+
             Close();
         }
     }
