@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:rccs_new"
          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        mc:Ignorable="d"
-        Title="просмотр договоров аренды" Height="580" Width="950" Cursor="">
+        mc:Ignorable="d"  Icon="/Рисунок1.png"
+        Title="просмотр договоров аренды" Height="600" Width="950" Cursor="">
     <Grid>
 
         <Grid Background="#FF2196F3" Height="60" VerticalAlignment="Top">

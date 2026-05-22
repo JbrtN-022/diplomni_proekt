@@ -8,7 +8,7 @@
         Title="Сотрудники"
         Height="550"
         Width="900"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen"  Icon="/Рисунок1.png"
         >
 
     <Grid>

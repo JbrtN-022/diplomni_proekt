@@ -12,7 +12,7 @@ namespace rccs.MyClass
 {
     internal class ConnectionBD
     {
-        //public static string connectionString = @"Database = rccs; Data Source = localhost; password =qwerty; user=root; charset = utf8;";
+        
         public static MySqlConnection myconnection;
         public static MySqlCommand mycommand;
         public static MySqlDataAdapter myDataAdapter;

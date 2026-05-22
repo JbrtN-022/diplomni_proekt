@@ -30,7 +30,7 @@ namespace rccs_new
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму договоров и лицензий");
             LoadDocumentTypes();
         }
-
+        // Показывает справочное сообщение о форме
         private void ShowHelp()
         {
             MessageBox.Show(
@@ -92,13 +92,13 @@ namespace rccs_new
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
-
+        // Инициализация типов документов в комбобоксе
         private void LoadDocumentTypes()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил типы документов");
             cmbDocumentType.SelectedIndex = 0;
         }
-
+        // Возврат в главное окно администратора
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} вернулся в панель администратора");
@@ -109,7 +109,7 @@ namespace rccs_new
 
             this.Close();
         }
-
+        // Редактирование выбранного документа
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
             if (cmbDocumentType.SelectedItem == null)
@@ -152,7 +152,7 @@ namespace rccs_new
                 }
             }
         }
-
+        // Удаление выбранного документа
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (cmbDocumentType.SelectedItem == null)
@@ -207,7 +207,7 @@ namespace rccs_new
                 MessageBox.Show("Ошибка удаления!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        // Печать выбранного документа в Word
         private void btnPrint_Click(object sender, RoutedEventArgs e)
         {
             if (cmbDocumentType.SelectedItem == null)
@@ -346,7 +346,7 @@ namespace rccs_new
                 MessageBox.Show("Ошибка при печати:\n" + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        // Обработчики изменения фильтров
         private void chkOnlyApproved_Unchecked(object sender, RoutedEventArgs e)
         {
             if (cmbDocumentType.SelectedItem is ComboBoxItem item)
@@ -382,7 +382,7 @@ namespace rccs_new
                 LoadDocumentsByType(type, onlyApproved);
             }
         }
-
+        // Основной метод загрузки документов выбранного типа
         private void LoadDocumentsByType(string documentType, bool onlyApproved)
         {
             itemsControlDocuments.ItemsSource = null;
@@ -433,7 +433,7 @@ namespace rccs_new
                 }
             }
         }
-
+        // Обработка выбора документа в комбобоксе
         private void cmbDocumentList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmbDocumentList.SelectedValue != null && cmbDocumentList.SelectedIndex != -1)

@@ -6,9 +6,9 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Настройки подключения" 
-        Height="520" 
+        Height="540" 
         Width="720"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen"  Icon="/Рисунок1.png"
         ResizeMode="NoResize"
         Background="#F8F9FA">
 
@@ -38,8 +38,12 @@
     </Window.Resources>
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="17*"/>
+            <ColumnDefinition Width="63*"/>
+        </Grid.ColumnDefinitions>
         <!-- Верхняя синяя панель -->
-        <Grid Background="#2196F3" Height="60" VerticalAlignment="Top">
+        <Grid Background="#2196F3" Height="60" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -70,7 +74,7 @@
         </Grid>
 
         <!-- Основное содержимое -->
-        <Grid Margin="30,80,30,30">
+        <Grid Margin="30,80,30,33" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -149,6 +153,7 @@
                         Background="#2196F3"
                         Foreground="White"
                         FontSize="15"
+                        Margin=" 0 0  0 15"
                         FontWeight="SemiBold"
                         BorderThickness="0"
                         HorizontalAlignment="Center" Click="podkluchKBD_Click"/>

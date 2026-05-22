@@ -1,20 +1,10 @@
 ﻿using rccs.MyClass;
 using rccs_new.MyClass;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace rccs_new
 {
@@ -24,9 +14,12 @@ namespace rccs_new
     public partial class форма_прайса : Window
     {
         private PriceHistory.PriceType currentType;
+
         public форма_прайса()
         {
             InitializeComponent();
+
+            // Подключение обработчика клавиши F1 для вызова справки
             this.KeyDown += (s, e) =>
             {
                 if (e.Key == Key.F1)
@@ -36,67 +29,55 @@ namespace rccs_new
                 }
             };
 
+            // Инициализация выпадающего списка типов прайсов
             cmbPrice.Items.Add("Прайс за м²");
             cmbPrice.Items.Add("Прайс программ");
             cmbPrice.Items.Add("Прайс услуг");
-
             cmbPrice.SelectedIndex = 0;
         }
+
+        // Показывает справочное сообщение о форме управления прайсами
         private void ShowHelp()
         {
             MessageBox.Show(
 @"ФОРМА УПРАВЛЕНИЯ ПРАЙС-ЛИСТАМИ
-
 Назначение формы:
 Управление ценами на аренду помещений, программное обеспечение и услуги.
-
 Что можно сделать на этой форме:
 • Просматривать историю изменения цен
 • Добавлять новые цены
 • Удалять устаревшие цены
 • Переключаться между разными типами прайсов
-
 Типы прайс-листов:
-
 1. ПРАЙС ЗА М²
    • Цены на аренду 1 квадратного метра помещения
    • Привязка к конкретным офисам/помещениям
    • Позволяет отслеживать изменение стоимости аренды
-
 2. ПРАЙС ПРОГРАММ
    • Цены на лицензирование программного обеспечения
    • Привязка к конкретным программам
    • История изменения стоимости ПО
-
 3. ПРАЙС УСЛУГ
    • Цены на дополнительные услуги
    • Привязка к конкретным услугам
    • Отслеживание изменения стоимости услуг
-
 Функциональные возможности:
-
 1. ДОБАВЛЕНИЕ ЦЕНЫ
    • Выберите тип прайса в выпадающем списке
    • Выберите объект (помещение/программу/услугу)
    • Введите новую цену
    • Нажмите кнопку ""+""
-
 2. УДАЛЕНИЕ ЦЕНЫ
    • Выберите запись в таблице
    • Нажмите кнопку ""🗑"" (корзина)
    • Цена будет удалена из истории
-
 3. ПРОСМОТР ИСТОРИИ
    • Таблица показывает все изменения цен
    • Столбцы: Объект, Прайс, Дата
    • История сохраняется для анализа динамики цен
-
 4. ПЕРЕКЛЮЧЕНИЕ МЕЖДУ ТИПАМИ
    • Выпадающий список для выбора типа прайса
    • При переключении автоматически загружаются соответствующие данные
-
-
-
 Примечание:
 Все изменения цен сохраняются с датой изменения.
 Система хранит полную историю изменения цен.
@@ -106,6 +87,8 @@ namespace rccs_new
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+
+        // Возврат в главное окно администратора
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             форма_администратора formadm = new форма_администратора();
@@ -114,6 +97,7 @@ namespace rccs_new
             this.Close();
         }
 
+        // Удаление выбранной записи из истории цен
         private void DelBtn_Click(object sender, RoutedEventArgs e)
         {
             if (dgPriceTable.SelectedItem == null)
@@ -122,35 +106,21 @@ namespace rccs_new
                 return;
             }
 
-            DataRowView row =
-                dgPriceTable.SelectedItem as DataRowView;
+            DataRowView row = dgPriceTable.SelectedItem as DataRowView;
+            string objectName = row["Объект"].ToString();
+            decimal price = Convert.ToDecimal(row["Прайс"]);
+            string date = row["Дата"].ToString();
 
-            string objectName =
-                row["Объект"].ToString();
-
-            decimal price =
-                Convert.ToDecimal(row["Прайс"]);
-
-            string date =
-                row["Дата"].ToString();
-
-            bool result =
-                PriceHistory.DeletePrice(
-                    currentType,
-                    objectName,
-                    price,
-                    date);
+            bool result = PriceHistory.DeletePrice(currentType, objectName, price, date);
 
             if (result)
             {
                 MessageBox.Show("Удалено!");
-
-                PriceHistory.LoadPriceData(
-                    dgPriceTable,
-                    currentType);
+                PriceHistory.LoadPriceData(dgPriceTable, currentType);
             }
         }
 
+        // Добавление новой цены в выбранный тип прайса
         private void addBtn_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtPrice.Text))
@@ -177,11 +147,11 @@ namespace rccs_new
             {
                 MessageBox.Show("Добавлено!");
                 txtPrice.Clear();
-
                 PriceHistory.LoadPriceData(dgPriceTable, currentType);
             }
         }
 
+        // Смена типа прайса + загрузка соответствующих данных
         private void cmbPrice_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             currentType = (PriceHistory.PriceType)(cmbPrice.SelectedIndex + 1);
@@ -199,24 +169,19 @@ namespace rccs_new
                     guideBD.selectPrograms();
                     cmbLink.ItemsSource = ConnectionBD.dtProgramsComboBox.DefaultView;
                     cmbLink.DisplayMemberPath = "name";
-                    cmbLink.SelectedValuePath = "id_program";                    
+                    cmbLink.SelectedValuePath = "id_program";
                     break;
 
                 case PriceHistory.PriceType.Service:
                     guideBD.selectServices();
                     cmbLink.ItemsSource = ConnectionBD.dtServicesComboBox.DefaultView;
                     cmbLink.DisplayMemberPath = "name";
-                    cmbLink.SelectedValuePath = "id_services";                
+                    cmbLink.SelectedValuePath = "id_services";
                     break;
             }
 
             cmbLink.SelectedIndex = 0;
-
             PriceHistory.LoadPriceData(dgPriceTable, currentType);
-        }
-        private void dgSpravochnik_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }

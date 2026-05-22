@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="White"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"  Icon="/Рисунок1.png">
 
     <Grid>
        

@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:rccs_new"
          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        mc:Ignorable="d"
-        Title="просмотр_лицензий" Height="666" Width="1000" Cursor="">
+        mc:Ignorable="d"  Icon="/Рисунок1.png"
+        Title="просмотр_лицензий" Height="680" Width="1000" Cursor="">
     <Grid>
 
         <Grid Background="#FF2196F3" Height="60" VerticalAlignment="Top">

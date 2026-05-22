@@ -38,6 +38,7 @@ namespace rccs_new
 
             LoadLicenseData();
         }
+        // Показывает справочное сообщение о форме
         private void ShowHelp()
         {
             MessageBox.Show(
@@ -104,6 +105,7 @@ namespace rccs_new
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+        // Загрузка всех доступных услуг
         private void LoadServices()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список услуг");
@@ -112,7 +114,7 @@ namespace rccs_new
                 dgAllServices,
                 dgAllServices);
         }
-
+        // Загрузка списка контрагентов
         private void LoadClients()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список контрагентов");
@@ -127,7 +129,7 @@ namespace rccs_new
             cmbClient.SelectedValuePath =
                 "id_counterparty";
         }
-
+        // Загрузка списка программ
         private void LoadProgram()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список программ");
@@ -142,7 +144,7 @@ namespace rccs_new
             cmbProgram.SelectedValuePath =
                 "id_program";
         }
-
+        // Загрузка данных редактируемой лицензии
         private void LoadLicenseData()
         {
             DataRow row =
@@ -205,7 +207,7 @@ namespace rccs_new
             LoadSelectedServicesForLicense(
                 _idLicenseAgreement);
         }
-
+        // Загрузка ранее выбранных услуг из лицензии
         private void LoadSelectedServicesForLicense(
             int licenseId)
         {
@@ -281,7 +283,7 @@ WHERE id_license_agreement = @id";
                 dgAllServices.Items.Refresh();
             }
         }
-
+        // Получение списка выбранных услуг
         private List<licenseAgreement.ServiceItem>
             GetSelectedServices()
         {
@@ -311,7 +313,7 @@ WHERE id_license_agreement = @id";
                     && s.Quantity > 0)
                 .ToList();
         }
-
+        // Сохранение изменений лицензии
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             if (cmbClient.SelectedValue == null)
@@ -426,7 +428,7 @@ WHERE id_license_agreement = @id";
                     MessageBoxImage.Error);
             }
         }
-
+        // Закрытие формы без сохранения
         private void Back_Click(
             object sender,
             RoutedEventArgs e)

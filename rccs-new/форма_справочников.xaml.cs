@@ -3,17 +3,9 @@ using rccs_new.MyClass;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace rccs_new
 {
@@ -28,6 +20,8 @@ namespace rccs_new
         public форма_справочников()
         {
             InitializeComponent();
+
+            // Подключение обработчика клавиши F1 для вызова справки
             this.KeyDown += (s, e) =>
             {
                 if (e.Key == Key.F1)
@@ -36,72 +30,58 @@ namespace rccs_new
                     e.Handled = true;
                 }
             };
+
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл окно управления справочниками");
 
             LoadSpravochniki();
-
             cmbSpravochnik.SelectedIndex = 0;
         }
+
+        // Показывает справочное сообщение о форме управления справочниками
         private void ShowHelp()
         {
             MessageBox.Show(
 @"ФОРМА УПРАВЛЕНИЯ СПРАВОЧНИКАМИ
-
 Назначение формы:
 Управление справочной информацией, используемой в системе.
-
 Что можно сделать на этой форме:
 • Просматривать содержимое справочников
 • Добавлять новые записи в справочники
 • Редактировать существующие записи
 • Удалять записи (с проверкой использования)
-
 Доступные справочники:
-
 1. ВИД ЛИЦА
    • Типы контрагентов (Юридическое лицо, Физическое лицо)
    • Используется при оформлении контрагентов
-
 2. ГОРОДА
    • Список городов
    • Используется для указания адресов контрагентов
-
 3. ЭТАЖИ
    • Номера этажей в помещениях
    • Используется при описании арендуемых помещений
-
 4. ПОМЕЩЕНИЯ
    • Список арендуемых помещений/офисов
    • Основной справочник для договоров аренды
-
 5. РОЛИ НА РАБОТЕ
    • Должности и роли сотрудников
    • Определяет права доступа в системе
-
 Функциональные возможности:
-
 1. ДОБАВЛЕНИЕ
    • Выберите справочник
    • Введите название в поле ""Добавление""
    • Нажмите кнопку ""+""
-
 2. РЕДАКТИРОВАНИЕ
    • Выберите запись в таблице
    • Измените название в поле ""Редактирование""
    • Нажмите кнопку ""✎""
-
 3. УДАЛЕНИЕ
    • Выберите запись в таблице
    • Нажмите кнопку ""🗑""
    • Подтвердите удаление
-
 Ограничения:
 • Нельзя удалить запись, если она используется в других таблицах
 • Запрещено создавать дубликаты записей
 • При редактировании проверяется уникальность названия
-
-
-
 Примечание:
 Справочники являются основой для многих форм системы.
 Изменение справочников влияет на все связанные документы.
@@ -110,6 +90,8 @@ namespace rccs_new
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+
+        // Загрузка списка доступных справочников в комбобокс
         private void LoadSpravochniki()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список справочников");
@@ -126,10 +108,9 @@ namespace rccs_new
             cmbSpravochnik.ItemsSource = spravochniki;
             cmbSpravochnik.DisplayMemberPath = "Value";
             cmbSpravochnik.SelectedValuePath = "Key";
-
-            cmbSpravochnik.SelectedIndex = 0;
         }
 
+        // Смена текущего справочника и загрузка соответствующих данных
         private void cmbSpravochnik_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmbSpravochnik.SelectedItem is KeyValuePair<int, string> selected)
@@ -141,7 +122,6 @@ namespace rccs_new
 
                 Add.Visibility = Visibility.Collapsed;
                 Upp.Visibility = Visibility.Collapsed;
-
                 dgSpravochnik.ItemsSource = null;
                 dgSpravochnik.Columns.Clear();
 
@@ -151,22 +131,18 @@ namespace rccs_new
                         guideBD.selectVidLicaForTable();
                         dgSpravochnik.ItemsSource = ConnectionBD.dtVidLica.DefaultView;
                         break;
-
                     case 2:
                         guideBD.selectGorodaForTable();
                         dgSpravochnik.ItemsSource = ConnectionBD.dtGoroda.DefaultView;
                         break;
-
                     case 3:
                         guideBD.selectEtajForTable();
                         dgSpravochnik.ItemsSource = ConnectionBD.dtEtaj.DefaultView;
                         break;
-
                     case 4:
                         guideBD.selectOfficeForTable();
                         dgSpravochnik.ItemsSource = ConnectionBD.dtOffice.DefaultView;
                         break;
-
                     case 5:
                         guideBD.selectRollForTable();
                         dgSpravochnik.ItemsSource = ConnectionBD.dtRoll.DefaultView;
@@ -174,15 +150,13 @@ namespace rccs_new
                 }
 
                 dgSpravochnik.UpdateLayout();
-
                 Add.Visibility = Visibility.Visible;
-
                 txtAdd.Text = "";
-
                 addtxt.Text = $"Добавление: {selected.Value}";
             }
         }
 
+        // Получение названия записи из выбранной строки DataRowView
         private string GetNameFromRow(DataRowView row)
         {
             if (row == null) return "";
@@ -198,12 +172,12 @@ namespace rccs_new
             }
         }
 
+        // Получение ID записи после проверки на дубликат
         private int? GetIdFromDublicateQuery(string idColumnName)
         {
             try
             {
                 object result = ConnectionBD.mycommand.ExecuteScalar();
-
                 if (result != null && result != DBNull.Value)
                 {
                     return Convert.ToInt32(result);
@@ -213,20 +187,18 @@ namespace rccs_new
             {
                 HistoryLogger.Log($"Ошибка получения ID записи: {ex.Message}");
             }
-
             return null;
         }
 
+        // Обработка выбора записи в таблице (для редактирования)
         private void dgSpravochnik_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Upp.Visibility = Visibility.Collapsed;
-
             selectedItemId = null;
 
             if (dgSpravochnik.SelectedItem is DataRowView row)
             {
                 string name = GetNameFromRow(row);
-
                 if (!string.IsNullOrWhiteSpace(name))
                 {
                     HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} выбрал запись '{name}'");
@@ -240,22 +212,18 @@ namespace rccs_new
                             exists = guideBD.DublicateVidLica(name);
                             if (exists) foundId = GetIdFromDublicateQuery("id_type_of_face");
                             break;
-
                         case 2:
                             exists = guideBD.DublicateCity(name);
                             if (exists) foundId = GetIdFromDublicateQuery("id_city");
                             break;
-
                         case 3:
                             exists = guideBD.DublicateFloor(name);
                             if (exists) foundId = GetIdFromDublicateQuery("id_floor");
                             break;
-
                         case 4:
                             exists = guideBD.DublicateOffice(name);
                             if (exists) foundId = GetIdFromDublicateQuery("id_office");
                             break;
-
                         case 5:
                             exists = guideBD.DublicateRoll(name);
                             if (exists) foundId = GetIdFromDublicateQuery("id_roll");
@@ -265,49 +233,40 @@ namespace rccs_new
                     if (exists && foundId.HasValue)
                     {
                         selectedItemId = foundId;
-
                         txtUpp.Text = name;
-
                         upptxt.Text = $"Редактирование: {cmbSpravochnik.Text}";
-
                         Upp.Visibility = Visibility.Visible;
-
                         HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} выбрал запись ID {selectedItemId} для редактирования");
                     }
                 }
             }
         }
 
+        // Возврат в главное окно администратора
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} вернулся в панель администратора из окна справочников");
 
             форма_администратора formadm = new форма_администратора();
-
             Application.Current.MainWindow = formadm;
-
             formadm.Show();
-
             this.Close();
         }
 
+        // Добавление новой записи в выбранный справочник
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtAdd.Text))
             {
                 MessageBox.Show("Введите название для добавления!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-
                 HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} попытался добавить пустую запись");
-
                 return;
             }
 
             string name = txtAdd.Text.Trim();
-
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} пытается добавить запись '{name}'");
 
             bool exists = false;
-
             switch (SelectedSpravochnikId)
             {
                 case 1: exists = guideBD.DublicateVidLica(name); break;
@@ -319,13 +278,9 @@ namespace rccs_new
 
             if (exists)
             {
-                MessageBox.Show($"Запись с названием «{name}» уже существует!",
-                                "Дубликат",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Warning);
-
+                MessageBox.Show($"Запись с названием «{name}» уже существует!", "Дубликат",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
                 HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} попытался добавить дубликат '{name}'");
-
                 return;
             }
 
@@ -341,33 +296,28 @@ namespace rccs_new
                 }
 
                 MessageBox.Show("Запись успешно добавлена!", "Успех");
-
                 HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно добавил запись '{name}'");
 
                 txtAdd.Text = "";
-
                 RefreshCurrentTable();
             }
             catch (Exception ex)
             {
                 HistoryLogger.Log($"Ошибка добавления записи '{name}': {ex.Message}");
-
-                MessageBox.Show($"Ошибка добавления:\n{ex.Message}",
-                                "Ошибка",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка добавления:\n{ex.Message}", "Ошибка",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
+        // Выполнение SQL-запроса и возврат количества записей (используется для проверки использования)
         private int GetCount(string query)
         {
             ConnectionBD.mycommand.CommandText = query;
-
             object result = ConnectionBD.mycommand.ExecuteScalar();
-
             return Convert.ToInt32(result ?? 0);
         }
 
+        // Обновление таблицы текущего справочника
         private void RefreshCurrentTable()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} обновил таблицу справочника");
@@ -380,22 +330,18 @@ namespace rccs_new
                     guideBD.selectVidLicaForTable();
                     dgSpravochnik.ItemsSource = ConnectionBD.dtVidLica.DefaultView;
                     break;
-
                 case 2:
                     guideBD.selectGorodaForTable();
                     dgSpravochnik.ItemsSource = ConnectionBD.dtGoroda.DefaultView;
                     break;
-
                 case 3:
                     guideBD.selectEtajForTable();
                     dgSpravochnik.ItemsSource = ConnectionBD.dtEtaj.DefaultView;
                     break;
-
                 case 4:
                     guideBD.selectOfficeForTable();
                     dgSpravochnik.ItemsSource = ConnectionBD.dtOffice.DefaultView;
                     break;
-
                 case 5:
                     guideBD.selectRollForTable();
                     dgSpravochnik.ItemsSource = ConnectionBD.dtRoll.DefaultView;
@@ -403,14 +349,13 @@ namespace rccs_new
             }
         }
 
+        // Удаление выбранной записи с проверкой использования
         private void DelBtn_Click(object sender, RoutedEventArgs e)
         {
             if (selectedItemId == null)
             {
                 MessageBox.Show("Выберите запись для удаления!", "Предупреждение");
-
                 HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} попытался удалить запись без выбора");
-
                 return;
             }
 
@@ -425,22 +370,18 @@ namespace rccs_new
                     count = GetCount($"SELECT count(*) FROM rccs.counterparty where id_type_of_face= {selectedItemId};");
                     tableName = "вид лица";
                     break;
-
                 case 2:
                     count = GetCount($"SELECT COUNT(*) FROM rccs.counterparty WHERE id_city = {selectedItemId}");
                     tableName = "города";
                     break;
-
                 case 3:
                     count = GetCount($"SELECT COUNT(*) FROM rccs.room WHERE id_floor = {selectedItemId}");
                     tableName = "помещения";
                     break;
-
                 case 4:
                     count = GetCount($"SELECT COUNT(*) FROM rccs.room WHERE id_office = {selectedItemId}");
                     tableName = "комнаты";
                     break;
-
                 case 5:
                     count = GetCount($"SELECT COUNT(*) FROM rccs.users WHERE id_roll = {selectedItemId}");
                     tableName = "пользователи";
@@ -449,28 +390,18 @@ namespace rccs_new
 
             if (count > 0)
             {
-                MessageBox.Show($"Нельзя удалить эту запись!\n\n" +
-                                $"Она используется в таблице «{tableName}» ({count} записей).",
-                                "Запрет удаления",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Warning);
-
+                MessageBox.Show($"Нельзя удалить эту запись!\n\nОна используется в таблице «{tableName}» ({count} записей).",
+                                "Запрет удаления", MessageBoxButton.OK, MessageBoxImage.Warning);
                 HistoryLogger.Log($"Удаление записи ID {selectedItemId} запрещено. Используется в таблице {tableName}");
-
                 return;
             }
 
-            var result = MessageBox.Show(
-                $"Вы действительно хотите удалить эту запись?\n\n" +
-                $"Название: {txtUpp.Text}\n",
-                "Подтверждение удаления",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+            var result = MessageBox.Show($"Вы действительно хотите удалить эту запись?\n\nНазвание: {txtUpp.Text}\n",
+                                         "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result != MessageBoxResult.Yes)
             {
                 HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} отменил удаление записи ID {selectedItemId}");
-
                 return;
             }
 
@@ -485,38 +416,28 @@ namespace rccs_new
                     case 5: guideBD.DelRoll(selectedItemId.ToString()); break;
                 }
 
-                MessageBox.Show("Запись успешно удалена!",
-                                "Успех",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Information);
-
+                MessageBox.Show("Запись успешно удалена!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} удалил запись ID {selectedItemId}");
 
                 RefreshCurrentTable();
-
                 Upp.Visibility = Visibility.Collapsed;
-
                 selectedItemId = null;
             }
             catch (Exception ex)
             {
                 HistoryLogger.Log($"Ошибка удаления записи ID {selectedItemId}: {ex.Message}");
-
-                MessageBox.Show($"Ошибка при удалении:\n{ex.Message}",
-                                "Ошибка",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка при удалении:\n{ex.Message}", "Ошибка",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
+        // Редактирование выбранной записи
         private void ButtonUpp_Click(object sender, RoutedEventArgs e)
         {
             if (selectedItemId == null || string.IsNullOrWhiteSpace(txtUpp.Text))
             {
                 MessageBox.Show("Выберите запись и введите новое название!", "Предупреждение");
-
                 HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} попытался обновить запись без выбора");
-
                 return;
             }
 
@@ -529,22 +450,18 @@ namespace rccs_new
                     count = GetCount($"SELECT count(*) FROM rccs.counterparty where id_type_of_face= {selectedItemId};");
                     tableName = "вид лица";
                     break;
-
                 case 2:
                     count = GetCount($"SELECT COUNT(*) FROM rccs.counterparty WHERE id_city = {selectedItemId}");
                     tableName = "помещения";
                     break;
-
                 case 3:
                     count = GetCount($"SELECT COUNT(*) FROM rccs.room WHERE id_floor = {selectedItemId}");
                     tableName = "помещения";
                     break;
-
                 case 4:
                     count = GetCount($"SELECT COUNT(*) FROM rccs.room WHERE id_office = {selectedItemId}");
                     tableName = "комнаты";
                     break;
-
                 case 5:
                     count = GetCount($"SELECT COUNT(*) FROM rccs.users WHERE id_roll = {selectedItemId}");
                     tableName = "пользователи";
@@ -553,19 +470,13 @@ namespace rccs_new
 
             if (count > 0)
             {
-                MessageBox.Show($"Нельзя удалить эту запись!\n\n" +
-                                $"Она используется в таблице «{tableName}»",
-                                "Запрет удаления",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Warning);
-
+                MessageBox.Show($"Нельзя редактировать эту запись!\n\nОна используется в таблице «{tableName}»",
+                                "Запрет редактирования", MessageBoxButton.OK, MessageBoxImage.Warning);
                 HistoryLogger.Log($"Редактирование записи ID {selectedItemId} запрещено. Используется в таблице {tableName}");
-
                 return;
             }
 
             string name = txtUpp.Text.Trim();
-
             bool exists = false;
 
             switch (SelectedSpravochnikId)
@@ -579,13 +490,9 @@ namespace rccs_new
 
             if (exists)
             {
-                MessageBox.Show($"Запись с названием «{name}» уже существует!",
-                                "Дубликат",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Warning);
-
+                MessageBox.Show($"Запись с названием «{name}» уже существует!", "Дубликат",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
                 HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} попытался обновить запись на дубликат '{name}'");
-
                 return;
             }
 
@@ -601,7 +508,6 @@ namespace rccs_new
                 }
 
                 MessageBox.Show("Запись успешно обновлена!", "Успех");
-
                 HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} обновил запись ID {selectedItemId} на '{name}'");
 
                 RefreshCurrentTable();
@@ -609,7 +515,6 @@ namespace rccs_new
             catch (Exception ex)
             {
                 HistoryLogger.Log($"Ошибка обновления записи ID {selectedItemId}: {ex.Message}");
-
                 MessageBox.Show($"Ошибка обновления:\n{ex.Message}", "Ошибка");
             }
         }

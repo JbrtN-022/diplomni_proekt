@@ -6,7 +6,7 @@
         Height="650"
         Width="1100"
         WindowStartupLocation="CenterScreen"
-       
+        Icon="/Рисунок1.png"
         Background="White">
 
     <materialDesign:DrawerHost x:Name="DrawerHost" IsLeftDrawerOpen="False">

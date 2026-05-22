@@ -5,7 +5,7 @@
         Title="Авторизация" 
         Height="620" 
         Width="900"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Icon="/Рисунок1.png">
 
     <Window.Background>
         <ImageBrush ImageSource="/загруженное.jpg"/>

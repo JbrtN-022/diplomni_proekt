@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Оформление договора аренды" 
-        Height="700" 
+        Height="749" 
         Width="1000"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen"  Icon="/Рисунок1.png"
         Background="#F5F5F5">
 
-    <Grid>
-        
+    <Grid Height="717" VerticalAlignment="Top">
+
         <Grid Background="#FF2196F3" Height="80" VerticalAlignment="Top">
             <TextBlock Text="Оформление договора аренды"
                        Foreground="White"
@@ -23,7 +23,7 @@
                         VerticalAlignment="Center"
                         Margin="0,0,30,0">
 
-                
+
                 <Border CornerRadius="10" Background="#FFFFFF" BorderBrush="#FF2196F3" BorderThickness="2" 
                         Width="280" Height="48" Margin="0,0,15,0" Padding="8">
                     <ComboBox x:Name="cmbDraft" 
@@ -49,10 +49,10 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="450"/>
                 <ColumnDefinition Width="*"/>
-               
+
             </Grid.ColumnDefinitions>
 
-            
+
             <Border Grid.Column="0" Margin="25,10,15,10" 
                     Padding="25" CornerRadius="15" Background="White">
                 <Border.Effect>
@@ -67,7 +67,7 @@
                              Height="48"
                              materialDesign:HintAssist.Hint="Автоматически генерируется"/>
 
-                   
+
                     <TextBlock Text="Контрагент" FontSize="15" Margin="0,18,0,6" FontWeight="Medium"/>
                     <Grid>
                         <ComboBox x:Name="cmbClient" 
@@ -81,15 +81,15 @@
                         </Button>
                     </Grid>
 
-                   
+
                     <TextBlock Text="Этаж" FontSize="15" Margin="0,18,0,6" FontWeight="Medium"/>
-                   
+
                     <ComboBox x:Name="cmbFloor" 
                       Height="48" 
                       FontSize="15"
                       materialDesign:HintAssist.Hint="Выберите этаж" SelectionChanged="cmbFloor_SelectionChanged"
                      />
-                   
+
                     <TextBlock Text="Кабинет / Помещение" FontSize="15" Margin="0,18,0,6" FontWeight="Medium"/>
                     <ComboBox x:Name="cmbRoom" 
                               Height="48" 
@@ -97,7 +97,7 @@
                               materialDesign:HintAssist.Hint="Выберите свободное помещение" SelectionChanged="cmbRoom_SelectionChanged"
                              />
 
-                   
+
                     <Grid Margin="0,20,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -113,7 +113,7 @@
                         </StackPanel>
                     </Grid>
 
-                  
+
                     <Grid Margin="0,25,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -135,10 +135,10 @@
                 </StackPanel>
             </Border>
 
-            
-            <Border Grid.Column="1" Margin="10,20,10,20" 
+
+            <Border Grid.Column="1" Margin="10,20,10,0" 
                     Background="White" CornerRadius="12" 
-                     Height="520" VerticalAlignment="Top">
+                     Height="597" VerticalAlignment="Top">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="15" Opacity="0.15"/>
                 </Border.Effect>

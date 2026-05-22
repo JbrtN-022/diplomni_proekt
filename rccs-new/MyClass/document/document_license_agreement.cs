@@ -125,7 +125,7 @@ namespace rccs_new.MyClass.document
 
                 
                 table.Cell(totalRow, 2).Range.Text = "Итого:";
-                for (int i = 2; i <= 6; i++)
+                for (int i = 3; i <= 6; i++)
                 {
                     table.Cell(totalRow, i).Range.Text = "";
                 }

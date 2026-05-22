@@ -5,28 +5,26 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using static rccs_new.MyClass.licenseAgreement;
 
 namespace rccs_new
 {
-    
+    /// <summary>
+    /// Логика взаимодействия для Форма_оформления_лицензии.xaml
+    /// </summary>
     public partial class Форма_оформления_лицензии : Window
     {
         private bool isFirstOpen = true;
         private bool isDraftLoaded = false;
+
         public Форма_оформления_лицензии()
         {
             InitializeComponent();
+
+            // Подключение обработчика клавиши F1 для вызова справки
             this.KeyDown += (s, e) =>
             {
                 if (e.Key == Key.F1)
@@ -35,6 +33,7 @@ namespace rccs_new
                     e.Handled = true;
                 }
             };
+
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму оформления лицензии на ПО");
 
             GenerateLicenseNumber();
@@ -43,14 +42,14 @@ namespace rccs_new
             LoadServices();
             licenseAgreement.LoadDraftLicensesComboBox(cmbDraft);
         }
+
+        // Показывает справочное сообщение о форме оформления лицензии
         private void ShowHelp()
         {
             MessageBox.Show(
 @"ФОРМА ОФОРМЛЕНИЯ ЛИЦЕНЗИИ
-
 Назначение формы:
 Оформление лицензионных договоров на программное обеспечение.
-
 Что можно сделать на этой форме:
 • Создать новую лицензию
 • Выбрать контрагента (клиента)
@@ -60,38 +59,27 @@ namespace rccs_new
 • Сохранить черновик лицензии
 • Загрузить ранее сохраненный черновик
 • Создать и сохранить договор в формате Word
-
 Поля для заполнения:
-
 1. НОМЕР ЛИЦЕНЗИИ
    • Генерируется автоматически
    • Уникальный 5-значный номер
-
 2. КОНТРАГЕНТ
    • Выбор из списка существующих
    • Кнопка ""+"" для добавления нового
-
 3. ПРОГРАММА
    • Выбор лицензируемого ПО из списка
-
 4. СРОК ДЕЙСТВИЯ
    • Дата начала лицензии
    • Дата окончания лицензии
-
 5. УСЛУГИ
    • Таблица с доступными услугами
    • Выберите нужные услуги (галочка)
    • Укажите количество для каждой услуги
-
 Кнопки управления:
-
 • СОЗДАТЬ - создает лицензию и формирует Word-договор
 • СОХРАНИТЬ - сохраняет черновик лицензии
 • ЗАГРУЗИТЬ - загружает сохраненный черновик из списка
 • НАЗАД - возврат в главное меню
-
-
-
 Примечание:
 Лицензионный договор создается в формате Word и сохраняется в выбранную папку.
 Черновики позволяют отложить оформление и завершить позже.
@@ -101,13 +89,14 @@ namespace rccs_new
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+
+        // Получение списка выбранных услуг с количеством
         private List<ServiceItem> GetSelectedServices()
         {
             dgAllServices.CommitEdit(DataGridEditingUnit.Cell, true);
             dgAllServices.CommitEdit(DataGridEditingUnit.Row, true);
 
             var list = dgAllServices.ItemsSource as List<ServiceItem>;
-
             if (list == null)
                 return new List<ServiceItem>();
 
@@ -115,49 +104,49 @@ namespace rccs_new
                 .Where(s => s.IsSelected && s.Quantity > 0)
                 .ToList();
         }
+
+        // Загрузка всех доступных услуг в таблицу
         private void LoadServices()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список всех услуг");
-
             licenseAgreement.LoadAllServices(dgAllServices, dgAllServices);
         }
+
+        // Загрузка списка контрагентов в комбобокс
         private void LoadClients()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список контрагентов");
-
             guideBD.selectCounterpartyComboBox();
-
             cmbClient.ItemsSource = ConnectionBD.dtCounterpartyComboBox.DefaultView;
             cmbClient.DisplayMemberPath = "name";
             cmbClient.SelectedValuePath = "id_counterparty";
         }
+
+        // Загрузка списка программ в комбобокс
         private void LoadProgram()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список программ");
-
             guideBD.selectPrograms();
-
             cmbProgram.ItemsSource = ConnectionBD.dtProgramsComboBox.DefaultView;
             cmbProgram.DisplayMemberPath = "name";
             cmbProgram.SelectedValuePath = "id_program";
         }
+
+        // Генерация нового номера лицензии
         private void GenerateLicenseNumber()
         {
             Random rnd = new Random();
-            int licenseValue = rnd.Next(0, 100000); 
+            int licenseValue = rnd.Next(0, 100000);
             txtLicenseNumber.Text = licenseValue.ToString("D5");
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} сгенерировал новый номер лицензии: {txtLicenseNumber.Text}");
         }
 
-
-
-
+        // Обработка открытия выпадающего списка контрагентов (проверка на пустоту)
         private void cmbClient_DropDownOpened(object sender, EventArgs e)
         {
             if (cmbClient.Items.Count == 0)
             {
                 HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} попытался открыть список контрагентов — список пуст");
-
                 var result = MessageBox.Show(
                     "В базе нет ни одного контрагента.\n\nДобавить нового контрагента сейчас?",
                     "Нет контрагентов",
@@ -171,6 +160,7 @@ namespace rccs_new
             }
         }
 
+        // Возврат в главное окно менеджера
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             форма_менеджера formMemedjer = new форма_менеджера();
@@ -178,31 +168,33 @@ namespace rccs_new
             formMemedjer.Show();
             this.Close();
         }
+
+        // Открытие формы добавления нового контрагента
         private void OpenAddClientForm()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму добавления нового контрагента");
-
             var addForm = new добавление_контрагента();
             addForm.ShowDialog();
             LoadClients();
+
             if (cmbClient.Items.Count > 0)
             {
                 cmbClient.SelectedIndex = cmbClient.Items.Count - 1;
             }
         }
+
         private void btnAddNewClient_Click(object sender, RoutedEventArgs e)
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} нажал кнопку добавления нового контрагента");
             OpenAddClientForm();
         }
+
+        // Очистка формы после создания/сохранения
         private void ClearForm()
         {
-
             GenerateLicenseNumber();
-
             cmbClient.SelectedIndex = -1;
             cmbProgram.SelectedIndex = -1;
-
             dpStart.SelectedDate = null;
             dpEnd.SelectedDate = null;
 
@@ -211,44 +203,41 @@ namespace rccs_new
                 foreach (var service in services)
                 {
                     service.IsSelected = false;
-                    service.Quantity = 0;     
+                    service.Quantity = 0;
                     service.IdWorker = null;
                 }
                 dgAllServices.Items.Refresh();
             }
+
             cmbClient.Focus();
             isDraftLoaded = false;
         }
-       
+
+        // Основной метод создания лицензии и генерации Word-документа
         private void Create_Click(object sender, RoutedEventArgs e)
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} начал создание лицензии. Номер: {txtLicenseNumber.Text}");
 
+            // Валидация обязательных полей
             if (cmbClient.SelectedValue == null)
             {
                 MessageBox.Show("Выберите контрагента!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 cmbClient.Focus();
                 return;
             }
-
             if (cmbProgram.SelectedValue == null)
             {
                 MessageBox.Show("Выберите программу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 cmbProgram.Focus();
                 return;
             }
-
             if (dpStart.SelectedDate == null || dpEnd.SelectedDate == null)
             {
                 MessageBox.Show("Укажите даты!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            dgAllServices.CommitEdit(DataGridEditingUnit.Cell, true);
-            dgAllServices.CommitEdit(DataGridEditingUnit.Row, true);
-
             var selectedServices = GetSelectedServices();
-
             if (selectedServices.Count == 0)
             {
                 MessageBox.Show("Выберите хотя бы одну услугу!", "Ошибка");
@@ -270,33 +259,26 @@ namespace rccs_new
                 int idProgram = Convert.ToInt32(cmbProgram.SelectedValue);
                 string licenseNumber = txtLicenseNumber.Text.Trim();
 
-                ConnectionBD.mycommand.CommandText =
-                    "SELECT id_workers FROM rccs.workers WHERE name = @fio";
-
+                // Получение ID текущего сотрудника
+                ConnectionBD.mycommand.CommandText = "SELECT id_workers FROM rccs.workers WHERE name = @fio";
                 ConnectionBD.mycommand.Parameters.Clear();
                 ConnectionBD.mycommand.Parameters.AddWithValue("@fio", ConnectionBD.resFio);
-
                 object workerResult = ConnectionBD.mycommand.ExecuteScalar();
-
-                int idWorker =
-                    workerResult != null
-                    ? Convert.ToInt32(workerResult)
-                    : 1;
+                int idWorker = workerResult != null ? Convert.ToInt32(workerResult) : 1;
 
                 string licenseId = "";
 
-                // ЕСЛИ ЗАГРУЖЕН ЧЕРНОВИК
+                // === Если загружен черновик ===
                 if (isDraftLoaded)
                 {
-                    bool updated =
-                        licenseAgreement.UpdateLicenseAgreement(
-                            idLicenseAgreement: Convert.ToInt32(licenseNumber),
-                            idCounterparty: idCounterparty,
-                            idProgram: idProgram,
-                            dateFrom: dpStart.SelectedDate.Value,
-                            dateUntil: dpEnd.SelectedDate.Value,
-                            approved: "Утверждён"
-                        );
+                    bool updated = licenseAgreement.UpdateLicenseAgreement(
+                        idLicenseAgreement: Convert.ToInt32(licenseNumber),
+                        idCounterparty: idCounterparty,
+                        idProgram: idProgram,
+                        dateFrom: dpStart.SelectedDate.Value,
+                        dateUntil: dpEnd.SelectedDate.Value,
+                        approved: "Утверждён"
+                    );
 
                     if (!updated)
                     {
@@ -304,24 +286,20 @@ namespace rccs_new
                         return;
                     }
 
-                    // удаляем старые услуги
-                    licenseAgreement.DeleteServicesFromLicense(
-                        Convert.ToInt32(licenseNumber));
-
+                    licenseAgreement.DeleteServicesFromLicense(Convert.ToInt32(licenseNumber));
                     licenseId = licenseNumber;
                 }
-                // ЕСЛИ НОВАЯ ЛИЦЕНЗИЯ
+                // === Если новая лицензия ===
                 else
                 {
-                    licenseId =
-                        licenseAgreement.AddlicenseAgreement(
-                            id: licenseNumber,
-                            IDcounterparty: idCounterparty,
-                            IDprogram: idProgram,
-                            dateFrom: dpStart.SelectedDate.Value,
-                            dateUntil: dpEnd.SelectedDate.Value,
-                            idWorker: idWorker
-                        );
+                    licenseId = licenseAgreement.AddlicenseAgreement(
+                        id: licenseNumber,
+                        IDcounterparty: idCounterparty,
+                        IDprogram: idProgram,
+                        dateFrom: dpStart.SelectedDate.Value,
+                        dateUntil: dpEnd.SelectedDate.Value,
+                        idWorker: idWorker
+                    );
 
                     if (string.IsNullOrEmpty(licenseId))
                     {
@@ -330,125 +308,78 @@ namespace rccs_new
                     }
                 }
 
-                // добавляем услуги
-                licenseAgreement.AddServicesToLicense(
-                    int.Parse(licenseId),
-                    selectedServices);
+                // Добавление выбранных услуг
+                licenseAgreement.AddServicesToLicense(int.Parse(licenseId), selectedServices);
 
-                DataRow licenseRow =
-                    licenseAgreement.GetLicenseAgreementForPrint(
-                        int.Parse(licenseId));
+                // Получение данных для печати
+                DataRow licenseRow = licenseAgreement.GetLicenseAgreementForPrint(int.Parse(licenseId));
+                DataTable servicesTable = licenseAgreement.GetLicenseAgreementForPrintTable(int.Parse(licenseId));
 
-                DataTable servicesTable =
-                    licenseAgreement.GetLicenseAgreementForPrintTable(
-                        int.Parse(licenseId));
-
+                // Сохранение документа Word
                 var saveDialog = new Microsoft.Win32.SaveFileDialog();
+                saveDialog.Filter = "Word документ (*.docx)|*.docx";
+                saveDialog.FileName = $"Договор_{licenseNumber}.docx";
 
-                saveDialog.Filter =
-                    "Word документ (*.docx)|*.docx";
-
-                saveDialog.FileName =
-                    $"Договор_{licenseNumber}.docx";
-
-                if (saveDialog.ShowDialog() != true)
-                    return;
+                if (saveDialog.ShowDialog() != true) return;
 
                 string filePath = saveDialog.FileName;
+                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                string projectDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(baseDirectory, @"..\..\"));
+                string documentPath = System.IO.Path.Combine(projectDirectory, "document");
+                string templatePath = System.IO.Path.Combine(documentPath, "Шаблон_ТС_А0_2026_с_НДС.docx");
 
-                string baseDirectory =
-                    AppDomain.CurrentDomain.BaseDirectory;
-
-                string projectDirectory =
-                    System.IO.Path.GetFullPath(
-                        System.IO.Path.Combine(
-                            baseDirectory,
-                            @"..\..\"));
-
-
-                string documentPath =
-                    System.IO.Path.Combine(
-                        projectDirectory,
-                        "document");
-
-                string templatePath =
-                    System.IO.Path.Combine(
-                        documentPath,
-                        "Шаблон_ТС_А0_2026_с_НДС.docx");
-
-                bool result =
-                    document_license_agreement.CreateLicenseAgreement(
-                        templatePath,
-                        filePath,
-                        licenseNumber,
-                        licenseRow["counterparty_name"]?.ToString() ?? "",
-                        licenseRow["cont_person_name"]?.ToString() ?? "",
-                        licenseRow["program_name"]?.ToString() ?? "",
-                        Convert.ToDateTime(
-                            licenseRow["rental_date_from"])
-                            .ToShortDateString(),
-
-                        Convert.ToDateTime(
-                            licenseRow["rental_date_until"])
-                            .ToShortDateString(),
-
-                        licenseRow["conclusion_date"] != DBNull.Value
-                        ? Convert.ToDateTime(
-                            licenseRow["conclusion_date"])
-                            .ToShortDateString()
+                bool result = document_license_agreement.CreateLicenseAgreement(
+                    templatePath,
+                    filePath,
+                    licenseNumber,
+                    licenseRow["counterparty_name"]?.ToString() ?? "",
+                    licenseRow["cont_person_name"]?.ToString() ?? "",
+                    licenseRow["program_name"]?.ToString() ?? "",
+                    Convert.ToDateTime(licenseRow["rental_date_from"]).ToShortDateString(),
+                    Convert.ToDateTime(licenseRow["rental_date_until"]).ToShortDateString(),
+                    licenseRow["conclusion_date"] != DBNull.Value
+                        ? Convert.ToDateTime(licenseRow["conclusion_date"]).ToShortDateString()
                         : DateTime.Today.ToShortDateString(),
-
-                        licenseId
-                    );
+                    licenseId
+                );
 
                 if (result)
                 {
-                    HistoryLogger.Log(
-                        $"Пользователь {ConnectionBD.resFio} успешно создал и сохранил лицензию №{licenseNumber} (ID: {licenseId})");
-
+                    HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно создал и сохранил лицензию №{licenseNumber} (ID: {licenseId})");
                     MessageBox.Show("Документ успешно создан!");
 
-                    string folder =
-                        System.IO.Path.GetDirectoryName(filePath);
-
-                    System.Diagnostics.Process.Start(
-                        "explorer.exe",
-                        folder);
+                    string folder = System.IO.Path.GetDirectoryName(filePath);
+                    System.Diagnostics.Process.Start("explorer.exe", folder);
                 }
 
                 ClearForm();
-
                 licenseAgreement.LoadDraftLicensesComboBox(cmbDraft);
             }
             catch (Exception ex)
             {
-                HistoryLogger.Log(
-                    $"ОШИБКА! Пользователь {ConnectionBD.resFio} не смог создать лицензию. Ошибка: {ex.Message}");
-
+                HistoryLogger.Log($"ОШИБКА! Пользователь {ConnectionBD.resFio} не смог создать лицензию. Ошибка: {ex.Message}");
                 MessageBox.Show("Ошибка:\n" + ex.Message);
             }
         }
 
+        // Сохранение текущих данных как черновик
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} начал сохранение черновика лицензии №{txtLicenseNumber.Text}");
 
-            
+            // Валидация
             if (cmbClient.SelectedValue == null)
             {
-
                 MessageBox.Show("Выберите контрагента!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 cmbClient.Focus();
                 return;
             }
-
             if (cmbProgram.SelectedValue == null)
             {
                 MessageBox.Show("Выберите программу!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 cmbProgram.Focus();
                 return;
             }
-
             if (dpStart.SelectedDate == null || dpEnd.SelectedDate == null)
             {
                 MessageBox.Show("Укажите даты начала и окончания действия лицензии!", "Ошибка",
@@ -457,13 +388,13 @@ namespace rccs_new
             }
 
             var selectedServices = GetSelectedServices();
-
             if (selectedServices.Count == 0)
             {
                 MessageBox.Show("Выберите хотя бы одну услугу!", "Ошибка",
                                 MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
             foreach (var s in selectedServices)
             {
                 if (s.Quantity <= 0)
@@ -473,17 +404,17 @@ namespace rccs_new
                     return;
                 }
             }
+
             try
             {
                 int idCounterparty = Convert.ToInt32(cmbClient.SelectedValue);
                 int idProgram = Convert.ToInt32(cmbProgram.SelectedValue);
                 string licenseNumber = txtLicenseNumber.Text.Trim();
 
-              
+                // Получение ID сотрудника
                 ConnectionBD.mycommand.CommandText = "SELECT id_workers FROM rccs.workers WHERE name = @fio";
                 ConnectionBD.mycommand.Parameters.Clear();
                 ConnectionBD.mycommand.Parameters.AddWithValue("@fio", ConnectionBD.resFio);
-
                 object workerResult = ConnectionBD.mycommand.ExecuteScalar();
                 int idWorker = workerResult != null ? Convert.ToInt32(workerResult) : 1;
 
@@ -502,8 +433,8 @@ namespace rccs_new
 
                     HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} успешно сохранил черновик лицензии №{licenseNumber} (ID: {newLicenseId})");
                     MessageBox.Show($"Черновик лицензии №{licenseNumber} успешно сохранён!", "Успех");
-                    licenseAgreement.LoadDraftLicensesComboBox(cmbDraft);
 
+                    licenseAgreement.LoadDraftLicensesComboBox(cmbDraft);
                     ClearForm();
                 }
                 else
@@ -519,39 +450,33 @@ namespace rccs_new
             }
         }
 
+        // Загрузка выбранного черновика
         private void cmbDraft_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmbDraft.SelectedItem == null || e.AddedItems.Count == 0)
-            {
-                
                 return;
-            }
 
             int licenseId;
-
             try
             {
                 licenseId = Convert.ToInt32(cmbDraft.SelectedValue);
             }
             catch
             {
-                return; 
+                return;
             }
 
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} выбрал для загрузки черновик лицензии ID: {licenseId}");
 
             LoadClients();
             LoadProgram();
-
             LoadDraftIntoForm(licenseId);
-          
         }
 
-
+        // Загрузка данных черновика в форму
         private void LoadDraftIntoForm(int licenseId)
         {
             DataRow row = licenseAgreement.LoadDraftById(licenseId);
-
             if (row == null)
             {
                 MessageBox.Show("Не удалось загрузить данные черновика.", "Ошибка");
@@ -577,11 +502,12 @@ namespace rccs_new
             LoadSelectedServicesForLicense(licenseId);
             isDraftLoaded = true;
         }
+
+        // Загрузка выбранных услуг из черновика
         private void LoadSelectedServicesForLicense(int licenseId)
         {
             if (dgAllServices.ItemsSource is List<ServiceItem> allServices)
             {
-                
                 foreach (var service in allServices)
                 {
                     service.IsSelected = false;
@@ -590,9 +516,9 @@ namespace rccs_new
                 }
 
                 string sql = @"
-        SELECT id_services, kolvo, id_workers
-        FROM rccs.service_in_agreement 
-        WHERE id_license_agreement = @id";
+                    SELECT id_services, kolvo, id_workers 
+                    FROM rccs.service_in_agreement 
+                    WHERE id_license_agreement = @id";
 
                 ConnectionBD.mycommand.CommandText = sql;
                 ConnectionBD.mycommand.Parameters.Clear();
@@ -604,20 +530,13 @@ namespace rccs_new
                 foreach (DataRow row in ConnectionBD.dtTemp.Rows)
                 {
                     int serviceId = Convert.ToInt32(row["id_services"]);
-
                     var service = allServices.FirstOrDefault(s => s.IdServices == serviceId);
 
                     if (service != null)
                     {
                         service.IsSelected = true;
-
-                        service.Quantity = row["kolvo"] != DBNull.Value
-                            ? Convert.ToInt32(row["kolvo"])
-                            : 1;
-
-                        service.IdWorker = row["id_workers"] != DBNull.Value
-                            ? Convert.ToInt32(row["id_workers"])
-                            : (int?)null;
+                        service.Quantity = row["kolvo"] != DBNull.Value ? Convert.ToInt32(row["kolvo"]) : 1;
+                        service.IdWorker = row["id_workers"] != DBNull.Value ? Convert.ToInt32(row["id_workers"]) : (int?)null;
                     }
                 }
 

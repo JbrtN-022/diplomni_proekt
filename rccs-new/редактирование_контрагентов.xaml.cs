@@ -28,6 +28,7 @@ namespace rccs_new
         public редактирование_контрагентов(int id_workers)
         {
             InitializeComponent();
+            // Подключение обработчика клавиши F1 для вызова справки
             this.KeyDown += (s, e) =>
             {
                 if (e.Key == Key.F1)
@@ -43,6 +44,7 @@ namespace rccs_new
             LoadComboBoxes();
             LoadDataForEdit();
         }
+        // Показывает справочное сообщение о форме
         private void ShowHelp()
         {
             MessageBox.Show(
@@ -331,7 +333,7 @@ namespace rccs_new
             var regex = new Regex(@"^[a-zA-Zа-яА-ЯёЁ\s\-\.\,]+$");
             return regex.IsMatch(contactPerson);
         }
-
+        // Загрузка текущих данных контрагента для редактирования
         private void LoadDataForEdit()
         {
             ConnectionBD.mycommand.CommandText = @"
@@ -412,7 +414,7 @@ namespace rccs_new
                 MessageBox.Show("Не удалось загрузить данные контрагента.", "Ошибка");
             }
         }
-
+        // Загрузка справочников (города и типы лица)
         private void LoadComboBoxes()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил справочники для редактирования контрагента");
@@ -428,9 +430,6 @@ namespace rccs_new
             cmbTypeFace.SelectedValuePath = "id_type_of_face";
         }
 
-        private void cmbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
+       
     }
 }

@@ -26,6 +26,7 @@ namespace rccs_new
         public создание_договора_аренды()
         {
             InitializeComponent();
+            // Подключение обработчика клавиши F1 для вызова справки
             this.KeyDown += (s, e) =>
             {
                 if (e.Key == Key.F1)
@@ -41,6 +42,7 @@ namespace rccs_new
             GenerateLieseNumber();
             leaseAgreement.LoadDraftLeases(cmbDraft);
         }
+        // Показывает справочное сообщение о форме
         private void ShowHelp()
         {
             MessageBox.Show(
@@ -105,6 +107,7 @@ namespace rccs_new
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+        // Загрузка списка контрагентов
         private void LoadClients()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список контрагентов");
@@ -114,12 +117,14 @@ namespace rccs_new
             cmbClient.DisplayMemberPath = "name";
             cmbClient.SelectedValuePath = "id_counterparty";
         }
+        // Генерация номера договора (3 цифры)
         private void GenerateLieseNumber()
         {
             Random rnd = new Random();
             int licenseValue = rnd.Next(0, 1000);
             txtLicenseNumber.Text = licenseValue.ToString("D3");
         }
+        // Загрузка списка этажей
         private void LoadFloor()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список этажей");
@@ -128,6 +133,7 @@ namespace rccs_new
             cmbFloor.DisplayMemberPath = "floor";
             cmbFloor.SelectedValuePath = "id_floor";
         }
+        // Загрузка помещений для выбранного этажа
         private void LoadRoom(int? room, int? currentRoomId = null)
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список помещений");
@@ -138,12 +144,13 @@ namespace rccs_new
             cmbRoom.DisplayMemberPath = "office";
             cmbRoom.SelectedValuePath = "id_room";
         }
-
+        // Открытие формы добавления нового контрагента
         private void btnAddNewClient_Click(object sender, RoutedEventArgs e)
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} открыл форму добавления контрагента");
             OpenAddClientForm();
         }
+        // Смена этажа → загрузка помещений и плана этажа
         private void OpenAddClientForm()
         {
             var addForm = new добавление_контрагента();
@@ -154,7 +161,7 @@ namespace rccs_new
                 cmbClient.SelectedIndex = cmbClient.Items.Count - 1;
             }
         }
-
+        // Смена этажа → загрузка помещений и плана этажа
         private void cmbFloor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmbFloor.SelectedItem is DataRowView row)
@@ -172,6 +179,7 @@ namespace rccs_new
                 imgFloorPlan.Source = null;
             }
         }
+        // Загрузка изображения плана этажа
         private void LoadFloorImage(int floorId)
         {
             string path = "";
@@ -229,7 +237,7 @@ namespace rccs_new
         {
 
         }
-
+        // Загрузка выбранного черновика
         private void cmbDraft_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmbDraft.SelectedValue == null) return;
@@ -238,6 +246,7 @@ namespace rccs_new
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} выбрал черновик договора аренды ID {leaseId}");
             LoadDraftIntoForm(leaseId);
         }
+        // Загрузка данных черновика в форму
         private void LoadDraftIntoForm(int leaseId)
         {
             DataRow row = leaseAgreement.LoadDraftById(leaseId);
@@ -285,8 +294,8 @@ namespace rccs_new
                     dpEnd.SelectedDate = endDate;
             }
         }
-      
 
+        // Сохранение черновика
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             if (!ValidateInput()) return;
@@ -315,7 +324,7 @@ namespace rccs_new
                 MessageBox.Show("Не удалось сохранить черновик.", "Ошибка");
             }
         }
-
+        // Создание договора и генерация Word-документа
         private void Create_Click(object sender, RoutedEventArgs e)
         {
             if (!ValidateInput()) return;
@@ -431,6 +440,7 @@ namespace rccs_new
                 MessageBox.Show("Ошибка: " + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        // Очистка формы после создания/сохранения
         private void ClearForm()
         {
             GenerateLieseNumber();
@@ -443,6 +453,7 @@ namespace rccs_new
 
             cmbClient.Focus();
         }
+        // Проверка заполнения обязательных полей
         private bool ValidateInput()
         {
             if (cmbClient.SelectedValue == null || cmbRoom.SelectedValue == null)

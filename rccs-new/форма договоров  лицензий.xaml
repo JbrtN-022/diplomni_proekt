@@ -5,7 +5,7 @@
         Title="Просмотр договоров и лицензий"
         Height="760"
         Width="1020"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen"  Icon="/Рисунок1.png"
         Background="#F5F5F5">
 
     <Grid>

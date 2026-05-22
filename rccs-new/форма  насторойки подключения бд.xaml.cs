@@ -27,7 +27,7 @@ namespace rccs_new
         private string staryUser;
         private string staryPassword;
         private string staryBD;
-
+        // Свойства для передачи новых параметров подключения в вызывающий код
         public string NovyyHost { get; private set; }
         public string NovyyUser { get; private set; }
         public string NovyyPassword { get; private set; }
@@ -42,6 +42,7 @@ namespace rccs_new
             string teckBD)
         {
             InitializeComponent();
+            // Подключение обработчика клавиши F1 для вызова справки
             this.KeyDown += (s, e) =>
             {
                 if (e.Key == Key.F1)
@@ -49,7 +50,7 @@ namespace rccs_new
                     ShowHelp();
                     e.Handled = true;
                 }
-            };
+            };// Сохранение текущих настроек
             staryHost = teckHost;
             staryUser = teckUser;
             staryPassword = teckPassword;
@@ -59,6 +60,7 @@ namespace rccs_new
 
             LoadCurrentConnection();
         }
+        // Показывает справочное сообщение о форме настроек подключения
         private void ShowHelp()
         {
             MessageBox.Show(
@@ -130,6 +132,7 @@ namespace rccs_new
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+        // Загрузка текущих настроек подключения и списка баз данных
         private void LoadCurrentConnection()
         {
             try
@@ -174,7 +177,7 @@ namespace rccs_new
                 HistoryLogger.Log($"ОШИБКА! Не удалось загрузить текущие настройки БД. Ошибка: {ex.Message}");
             }
         }
-
+        // Кнопка "Отмена" — закрытие без сохранения изменений
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             NovyyHost = staryHost;
@@ -187,7 +190,7 @@ namespace rccs_new
 
             this.Close();
         }
-
+        // Подключение к выбранной базе данных
         private void podkluchKBD_Click(object sender, RoutedEventArgs e)
         {
             if (cmbDatabase.SelectedItem == null)
@@ -237,7 +240,7 @@ namespace rccs_new
                     MessageBoxImage.Error);
             }
         }
-
+        // Подключение к серверу MySQL и загрузка списка баз данных
         private void podkluchKServeru_Click(object sender, RoutedEventArgs e)
         {
             string host = txtHost.Text.Trim();
@@ -308,7 +311,7 @@ namespace rccs_new
                 cmbDatabase.Items.Clear();
             }
         }
-
+        // Кнопка "Назад" — закрытие без сохранения
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             NovyyHost = staryHost;

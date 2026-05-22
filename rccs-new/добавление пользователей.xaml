@@ -4,7 +4,7 @@
         Title="Добавление работника"
         Height="633"
         Width="420"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen"  Icon="/Рисунок1.png"
         Background="#F5F5F5">
 
     <Grid Margin="0,0,0,0">

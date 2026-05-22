@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace rccs_new
 {
     /// <summary>
     /// Логика взаимодействия для WindowStart.xaml
+    /// Стартовое окно (splash screen) приложения
     /// </summary>
     public partial class WindowStart : Window
     {
@@ -24,33 +15,36 @@ namespace rccs_new
             InitializeComponent();
         }
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        // Обработка события загрузки окна
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var timer = new System.Windows.Threading.DispatcherTimer
+            // Создаём таймер на 5 секунд
+            var timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(5)
             };
 
             timer.Tick += (s, args) =>
             {
-                timer.Stop();                    
+                timer.Stop();
 
+                // Скрываем стартовое окно
                 this.Hide();
 
-
-                MainWindow authForm = new MainWindow();  
+                // Открываем форму авторизации
+                MainWindow authForm = new MainWindow();
                 authForm.Show();
 
-               
+                // Закрываем текущее окно
                 this.Close();
             };
 
             timer.Start();
+        }
+
+        // Пустой обработчик (оставлен на случай, если потребуется в будущем)
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

@@ -6,13 +6,13 @@
         Height="650"
         Width="1100"
         WindowStartupLocation="CenterScreen"
-       
+        Icon="/Рисунок1.png"
         Background="White">
 
     <materialDesign:DrawerHost x:Name="DrawerHost" IsLeftDrawerOpen="False">
 
         <materialDesign:DrawerHost.LeftDrawerContent>
-            <StackPanel Width="280" Background="{DynamicResource MaterialDesignPaper}">
+            <StackPanel Width="290" Background="{DynamicResource MaterialDesignPaper}">
                 <TextBlock Text="Меню администратора"
                            FontSize="20"
                            FontWeight="SemiBold"
@@ -49,13 +49,13 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
                             <Button x:Name="экспорт" Content="Экспортировать БД"
                         Height="65"
                        
                         Style="{StaticResource MaterialDesignFlatButton}" BorderBrush="#FF2196F3" FontSize="12" Click="экспорт_Click"  />
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                        <StackPanel Grid.Column="1" Margin="0,0,10,0">
                             <Button x:Name="импорт" Content="Импортировать БД"
                         Height="65"
                        

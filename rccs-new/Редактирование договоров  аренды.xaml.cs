@@ -44,6 +44,7 @@ namespace rccs_new
 
             LoadData();
         }
+        // Показывает справочное сообщение о форме
         private void ShowHelp()
         {
             MessageBox.Show(
@@ -108,6 +109,7 @@ namespace rccs_new
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+        // Загрузка данных существующего договора
         private void LoadData()
         {
             DataRow row =
@@ -159,7 +161,7 @@ namespace rccs_new
             chkApproved.IsChecked =
                 row["approved"].ToString() == "Утверждён";
         }
-
+        // Загрузка списка контрагентов
         private void LoadClients()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список контрагентов");
@@ -170,7 +172,7 @@ namespace rccs_new
             cmbClient.DisplayMemberPath = "name";
             cmbClient.SelectedValuePath = "id_counterparty";
         }
-
+        // Загрузка списка этажей
         private void LoadFloor()
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список этажей");
@@ -181,7 +183,7 @@ namespace rccs_new
             cmbFloor.DisplayMemberPath = "floor";
             cmbFloor.SelectedValuePath = "id_floor";
         }
-
+        // Загрузка помещений для выбранного этажа
         private void LoadRoom(int? room, int? currentRoomId = null)
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} загрузил список помещений");
@@ -192,7 +194,7 @@ namespace rccs_new
             cmbRoom.DisplayMemberPath = "office";
             cmbRoom.SelectedValuePath = "id_room";
         }
-
+        // Сохранение изменений договора
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             if (cmbClient.SelectedValue == null)
@@ -299,14 +301,14 @@ namespace rccs_new
                     MessageBoxImage.Error);
             }
         }
-
+        // Закрытие формы без сохранения
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             HistoryLogger.Log($"Пользователь {ConnectionBD.resFio} закрыл редактирование договора аренды ID {_idLeaseAgreement}");
 
             this.Close();
         }
-
+        // Обновление списка помещений при смене этажа
         private void cmbFloor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmbFloor.SelectedItem is DataRowView row)

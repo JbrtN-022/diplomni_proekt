@@ -12,7 +12,7 @@ namespace rccs_new
         {
             InitializeComponent();
 
-            // Подсказка по F1
+            // Подключение обработчика клавиши F1 для вызова справки
             this.KeyDown += (s, e) =>
             {
                 if (e.Key == Key.F1)
@@ -22,48 +22,39 @@ namespace rccs_new
                 }
             };
 
-            if (!ConnectionBD.ConnectBD("rccs", "localhost", "root", "qwerty") == true)
+            // Проверка подключения к базе данных при запуске окна
+            if (!ConnectionBD.ConnectBD("rccs", "localhost", "root", "qwerty"))
             {
                 MessageBox.Show("Не удалось подключиться к базе данных!\n\nПриложение будет закрыто.",
                                 "Ошибка подключения",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error);
-
                 Application.Current.Shutdown();
             }
         }
 
+        // Показывает справочное сообщение о форме авторизации
         private void ShowHelp()
         {
             MessageBox.Show(
 @"ФОРМА АВТОРИЗАЦИИ
-
 Назначение формы:
 Форма предназначена для входа в систему с проверкой прав доступа пользователя.
-
 Что можно сделать на этой форме:
 • Ввести логин и пароль для входа в систему
 • Включить/отключить отображение пароля (глазок/чекбокс)
 • Настроить подключение к базе данных
-
 Поля для ввода:
 • Логин - ваше уникальное имя пользователя
 • Пароль - конфиденциальный ключ доступа (скрыт точками)
-
 Как авторизоваться:
 1. Введите ваш логин в поле ""Логин""
 2. Введите пароль в поле ""Пароль""
 3. При необходимости включите ""Показать пароль"" для проверки ввода
 4. Нажмите кнопку ""Авторизоваться""
-
-
-
 Дополнительные функции:
 • Кнопка ""Настройки подключения"" - позволяет изменить параметры соединения с БД
 • Показать пароль - временно отображает вводимый пароль
-
-
-
 Примечание:
 При неверном вводе логина или пароля система покажет сообщение об ошибке.
 При отсутствии подключения к БД приложение закроется автоматически.",
@@ -72,6 +63,7 @@ namespace rccs_new
                 MessageBoxImage.Information);
         }
 
+        // Обработка нажатия кнопки "Авторизоваться"
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             string login = txtLogin.Text.Trim();
@@ -129,9 +121,9 @@ namespace rccs_new
                 MessageBox.Show("Неверный логин или пароль!", "Ошибка авторизации",
                                 MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
         }
 
+        // Включение режима отображения пароля
         private void chkShowPassword_Checked(object sender, RoutedEventArgs e)
         {
             txtVisiblePassword.Text = txtPassword.Password;
@@ -141,6 +133,7 @@ namespace rccs_new
             txtVisiblePassword.CaretIndex = txtVisiblePassword.Text.Length;
         }
 
+        // Выключение режима отображения пароля
         private void chkShowPassword_Unchecked(object sender, RoutedEventArgs e)
         {
             txtPassword.Password = txtVisiblePassword.Text;
@@ -149,6 +142,7 @@ namespace rccs_new
             txtPassword.Focus();
         }
 
+        // Открытие окна настроек подключения к БД (с проверкой, что окно уже не открыто)
         private void подключение_Click(object sender, RoutedEventArgs e)
         {
             форма__насторойки_подключения_бд openedWindow = null;
@@ -196,7 +190,6 @@ namespace rccs_new
                     "Предупреждение",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
-
                 openedWindow.Activate();
                 openedWindow.Focus();
             }
